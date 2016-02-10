@@ -40,86 +40,103 @@
 				?>
 				<div class="row">
 					<div class="col-md-12">
-						<?php echo form_open("sales/change_mode",array('id'=>'mode_form')); ?>
-							<span><?php echo $this->lang->line('sales_mode') ?></span>
-							<?php echo form_dropdown('mode',$modes,$mode,'onchange="$(\'#mode_form\').submit();"'); ?>
-							<br>
-							<?php
-							if (count($stock_locations) > 1)
-							{
-							?>
-								<span><?php echo $this->lang->line('sales_stock_location') ?></span>
-								<?php echo form_dropdown('stock_location',$stock_locations,$stock_location,'onchange="$(\'#mode_form\').submit();"'); ?>
-							<?php
-							}
-							?>
-
-							<?php
-							if ($this->Employee->has_grant('reports_sales', $this->session->userdata('person_id')))
-							{
-							?>
-							<div id="sales_overview">
-								<a href="<?=site_url($controller_name . '/manage')?>"><button class="btn btn-block btn-success btn-sm"><?php echo $this->lang->line('sales_takings'); ?></button></a>
+						<?php echo form_open("sales/change_mode",array('id'=>'mode_form', 'class'=>'form-horizontal')); ?>
+							<div class="row">
+								<div class="col-md-4">
+									<span><?php echo $this->lang->line('sales_mode') ?></span>
+									<?php echo form_dropdown('mode',$modes,$mode,'onchange="$(\'#mode_form\').submit();" class="form-control"'); ?>
+								</div>
+								<div class="col-md-4">
+									<?php
+									if (count($stock_locations) > 1)
+									{
+									?>
+										<span><?php echo $this->lang->line('sales_stock_location') ?></span>
+										<?php echo form_dropdown('stock_location',$stock_locations,$stock_location,'onchange="$(\'#mode_form\').submit();" class="form-control"'); ?>
+									<?php
+									}
+									?>
+								</div>
+								<div class="col-md-2">
+									<?php
+									if ($this->Employee->has_grant('reports_sales', $this->session->userdata('person_id')))
+									{
+									?>
+									<div id="sales_overview">
+										<a href="<?=site_url($controller_name . '/manage')?>" class="btn btn-block btn-success btn-sm"><!--<button class="btn btn-block btn-success btn-sm">--><?php echo $this->lang->line('sales_takings'); ?><!--</button>--></a>
+									</div>
+									<?php
+									}
+									?>
+								</div>
+								<div class="col-md-2">
+									<div id="show_suspended_sales_button">
+										<?php echo anchor("sales/suspended/width:700",
+										"<div><button class='btn btn-block btn-warning btn-sm'>".$this->lang->line('sales_suspended_sales')."</button></div>",
+										array('class'=>'thickbox none','title'=>$this->lang->line('sales_suspended_sales')));
+										?>
+									</div>
+								</div>
 							</div>
-							<?php
-							}
-							?>
-
-							<div id="show_suspended_sales_button">
-								<?php echo anchor("sales/suspended/width:700",
-								"<div><button class='btn btn-block btn-warning btn-sm'>".$this->lang->line('sales_suspended_sales')."</button></div>",
-								array('class'=>'thickbox none','title'=>$this->lang->line('sales_suspended_sales')));
-								?>
-							</div>
-
-
-
 						</form>
-						<?php
-							if(isset($customer))
-							{
-								echo $this->lang->line("sales_customer").': <b>'.$customer. '</b><br />';
-								echo anchor("sales/remove_customer",'['.$this->lang->line('common_remove').' '.$this->lang->line('customers_customer').']');
-							}
-							else
-							{
-								echo form_open("sales/select_customer",array('id'=>'select_customer_form'));
+					</div> <!-- ./col-md-12 -->
+					<div class="col-md-12">
+						<div class="row">
+							<?php if(isset($customer)) {?>
+							<div class="col-md-4">
+								<?php echo $this->lang->line("sales_customer").': <b>'.$customer. '</b>'; ?>
+							</div>
+							<div class="col-md-8">
+								<?php echo anchor("sales/remove_customer",'['.$this->lang->line('common_remove').' '.$this->lang->line('customers_customer').']'); ?>
+							</div>
+							<?php 
+							} 
+							else {
+								echo form_open("sales/select_customer",array('id'=>'select_customer_form', 'class'=>'form-horizontal'));
 							?>
-								<label id="customer_label" for="customer"><?php echo $this->lang->line('sales_select_customer'); ?></label>
-								<br>
-								<?php echo form_input(array('name'=>'customer','id'=>'customer','size'=>'30','value'=>$this->lang->line('sales_start_typing_customer_name')));?>
-							
-							<div style="margin-top: 5px; text-align: center;">
-									<h3 style="margin: 5px 0 5px 0"><?php echo $this->lang->line('common_or'); ?></h3>
+								<div class="col-md-4">
+									<label id="customer_label" for="customer"><?php echo $this->lang->line('sales_select_customer'); ?></label>
+									<!-- <br> -->
+									<?php echo form_input(array('class'=>'form-control','name'=>'customer','id'=>'customer','value'=>$this->lang->line('sales_start_typing_customer_name')));?>
+								</div>
+								<div class="col-md-1">
+									<h3 style="margin: 25px 0 5px 0"><?php echo $this->lang->line('common_or'); ?></h3>
+								</div>
+								<div class="col-md-2">
 									<?php echo anchor("customers/view/-1/width:400",
-									"<div class='small_button' style='margin:0 auto;'><span>".$this->lang->line('sales_new_customer')."</span></div>",
+									"<div style='margin-top:25px'><button class='btn btn-block btn-success btn-sm'>".$this->lang->line('sales_new_customer')."</button></div>",
 									array('class'=>'thickbox none','title'=>$this->lang->line('sales_new_customer')));
 									?>
 								</div>
-								</form>
-
-								
-								
-								<div class="clearfix">&nbsp;</div>
-							<?php
-							}
-							?>
-
-						<?php echo form_open("sales/add",array('id'=>'add_item_form')); ?>
-							<label id="item_label" for="item"> 
-								<?php echo $this->lang->line('sales_find_or_scan_item_or_receipt'); ?>
-							</label>
-							
-							<?php echo form_input(array('name'=>'item','id'=>'item','size'=>'40','tabindex'=>'1')); ?>
-							<div id="new_item_button_register" >
-								<?php echo anchor("items/view/-1/width:450",
-								"<div class='small_button'><span>".$this->lang->line('sales_new_item')."</span></div>",
-								array('class'=>'thickbox none','title'=>$this->lang->line('sales_new_item')));
-								?>
+							</form>
+							<?php } ?>
+						</div>
+						<div class="clearfix">&nbsp;</div>
+					</div> <!-- ./col-md-12 -->
+					<div class="col-md-12">
+						<?php echo form_open("sales/add",array('id'=>'add_item_form', 'class'=>'form-horizontal')); ?>
+							<div class="row">
+								<div class="col-md-3">
+									<span style="float:right; margin-top:10px"><strong><?php echo $this->lang->line('sales_find_or_scan_item_or_receipt'); ?></strong></span>
+								</div>
+								<div class="col-md-4">
+									<?php echo form_input(array('class'=>'form-control','name'=>'item','id'=>'item','size'=>'40','tabindex'=>'1')); ?>
+								</div>
+								<div class="col-md-2">
+									<h3 style="margin-top: 0px"><?php echo $this->lang->line('common_or'); ?></h3>
+								</div>
+								<div class="col-md-2">
+									<div id="new_item_button_register" >
+										<?php echo anchor("items/view/-1/width:450",
+										"<div><button class='btn btn-block btn-success btn-sm'>".$this->lang->line('sales_new_item')."</button></div>",
+										array('class'=>'thickbox none','title'=>$this->lang->line('sales_new_item')));
+										?>
+									</div>
+								</div>
 							</div>
-
 						</form>
-
+					</div> <!-- ./col-md-12 -->
+					<div class="col-md-12">
 						<table id="register">
 							<thead>
 								<tr>
@@ -128,7 +145,7 @@
 									<th style="width: 30%;"><?php echo $this->lang->line('sales_item_name'); ?></th>
 									<th style="width: 11%;"><?php echo $this->lang->line('sales_price'); ?></th>
 									<th style="width: 11%;"><?php echo $this->lang->line('sales_quantity'); ?></th>
-									<th style="width: 11%;"><?php echo $this->lang->line('sales_discount'); ?></th>
+									<th style="width: 11%;"><?php echo $this->lang->line('sales_discount'); ?> (%)</th>
 									<th style="width: 15%;"><?php echo $this->lang->line('sales_total'); ?></th>
 									<th style="width: 11%;"><?php echo $this->lang->line('sales_edit'); ?></th>
 								</tr>
@@ -261,205 +278,203 @@
 								?>
 							</tbody>
 						</table>
-					</div>
+					</div> <!-- ./col-md-12 -->
 					<div class="col-md-12">
-						
+						<div class="row">
+							<div class="col-md-6">
+								<?php echo form_open("sales/add_payment",array('id'=>'add_payment_form', 'class'=>'form-horizontal', 'role'=>'form')); ?>
 
-							<div id='sale_details'>
-								
-
-								<?php foreach($taxes as $name=>$value) { ?>
-								<div class="float_left" style='width: 55%;'><?php echo $name; ?>:</div>
-								<div class="float_left" style="width: 45%; font-weight: bold;"><?php echo to_currency($value); ?></div>
-								<?php }; ?>
-
-								<div class="float_left" style='width: 55%;'><?php echo $this->lang->line('sales_total'); ?>:</div>
-								<div class="float_left" style="width: 45%; font-weight: bold;"><?php echo to_currency($total); ?></div>
-							
-							<div>
-							<?php echo form_open("sales/add_payment",array('id'=>'add_payment_form')); ?>
-
-								<div class="float_left" style='width: 55%;'><?php echo $this->lang->line('sales_payment'); ?>:</div>
-								<div class="float_left" style="width: 45%; font-weight: bold;">
-									<select name='payment_type'>
-									<?php echo $this->lang->line('sales_payment').':   ';?>
-											<option value="cash">Cash</option>
-											<option value="cash kredit">Cash Debit</option>
-										    <option value="cash kartu kredit">Cash Kartu Kredit</option>
-										    <option value="kredit leasing">Kredit Leasing</option>
-											<option value="kredit in house">Kredit In House</option>
-											<option value="kredit rekanan">Kredit Rekanan</option>
-										</select>
-								</div>
-
-								<div class="float_left" style='width: 55%;'><?php echo $this->lang->line('sales_nomerkartu'); ?>:</div>
-								<div class="float_left" style="width: 45%; font-weight: bold;">
-								<input id="nomorkartu" class="ac_input" type="text" size="15" value="" name="nomorkartu" autocomplete="off">
-								</div>
-
-								<div class="float_left" style='width: 55%;'><?php echo $this->lang->line('sales_amount_tendered'); ?>:</div>
-								<div class="float_left" style="width: 45%; font-weight: bold;">
-								<?php echo form_input( array( 'name'=>'amount_tendered', 'id'=>'amount_tendered', 'value'=>to_currency_no_money($amount_due), 'size'=>'15','tabindex'=>4 ) ); ?>
-								
-									<div class='small_button' id='add_payment_button' >
-											<span><?php echo $this->lang->line('sales_add_payment'); ?></span>
+									<div class="form-group">
+										<label class='col-sm-4 text-left'><?php echo $this->lang->line('sales_payment'); ?></label>
+										<div class='col-sm-8'>
+											<select name='payment_type' class="form-control">
+											<?php echo $this->lang->line('sales_payment').':   ';?>
+												<option value="cash">Cash</option>
+												<option value="cash kredit">Cash Debit</option>
+											    <option value="cash kartu kredit">Cash Kartu Kredit</option>
+											    <option value="kredit leasing">Kredit Leasing</option>
+												<option value="kredit in house">Kredit In House</option>
+												<option value="kredit rekanan">Kredit Rekanan</option>
+											</select>
 										</div>
-
-								</div>
-
-							</div>
-
-								<div class="float_left" style='width: 55%;'><?php echo $this->lang->line('sales_payments_total'); ?>:</div>
-								<div class="float_left" style="width: 45%; font-weight: bold;"><?php echo to_currency($payments_total); ?></div>
-
-								<div class="float_left" style='width: 55%;'><?php echo $this->lang->line('sales_amount_due'); ?>:</div>
-								<div class="float_left" style="width: 45%; font-weight: bold;"><?php echo to_currency($amount_due); ?></div>
-
-								
-							</div>
-
-							
-							
+									</div>
+									<div class="form-group">
+										<label class='col-sm-4 text-left'><?php echo $this->lang->line('sales_nomerkartu'); ?></label>
+										<div class='col-sm-8'>
+											<input id="nomorkartu" class="form-control ac_input" type="text" size="15" value="" name="nomorkartu" autocomplete="off">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class='col-sm-4 text-left'><?php echo $this->lang->line('sales_amount_tendered'); ?></label>
+										<div class='col-sm-8'>
+											<?php echo form_input( array( 'name'=>'amount_tendered', 'id'=>'amount_tendered', 'value'=>to_currency_no_money($amount_due), 'class'=>'form-control','tabindex'=>4 ) ); ?>
+											<br><div id='add_payment_button' >
+												<button class='btn btn-block btn-success btn-sm'><?php echo $this->lang->line('sales_add_payment'); ?></button>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class='col-sm-4 text-left'><?php echo $this->lang->line('sales_payments_total'); ?></label>
+										<div class='col-sm-8'>
+											<p><?php echo to_currency($payments_total); ?></p>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class='col-sm-4 text-left'><?php echo $this->lang->line('sales_amount_due'); ?></label>
+										<div class='col-sm-8'>
+											<p><?php echo to_currency($amount_due); ?></p>
+										</div>
+									</div>
 								</form>
-
-								<div class="clearfix" style="margin-bottom: 1px;">&nbsp;</div>
-								<table width="100%">
-									<tr>
-												<td>
-													<?php echo $this->lang->line('sales_print_after_sale'); ?>
-												</td>
-												<td>
-													<?php
-													if ($print_after_sale)
-													{
-														echo form_checkbox(array('name'=>'sales_print_after_sale','id'=>'sales_print_after_sale','checked'=>'checked'));
-													}
-													else
-													{
-														echo form_checkbox(array('name'=>'sales_print_after_sale','id'=>'sales_print_after_sale'));
-													}
-													?>
-												</td>
-											</tr>
-											<?php
-											if ($mode == "sale") 
-											{
-											?>
-											<tr>
-												<td>
-													<?php echo $this->lang->line('sales_invoice_enable'); ?>
-												</td>
-												<td>
-													<?php if ($invoice_number_enabled)
-													{
-														echo form_checkbox(array('name'=>'sales_invoice_enable','id'=>'sales_invoice_enable','checked'=>'checked'));
-													}
-													else
-													{
-														echo form_checkbox(array('name'=>'sales_invoice_enable','id'=>'sales_invoice_enable'));
-													}
-													?>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<?php echo $this->lang->line('sales_invoice_number').':   ';?>
-												</td>
-												<td>
-													<?php echo form_input(array('name'=>'sales_invoice_number','id'=>'sales_invoice_number','value'=>$invoice_number,'size'=>10));?>
-												</td>
-											</tr>
-									
-								</table>
-
-								<?php
-								// Only show this part if there is at least one payment entered.
-								if(count($payments) > 0)
-								{
-								?>
-									<div id="finish_sale">
-										<?php echo form_open("sales/complete", array('id'=>'finish_sale_form')); ?>
-										<label id="comment_label" for="comment"><?php echo $this->lang->line('common_comments'); ?>:</label>
-										<?php echo form_textarea(array('name'=>'comment', 'id'=>'comment', 'value'=>$comment, 'rows'=>'4', 'cols'=>'23'));?>
-										<br />
-										<br />
-										<?php
-										if(!empty($customer_email))
-										{
-											echo $this->lang->line('sales_email_receipt'). ': '
-												. form_checkbox(array(
-											    'name'    => 'email_receipt',
-											    'id'      => 'email_receipt',
-											    'value'   => '1',
-											    'checked' => (boolean)$email_receipt,
-											    )).'<br />('.$customer_email.')<br />';
-										}
-										 
-										if ($payments_cover_total)
-										{					
-											echo "<div class='small_button' style='margin:0 auto'; id='finish_sale_button' ; margin-top:5px;' tabindex='3'><span>".$this->lang->line('sales_complete_sale')."</span></div>";
-										}
-										?>
-										<br>
-
-										<?php
-							// Only show this part if there are Items already in the sale.
-							if(count($cart) > 0)
-							{
-							?>
-						    	<div id="Cancel_sale">
-									<?php echo form_open("sales/cancel_sale", array('id'=>'cancel_sale_form')); ?>
-									<div class='small_button' id='cancel_sale_button' style='float:left; margin-top: 5px;'>
-										<span><?php echo $this->lang->line('sales_cancel_sale'); ?></span>
-									</div>
-									
-									<div class='small_button' id='suspend_sale_button' style='float:right; margin-top: 5px;'>
-										<span><?php echo $this->lang->line('sales_suspend_sale'); ?></span>
-									</div>
-								</div>
-									</div>
-
-
-									</form>
-								<?php
-								}
-								?>
-										<table id="register">
-											<thead>
-												<tr>
-													<th style="width: 11%;"><?php echo $this->lang->line('common_delete'); ?></th>
-													<th style="width: 60%;"><?php echo $this->lang->line('sales_payment_type'); ?></th>
-													<th style="width: 18%;"><?php echo $this->lang->line('sales_payment_amount'); ?></th>
-												</tr>
-											</thead>
-								
-											<tbody id="payment_contents">
-												<?php
-												foreach($payments as $payment_id=>$payment)
+							</div>
+							<div class="col-md-6">
+								<div id='sale_details'>
+									<form class="form-horizontal">
+										<?php foreach($taxes as $name=>$value) { ?>
+										<div class="form-group">
+											<label class='col-sm-4 text-left'><?php echo $name; ?></label>
+											<div class='col-sm-8'>
+												<p><?php echo to_currency($value); ?></p>
+											</div>
+										</div>
+											<!-- <div class="float_left" style='width: 55%;'><?php echo $name; ?>:</div>
+											<div class="float_left" style="width: 45%; font-weight: bold;"><?php echo to_currency($value); ?></div> -->
+										<?php }; ?>
+										<div class="form-group">
+											<label class='col-sm-4 text-left'><?php echo $this->lang->line('sales_total'); ?></label>
+											<div class='col-sm-8'>
+												<p><?php echo to_currency($total); ?></p>
+											</div>
+										</div>
+										<div class="input-group">
+					                        <span class="input-group-addon">
+					                          	<?php
+												if ($print_after_sale)
 												{
-													echo form_open("sales/edit_payment/$payment_id",array('id'=>'edit_payment_form'.$payment_id));
-													?>
-													<tr>
-														<td><?php echo anchor( "sales/delete_payment/$payment_id", '['.$this->lang->line('common_delete').']' ); ?></td>
-														<td><?php echo $payment['payment_type']; ?></td>
-														<td style="text-align: right;"><?php echo to_currency( $payment['payment_amount'] ); ?></td>
-													</tr>
-													
-													</form>
-												<?php
+													echo form_checkbox(array('name'=>'sales_print_after_sale','id'=>'sales_print_after_sale','checked'=>'checked'));
+												}
+												else
+												{
+													echo form_checkbox(array('name'=>'sales_print_after_sale','id'=>'sales_print_after_sale'));
 												}
 												?>
-											</tbody>
-										</table>
-										<br />
+					                        </span>
+					                        <?php echo $this->lang->line('sales_print_after_sale'); ?>
+				                      	</div>
+				                      	<div class="input-group">
+					                        <span class="input-group-addon">
+					                          	<?php 
+					                          	if ($invoice_number_enabled)
+												{
+													echo form_checkbox(array('name'=>'sales_invoice_enable','id'=>'sales_invoice_enable','checked'=>'checked'));
+												}
+												else
+												{
+													echo form_checkbox(array('name'=>'sales_invoice_enable','id'=>'sales_invoice_enable'));
+												}
+												?>
+					                        </span>
+					                        <?php echo $this->lang->line('sales_invoice_enable'); ?>
+				                      	</div>
+				                      	<div class="form-group">
+											<label class='col-sm-4 text-left'><?php echo $this->lang->line('sales_invoice_number'); ?></label>
+											<div class='col-sm-8'>
+												<?php echo form_input(array('name'=>'sales_invoice_number','id'=>'sales_invoice_number','value'=>$invoice_number,'class'=>'form-control'));?>
+											</div>
+										</div>
+									</form>
 									<?php
-									}
-									?>
+									// Only show this part if there is at least one payment entered.
+									if(count($payments) > 0) { ?>
+									<div id="finish_sale">
+										<?php echo form_open("sales/complete", array('id'=>'finish_sale_form', 'class'=>'form-horizontal')); ?>
+										<div class="form-group">
+											<label class='col-sm-4 text-left'><?php echo $this->lang->line('common_comments'); ?></label>
+											<div class='col-sm-8'>
+												<?php echo form_textarea(array('name'=>'comment', 'id'=>'comment', 'value'=>$comment, 'rows'=>'4', 'cols'=>'23', 'class'=>'form-control'));?>
+											</div>
+										</div>
+										<?php
+										if(!empty($customer_email))
+										{ ?>
+										<div class="input-group">
+					                        <span class="input-group-addon">
+					                          	<?php 
+					                          	echo form_checkbox(array(
+												    'name'    => 'email_receipt',
+												    'id'      => 'email_receipt',
+												    'value'   => '1',
+												    'checked' => (boolean)$email_receipt,
+												    ));
+												?>
+					                        </span>
+					                        <?php echo $this->lang->line('sales_email_receipt').': '.$customer_email; ?>
+				                      	</div>
+										<?php }
+										if ($payments_cover_total)
+										{					
+											echo "<div id='finish_sale_button'><button class='btn btn-block btn-success btn-sm'>".$this->lang->line('sales_complete_sale')."</button></div>";
+										}
+										?>
+										</form>
+									</div>
+									<?php } ?>
 
-								</div>
+									<?php
+									// Only show this part if there are Items already in the sale.
+									if(count($cart) > 0)
+									{
+									?>
+							    	<div id="Cancel_sale">
+										<?php echo form_open("sales/cancel_sale", array('id'=>'cancel_sale_form')); ?>
+											<div id='cancel_sale_button' style='float:left; margin-top: 5px;'>
+												<button class='btn btn-block btn-danger btn-sm'><?php echo $this->lang->line('sales_cancel_sale'); ?></button>
+											</div>
+											
+											<div id='suspend_sale_button' style='float:right; margin-top: 5px;'>
+												<button class='btn btn-block btn-warning btn-sm'><?php echo $this->lang->line('sales_suspend_sale'); ?></button>
+											</div>
+										</form>
+									</div> <!-- ./Cancel_sale -->
+									<?php } ?>
+									<div class="clearfix" style="margin-bottom: 30px;">&nbsp;</div>
+									<table id="register">
+										<thead>
+											<tr>
+												<th style="width: 11%;"><?php echo $this->lang->line('common_delete'); ?></th>
+												<th style="width: 60%;"><?php echo $this->lang->line('sales_payment_type'); ?></th>
+												<th style="width: 18%;"><?php echo $this->lang->line('sales_payment_amount'); ?></th>
+											</tr>
+										</thead>
+							
+										<tbody id="payment_contents">
+											<?php
+											foreach($payments as $payment_id=>$payment)
+											{
+												echo form_open("sales/edit_payment/$payment_id",array('id'=>'edit_payment_form'.$payment_id));
+												?>
+												<tr>
+													<td><?php echo anchor( "sales/delete_payment/$payment_id", '['.$this->lang->line('common_delete').']' ); ?></td>
+													<td><?php echo $payment['payment_type']; ?></td>
+													<td style="text-align: right;"><?php echo to_currency( $payment['payment_amount'] ); ?></td>
+												</tr>
+												
+												</form>
+											<?php
+											}
+											?>
+										</tbody>
+									</table>
+									<br />
+									<!-- </div> -->
+								</div> <!-- ./sale_details -->
+							</div>
+						</div>
+
+								<!-- </div> -->
 
 							<?php
-							}
+							// }
 							?>
 					</div>
 				</div>

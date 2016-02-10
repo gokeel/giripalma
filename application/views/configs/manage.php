@@ -9,7 +9,7 @@
           </h1>
           <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li><a href="active">Dashboard</a></li>
+            <li><a href="active"><?php echo $this->lang->line('module_config'); ?></a></li>
           </ol>
         </section>
 

@@ -166,10 +166,10 @@ select#stock_location
 	border: none;
 }
 
-#select_customer_form input, #select_supplier_form input
+/*#select_customer_form input, #select_supplier_form input
 {
 	width: 40%;
-}
+}*/
 
 input.quantity, input.discount
 {
