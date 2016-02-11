@@ -140,12 +140,12 @@
 						<table id="register">
 							<thead>
 								<tr>
-									<th style="width: 11%;"><?php echo $this->lang->line('common_delete'); ?></th>
-									<th style="width: 30%;"><?php echo $this->lang->line('sales_item_number'); ?></th>
+									<th style="width: 8%;"><?php echo $this->lang->line('common_delete'); ?></th>
+									<th style="width: 11%;"><?php echo $this->lang->line('sales_item_number'); ?></th>
 									<th style="width: 30%;"><?php echo $this->lang->line('sales_item_name'); ?></th>
-									<th style="width: 11%;"><?php echo $this->lang->line('sales_price'); ?></th>
-									<th style="width: 11%;"><?php echo $this->lang->line('sales_quantity'); ?></th>
-									<th style="width: 11%;"><?php echo $this->lang->line('sales_discount'); ?> (%)</th>
+									<th style="width: 10%;"><?php echo $this->lang->line('sales_price'); ?></th>
+									<th style="width: 8%;"><?php echo $this->lang->line('sales_quantity'); ?></th>
+									<th style="width: 8%;"><?php echo $this->lang->line('sales_discount'); ?> (%)</th>
 									<th style="width: 15%;"><?php echo $this->lang->line('sales_total'); ?></th>
 									<th style="width: 11%;"><?php echo $this->lang->line('sales_edit'); ?></th>
 								</tr>
@@ -183,7 +183,7 @@
 											<?php if ($items_module_allowed)
 											{
 											?>
-												<td><?php echo form_input(array('name'=>'price','value'=>$item['price'],'size'=>'6'));?></td>
+												<td><?php echo form_input(array('name'=>'price','value'=>$item['price'],'size'=>'0'));?></td>
 											<?php
 											}
 											else
