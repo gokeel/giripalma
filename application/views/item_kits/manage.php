@@ -91,16 +91,22 @@
 								}
 							}
 							</script>
+							<div class="row">
+				               <div class="col-md-4">
+				               </div>
+				               <div class="col-md-4">
+				               </div>
 
-							<div id="title_bar">
-								<div id="title" class="float_left"><?php echo $this->lang->line('common_list_of').' '.$this->lang->line('module_'.$controller_name); ?></div>
-								<div id="new_button">
-									<?php echo anchor("$controller_name/view/-1/width:$form_width",
-									"<div class='big_button' style='float: left;'><span>".$this->lang->line($controller_name.'_new')."</span></div>",
+				               <div class="col-md-2">
+				               </div>
+				               <div class="col-md-2">
+				                   <?php echo anchor("$controller_name/view/-1/width:$form_width",
+									"<div class='btn btn-block btn-success btn-sm' style='float: left;'><span>".$this->lang->line($controller_name.'_new')."</span></div>",
 									array('class'=>'thickbox none','title'=>$this->lang->line($controller_name.'_new')));
 									?>
-								</div>
-							</div>
+				                </div>
+				             </div>
+							
 
 							<div id="pagination"><?= $links ?></div>
 							<?php echo form_open("$controller_name/search",array('id'=>'search_form')); ?>

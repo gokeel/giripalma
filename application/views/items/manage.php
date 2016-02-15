@@ -168,20 +168,31 @@
                   }
               }
               </script>
+              
+              <div class="row">
+                <div class="col-md-4">
+                <div class="box-header with-border">
+                 <div id="title" class="float_left"><?php echo $this->lang->line('common_list_of').' '.$this->lang->line('module_'.$controller_name); ?></div>
+              </div>
 
-              <div id="title_bar">
-                  <div id="title" class="float_left"><?php echo $this->lang->line('common_list_of').' '.$this->lang->line('module_'.$controller_name); ?></div>
-                  <div id="new_button">
-                      <?php echo anchor("$controller_name/view/-1/width:$form_width",
-                      "<div class='big_button' style='float: left;'><span>".$this->lang->line($controller_name.'_new')."</span></div>",
+                </div>
+                <div class="col-md-4">
+                </div>
+
+                <div class="col-md-2">
+                 <?php echo anchor("$controller_name/view/-1/width:$form_width",
+                      "<div class='btn btn-block btn-success btn-sm' style='float: left;'><span>".$this->lang->line($controller_name.'_new')."</span></div>",
                       array('class'=>'thickbox none','title'=>$this->lang->line($controller_name.'_new')));
                       ?>
-                      <?php echo anchor("$controller_name/excel_import/width:$form_width",
-                      "<div class='big_button' style='float: left;'><span>" . $this->lang->line('common_import_excel') . "</span></div>",
+                </div>
+                <div class="col-md-2">
+                   <?php echo anchor("$controller_name/excel_import/width:$form_width",
+                      "<div class='btn btn-block btn-success btn-sm' style='float: left;'><span>" . $this->lang->line('common_import_excel') . "</span></div>",
                       array('class'=>'thickbox none','title'=>'Import Items from Excel'));
                       ?>
-                  </div>
+                </div>
               </div>
+              
 
               <div id="pagination"><?= $links ?></div>
               <div id="titleTextImg" style="background-color:#EEEEEE;height:30px;position:relative;">
