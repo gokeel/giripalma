@@ -249,9 +249,10 @@ class Sales extends Secure_area
 		else
 		{
 			$payment_amount = $this->input->post( 'amount_tendered' );
+			$card_number = $this->input->post('nomorkartu');
 		}
 		
-		if( !$this->sale_lib->add_payment( $payment_type, $payment_amount ) )
+		if( !$this->sale_lib->add_payment( $payment_type, $payment_amount, $card_number ) )
 		{
 			$data['error']='Unable to Add Payment! Please try again!';
 		}
@@ -342,6 +343,7 @@ class Sales extends Secure_area
 
 	function complete()
 	{
+		// preparing data
 		$data['cart'] = $this->sale_lib->get_cart();
 		$data['subtotal'] = $this->sale_lib->get_subtotal();
 		$data['discounted_subtotal'] = $this->sale_lib->get_subtotal(TRUE);
@@ -367,6 +369,7 @@ class Sales extends Secure_area
 				$this->config->item('account_number')
 		));
         $cust_info = '';
+        // preparing data customer
 		if($customer_id!=-1)
 		{
 			$cust_info = $this->Customer->get_info($customer_id);

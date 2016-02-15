@@ -22,9 +22,12 @@
               <h3 class="box-title">Dashboard</h3>
             </div>
             <div class="box-body">
-              <?php
+              <div class="row">
+                <?php
+                $cnt = 1;
                 foreach($allowed_modules->result() as $module)
                 {
+                  if($cnt==1 or $cnt==6) echo '<div class="col-md-6">';
                 ?>
                   <div class="module_item">
                     <a href="<?php echo site_url("$module->module_id");?>">
@@ -33,8 +36,11 @@
                      - <?php echo $this->lang->line('module_'.$module->module_id.'_desc');?>
                   </div>
                 <?php
+                  if($cnt==5 or $cnt==10) echo '</div>';
+                  $cnt++;
                 }
-                ?>
+                ?>  
+              </div>
             </div><!-- /.box-body -->
           </div><!-- /.box -->
 

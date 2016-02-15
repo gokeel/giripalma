@@ -249,7 +249,7 @@ class Sale extends CI_Model
 		return $success;
 	}
 	
-	public function save($items, $customer_id, $employee_id, $comment, $invoice_number, $payments, $sale_id=false)
+	public function save($items, $customer_id, $employee_id, $comment, $invoice_number, $payments, $sale_id=false) 
 	{
 		if(count($items)==0)
 		{
@@ -283,7 +283,8 @@ class Sale extends CI_Model
 			$sales_payments_data = array(
 				'sale_id'=>$sale_id,
 				'payment_type'=>$payment['payment_type'],
-				'payment_amount'=>$payment['payment_amount']
+				'payment_amount'=>$payment['payment_amount'],
+				'card_number' => $payment['card_number']
 			);
 			$this->db->insert('sales_payments',$sales_payments_data);
 		}
