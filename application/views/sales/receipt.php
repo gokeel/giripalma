@@ -20,7 +20,7 @@
           <!-- Default box -->
           <div class="box">
             <div class="box-header with-border">
-              <h3 class="box-title">Penjualan Baru</h3>
+              <h3 class="box-title">Receipt Penjualan</h3>
             </div>
             <div class="box-body">
 				<?php $this->load->view('partial/print_receipt', array('print_after_sale', $print_after_sale, 

@@ -120,7 +120,7 @@
 									<span style="float:right; margin-top:10px"><strong><?php echo $this->lang->line('sales_find_or_scan_item_or_receipt'); ?></strong></span>
 								</div>
 								<div class="col-md-4">
-									<?php echo form_input(array('class'=>'form-control','name'=>'item','id'=>'item','size'=>'40','tabindex'=>'1')); ?>
+									<?php echo form_input(array('class'=>'form-control','name'=>'item','id'=>'item','tabindex'=>'1')); ?>
 								</div>
 								<div class="col-md-2">
 									<h3 style="margin-top: 0px"><?php echo $this->lang->line('common_or'); ?></h3>
@@ -145,7 +145,7 @@
 									<th style="width: 30%;"><?php echo $this->lang->line('sales_item_name'); ?></th>
 									<th style="width: 10%;"><?php echo $this->lang->line('sales_price'); ?></th>
 									<th style="width: 8%;"><?php echo $this->lang->line('sales_quantity'); ?></th>
-									<th style="width: 8%;"><?php echo $this->lang->line('sales_discount'); ?> (%)</th>
+									<th style="width: 8%;"><?php echo $this->lang->line('sales_discount'); ?></th>
 									<th style="width: 15%;"><?php echo $this->lang->line('sales_total'); ?></th>
 									<th style="width: 11%;"><?php echo $this->lang->line('sales_edit'); ?></th>
 								</tr>
