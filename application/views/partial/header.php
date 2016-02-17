@@ -6,7 +6,7 @@
   <head>
     <meta charset="UTF-8">
     <base href="<?php echo base_url();?>" />
-	<title><?php echo $this->config->item('company').' -- '.$this->lang->line('common_powered_by').' OS Point Of Sale' ?></title>
+	<title><?php echo $this->config->item('company').' -- Point Of Sale' ?></title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 3.3.2 -->
     <link href="themes/adminlte/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -79,7 +79,7 @@
     <div class="wrapper">
       
       <header class="main-header">
-        <a href="../../index2.html" class="logo"><b>Giri Palma </b>POS</a>
+        <a href="<?php echo base_url(); ?>" class="logo"><b><?php echo $this->config->item('company') ?> </b></a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">
           <!-- Sidebar toggle button-->

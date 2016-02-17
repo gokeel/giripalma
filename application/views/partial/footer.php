@@ -1,8 +1,8 @@
 		<footer class="main-footer">
 			<div class="pull-right hidden-xs">
-				<b>Version</b> 1.0
+				<b>Version</b> 2.0
 			</div>
-			<strong>Copyright &copy; 2015 <a href="http://www.wackymedia.id">Wacky Media</a>.</strong> All rights reserved. <strong>Admin Template by <a href="http://almsaeedstudio.com">Almsaeed Studio</a></strong>
+			<strong>Copyright &copy; 2016 <a href="#"><?php echo $this->config->item('company'); ?></a>. Admin Template By <a href="http://almsaeedstudio.com">Almsaeed Studio</a> Powered By <a href="https://github.com/jekkos/opensourcepos">OS POS</a> Developed by <a href="http://wackymedia.id">Wacky Media</a></strong>
 		</footer>
 	  
 	</div><!-- ./wrapper -->
