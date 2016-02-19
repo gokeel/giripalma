@@ -287,7 +287,8 @@
 									<div class="form-group">
 										<label class='col-sm-4 text-left'><?php echo $this->lang->line('sales_payment'); ?></label>
 										<div class='col-sm-8'>
-											<select name='payment_type' class="form-control">
+											<?php echo form_dropdown( 'payment_type', $payment_options, array(), 'id="payment_types"' ); ?>
+											<!-- <select name='payment_type' class="form-control">
 											<?php echo $this->lang->line('sales_payment').':   ';?>
 												<option value="cash">Cash</option>
 												<option value="cash kredit">Cash Debit</option>
@@ -295,7 +296,7 @@
 											    <option value="kredit leasing">Kredit Leasing</option>
 												<option value="kredit in house">Kredit In House</option>
 												<option value="kredit rekanan">Kredit Rekanan</option>
-											</select>
+											</select> -->
 										</div>
 									</div>
 									<div class="form-group">
@@ -672,6 +673,6 @@
           </div><!-- /.box -->
 
         </section><!-- /.content -->
-      </div><!-- /.content-wrapper -->
+    </div><!-- /.content-wrapper -->
 
 <?php $this->load->view("partial/footer"); ?>

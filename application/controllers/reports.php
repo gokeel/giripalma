@@ -110,8 +110,14 @@ class Reports extends Secure_area
 	}
 
 	//Summary sales report
-	function summary_sales($start_date, $end_date, $sale_type, $export_excel=0)
+	function summary_sales($start_date=null, $end_date=null, $sale_type=null, $export_excel=0)
 	{
+		if($start_date==null) $start_date = date('Y-m-d', mktime(0,0,0,date("m"),date("d")-30,date("Y"))); // initiate from 30 days ago
+		if($end_date==null) $end_date = date('Y-m-d');
+		if($sale_type==null) $sale_type = 'all';
+
+		$data = $this->_get_common_report_data();
+
 		$this->load->model('reports/Summary_sales');
 		$model = $this->Summary_sales;
 		$tabular_data = array();
@@ -119,19 +125,129 @@ class Reports extends Secure_area
 
 		foreach($report_data as $row)
 		{
-			$tabular_data[] = array($row['sale_date'], $row['quantity_purchased'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['cost']), to_currency($row['profit']));
+			$tabular_data[] = array($row['sale_date'], intval($row['quantity_purchased']), to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['cost']), to_currency($row['profit']));
 		}
 
-		$data = array(
-			"title" => $this->lang->line('reports_sales_summary_report'),
-			"subtitle" => date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date)),
-			"headers" => $model->getDataColumns(),
-			"data" => $tabular_data,
-			"summary_data" => $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type)),
-			"export_excel" => $export_excel
-		);
+		$data["title"] = $this->lang->line('reports_sales_summary_report');
+		$data["subtitle"] = date($this->config->item('dateformat'), strtotime($start_date)) .' - '.date($this->config->item('dateformat'), strtotime($end_date));
+		$data["headers"] = $model->getDataColumns();
+		$data["data"] = $tabular_data;
+		$data["summary_data"] = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		$data["export_excel"] = $export_excel;
+		$data['export_url'] = site_url('reports/export_summary_sales/'.$start_date.'/'.$end_date.'/'.$sale_type.'/excel');
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'summary_report';
+		$data['asm_2'] = 'summary_sales';
 
-		$this->load->view("reports/tabular",$data);
+		$this->load->view("reports/tabular", $data);
+	}
+
+	function export_summary_sales($start_date, $end_date, $sale_type, $output){
+		$this->load->model('reports/Summary_sales');
+		$model = $this->Summary_sales;
+		$tabular_data = array();
+		$report_data = $model->getData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		foreach($report_data as $row)
+		{
+			$tabular_data[] = array($row['sale_date'], intval($row['quantity_purchased']), intval($row['subtotal']), intval($row['total']), intval($row['tax']), intval($row['cost']), intval($row['profit']));
+		}
+
+		if($output=="json"){
+			$response = array(
+				'status' => (empty($tabular_data) ? '301' : '200'),
+				'title' => $this->lang->line('reports_sales_summary_report'),
+				'subtitle' => date($this->config->item('dateformat'), strtotime($start_date)) .' - '.date($this->config->item('dateformat'), strtotime($end_date)),
+				'header' => $model->getDataColumns(),
+				'data' => $tabular_data,
+				'summary' => $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type)),
+				'export_excel' => site_url('reports/export_summary_sales/'.$start_date.'/'.$end_date.'/'.$sale_type.'/excel')
+				);
+
+			echo json_encode($response);
+		}
+		else if($output=="excel"){
+			$this->load->library('excel');
+			$this->excel->setActiveSheetIndex(0);
+			$this->excel->getActiveSheet()->setTitle($this->lang->line('reports_sales_summary_report'));
+
+			// setting column width
+			$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+			$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+			$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+
+			//give border to top header
+			$style_top_header = array(
+				'font' => array(
+					'bold' => true,
+					'name' => 'Arial',
+					'size' => '11'
+				),
+			);
+			$alignment = array(
+				'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+					)
+				);
+
+			// filling title
+			$this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, 2, $this->lang->line('reports_sales_summary_report'));
+			$this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, 3, date($this->config->item('dateformat'), strtotime($start_date)) .' - '.date($this->config->item('dateformat'), strtotime($end_date)));
+			$this->excel->getActiveSheet()->mergeCells('A2:G2');
+			$this->excel->getActiveSheet()->mergeCells('A3:G3');
+			$this->excel->getActiveSheet()->getStyle('A2:G3')->applyFromArray($style_top_header);
+			$this->excel->getActiveSheet()->getStyle('A2:G3')->applyFromArray($alignment);
+
+			// filling the header
+			$col = 0; // starting at A5
+			$row = 5;
+			foreach($model->getDataColumns() as $header){
+				$this->excel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $header);
+				$col++;
+			}
+			
+			$this->excel->getActiveSheet()->getStyle('A5:G5')->applyFromArray($style_top_header);
+
+			// filling data
+			// starting at A6
+			$row = 6;
+			foreach($tabular_data as $record){
+				$col = 0; 
+				foreach($record as $rec_data){
+					$this->excel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $rec_data);
+					$col++;
+				}
+				$row++;
+			}
+
+			$this->excel->getActiveSheet()->getStyle('C6:G'.$row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+
+			// filling summary
+			$this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, 'TOTAL');
+			$summary = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+			$col = 1;
+			foreach($summary as $value){
+				$this->excel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $value);
+				$col++;
+			}
+			$this->excel->getActiveSheet()->getStyle('A'.$row.':G'.$row)->applyFromArray($style_top_header);
+
+
+			header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); //mime type
+			header('Content-Disposition: attachment;filename="'.$this->lang->line('reports_sales_summary_report').'.xlsx"'); //tell browser what's the file name
+			header('Cache-Control: max-age=0'); //no cache
+			//save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+			//if you want to save it as .XLSX Excel 2007 format
+			$objWriter = new PHPExcel_Writer_Excel2007($this->excel); 
+			ob_end_clean();
+			//force user to download the Excel file without writing it to server's HD
+			$objWriter->save('php://output');
+			
+		}
 	}
 
 	//Summary categories report
@@ -410,7 +526,7 @@ class Reports extends Secure_area
 		$summary = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
 		// print_r($this->db->last_query());
 		foreach($summary as $name => $value)
-			$summ[] = array('name' => $this->lang->line('reports_'.$name), 'value' => to_currency($value));
+			$summ[] = array('name' => $this->lang->line('reports_'.$name).': ', 'value' => ($name=="quantity_purchased" ? intval($value) : to_currency($value)));
 
 		$json_data = array(
 			'status' => empty($x_axis) ? '301' : '200',

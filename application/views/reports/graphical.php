@@ -42,14 +42,9 @@
                   </div>
                   <div id="report_summary">
                   <?php foreach($summary_data as $name=>$value) { ?>
-                    <div class="summary_row"><?php echo $this->lang->line('reports_'.$name). ': '.to_currency($value); ?></div>
+                    <div class="summary_row"><?php echo $this->lang->line('reports_'.$name).': '.($name=="quantity_purchased" ? intval($value) : to_currency($value)); ?></div>
                   <?php }?>
-                  </div>
-                    
-                    <div class="col-md-4">
-                      
-                    </div>
-                  
+                  </div>                  
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
               <!-- for graphic -->
@@ -61,7 +56,6 @@
                   <h3 class="box-title"><?php echo $this->lang->line('reports_report_input'); ?></h3>
                 </div>
                 <div class="box-body">
-                  <h4><?php echo $this->lang->line('reports_report_input'); ?></h4>
                   <?php echo form_label($this->lang->line('reports_date_range'), 'report_date_range_label', array('class'=>'required')); ?>
                   <?php
                   if(isset($error))
@@ -69,6 +63,7 @@
                     echo "<div class='error_message'>".$error."</div>";
                   }
                   ?>
+                  <form id="myForm">
                   <div class="form-group">
                     <div class="radio">
                       <label>
@@ -111,7 +106,8 @@
                         </div>
                       </label>
                     </div>
-                  </div>                    
+                  </div>
+                  </form>
                   <?php if($mode == 'sale') { ?>
                   <?php echo form_label($this->lang->line('reports_sale_type'), 'reports_sale_type_label', array('class'=>'required')); ?>
                   <div id='report_sale_type'>
@@ -165,14 +161,13 @@
 
     $("#generate_report").click(function()
     {
-
       var input_type = $("#input_type").val();
       var location_id = $("#location_id").val();
       var location = window.location;
       var date_range = $("#daterangepicker").val();
       var new_date_range = date_range.replace(" - ", "/");
       var param_string = '';
-      if ($("#simple_radio").attr('checked'))
+      if ($('input[name=report_type]:checked', '#myForm').val()=="simple")
       {
         param_string += '/'+$("#report_date_range_simple option:selected").val() + '/' + input_type;
       }
@@ -195,6 +190,15 @@
       visualize_data(param_string);
     });
     
+    $("#daterangepicker").click(function()
+    {
+      $("#complex_radio").prop("checked", true);
+    });
+    
+    $("#report_date_range_simple").click(function()
+    {
+      $("#simple_radio").prop("checked", true);
+    });
   });
 
   function visualize_data(param_string){
