@@ -23,9 +23,18 @@
     <!-- Morris Chart -->
     <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="<?php echo ADMIN_LTE_DIR;?>/plugins/morris/morris.min.js" type="text/javascript"></script>
+    <!-- date-range-picker -->
+    <script src="<?php echo ADMIN_LTE_DIR;?>/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
+    <!-- bootstrap color picker -->
+    <script src="<?php echo ADMIN_LTE_DIR;?>/plugins/colorpicker/bootstrap-colorpicker.min.js" type="text/javascript"></script>
+    <!-- bootstrap time picker -->
+    <script src="<?php echo ADMIN_LTE_DIR;?>/plugins/timepicker/bootstrap-timepicker.min.js" type="text/javascript"></script>
     <!-- AdminLTE App -->
     <script src="<?php echo ADMIN_LTE_DIR;?>/dist/js/app.min.js" type="text/javascript"></script>
     
+    <script>
+        $('#daterangepicker').daterangepicker({format: 'YYYY-MM-DD'});
+    </script>
 
 </body>
 </html>

@@ -1,5 +1,6 @@
 <?php 
 
+$lang["reports"] = "Reporting";
 $lang["reports_all"] = "Semua";
 $lang["reports_all_time"] = "Semua Waktu";
 $lang["reports_categories"] = "Kategori";
@@ -24,6 +25,7 @@ $lang["reports_discounts_summary_report"] = "Laporan Ringkasan Diskon";
 $lang["reports_employee"] = "Karyawan";
 $lang["reports_employees"] = "Karyawan";
 $lang["reports_employees_summary_report"] = "Laporan Ringkasan Karyawan";
+$lang["reports_filter_input"] = "Filter Input Laporan";
 $lang["reports_graphical_reports"] = "Laporan Dalam Bentuk Grafis";
 $lang["reports_inventory"] = "Laporan Persediaan";
 $lang["reports_inventory_low"] = "Laporan Persediaan Rendah";
@@ -48,7 +50,7 @@ $lang["reports_payment_type"] = "Tipe Pembayaran";
 $lang["reports_payments"] = "Pembayaran";
 $lang["reports_payments_summary_report"] = "Laporan Ringkasan Pembayaran";
 $lang["reports_profit"] = "Keuntungan/Laba";
-$lang["reports_cost"] = "";
+$lang["reports_cost"] = "Pokok";
 $lang["reports_quantity_purchased"] = "Jumlah Dibeli";
 $lang["reports_received_by"] = "Diterima Oleh";
 $lang["reports_receiving_id"] = "Id Penerima";

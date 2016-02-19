@@ -339,6 +339,7 @@ class Reports extends Secure_area
 	{
 		$data = $this->_get_common_report_data();
 		$data['mode'] = 'sale';
+		$data['am'] = 'reports';
 		$this->load->view("reports/date_input",$data);
 	}
 
@@ -364,17 +365,27 @@ class Reports extends Secure_area
     }
 
 	//Graphical summary sales report
-	function graphical_summary_sales($start_date, $end_date, $sale_type)
+	function graphical_summary_sales($start_date=null, $end_date=null, $sale_type=null)
 	{
+		if($start_date==null) $start_date = date('Y-m-d', mktime(0,0,0,date("m"),date("d")-30,date("Y"))); // initiate from 30 days ago
+		if($end_date==null) $end_date = date('Y-m-d');
+		if($sale_type==null) $sale_type = 'all';
+
 		$this->load->model('reports/Summary_sales');
 		$model = $this->Summary_sales;
 
-		$data = array(
-			"title" => $this->lang->line('reports_sales_summary_report'),
-			"data_file" => site_url("reports/graphical_summary_sales_graph/$start_date/$end_date/$sale_type"),
-			"subtitle" => date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date)),
-			"summary_data" => $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type))
-		);
+		$data = $this->_get_common_report_data();
+		$data["title"] = $this->lang->line('reports_sales_summary_report');
+		$data["data_file"] = site_url("reports/graphical_summary_sales_graph/$start_date/$end_date/$sale_type");
+		$data["subtitle"] = date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date));
+		$data["summary_data"] = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		$data['mode'] = 'sale';
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'graphical_report';
+		$data['asm_2'] = 'graphical_summary_sales';
+
+		// only for window open
+		$data['init_param_string'] = $start_date.'/'.$end_date.'/'.$sale_type;
 
 		$this->load->view("reports/graphical",$data);
 	}
@@ -386,35 +397,63 @@ class Reports extends Secure_area
 		$model = $this->Summary_sales;
 		$report_data = $model->getData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
 
-		$graph_data = array();
+		// $graph_data = array();
+		$x_axis = array();
+		$series_value = array();
 		foreach($report_data as $row)
 		{
-			$graph_data[date($this->config->item('dateformat'), strtotime($row['sale_date']))]= $row['total'];
+			array_push($series_value, intval($row['total']));
+			array_push($x_axis, date($this->config->item('dateformat'), strtotime($row['sale_date'])));
 		}
 
-		$data = array(
-			"title" => $this->lang->line('reports_sales_summary_report'),
-			"yaxis_label"=>$this->lang->line('reports_revenue'),
-			"xaxis_label"=>$this->lang->line('reports_date'),
-			"data" => $graph_data
-		);
+		// get summary data
+		$summary = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		// print_r($this->db->last_query());
+		foreach($summary as $name => $value)
+			$summ[] = array('name' => $this->lang->line('reports_'.$name), 'value' => to_currency($value));
 
-		$this->load->view("reports/graphs/line",$data);
+		$json_data = array(
+			'status' => empty($x_axis) ? '301' : '200',
+			// 'data' => $graph_data,
+			'title' => $this->lang->line('reports_sales_summary_report'),
+			'subtitle' => date($this->config->item('dateformat'), strtotime($start_date)).' - '.date($this->config->item('dateformat'), strtotime($end_date)),
+			'yaxis_label'=>$this->lang->line('reports_revenue'),
+			'xaxis_label'=>$this->lang->line('reports_date'),
+			'series_name' => 'Penjualan',
+			'x_axis' => $x_axis,
+			'series_value' => $series_value,
+			'summary' => $summ,
+			'chart_type' => 'line',
+			'start_date' => date($this->config->item('dateformat'), strtotime($start_date)),
+			'end_date' => date($this->config->item('dateformat'), strtotime($end_date))
+			);
 
+		echo json_encode($json_data);		
 	}
 
 	//Graphical summary items report
-	function graphical_summary_items($start_date, $end_date, $sale_type)
+	function graphical_summary_items($start_date=null, $end_date=null, $sale_type=null)
 	{
+		if($start_date==null) $start_date = date('Y-m-d', mktime(0,0,0,date("m"),date("d")-30,date("Y"))); // initiate from 30 days ago
+		if($end_date==null) $end_date = date('Y-m-d');
+		if($sale_type==null) $sale_type = 'all';
+
 		$this->load->model('reports/Summary_items');
 		$model = $this->Summary_items;
 
-		$data = array(
-			"title" => $this->lang->line('reports_items_summary_report'),
-			"data_file" => site_url("reports/graphical_summary_items_graph/$start_date/$end_date/$sale_type"),
-			"subtitle" => date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date)),
-			"summary_data" => $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type))
-		);
+		$data = $this->_get_common_report_data();
+		$data["title"] = $this->lang->line('reports_items_summary_report');
+		$data["data_file"] = site_url("reports/graphical_summary_items_graph/$start_date/$end_date/$sale_type");
+		$data["subtitle"] = date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date));
+		$data["summary_data"] = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+
+		$data['mode'] = 'sale';
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'graphical_report';
+		$data['asm_2'] = 'graphical_summary_items';
+
+		// only for window open
+		$data['init_param_string'] = $start_date.'/'.$end_date.'/'.$sale_type;
 
 		$this->load->view("reports/graphical",$data);
 	}
@@ -426,34 +465,73 @@ class Reports extends Secure_area
 		$model = $this->Summary_items;
 		$report_data = $model->getData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
 
-		$graph_data = array();
+		$x_axis = array();
+		$series_value = array();
 		foreach($report_data as $row)
 		{
-			$graph_data[$row['name']] = $row['total'];
+			array_push($series_value, intval($row['total']));
+			array_push($x_axis, $row['name']);
 		}
 
-		$data = array(
-			"title" => $this->lang->line('reports_items_summary_report'),
-			"xaxis_label"=>$this->lang->line('reports_revenue'),
-			"yaxis_label"=>$this->lang->line('reports_items'),
-			"data" => $graph_data
-		);
+		// get summary data
+		$summary = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		// print_r($this->db->last_query());
+		foreach($summary as $name => $value)
+			$summ[] = array('name' => $this->lang->line('reports_'.$name), 'value' => to_currency($value));
 
-		$this->load->view("reports/graphs/hbar",$data);
+		$json_data = array(
+			'status' => empty($x_axis) ? '301' : '200',
+			// 'data' => $graph_data,
+			'title' => $this->lang->line('reports_items_summary_report'),
+			'subtitle' => date($this->config->item('dateformat'), strtotime($start_date)).' - '.date($this->config->item('dateformat'), strtotime($end_date)),
+			'yaxis_label'=>$this->lang->line('reports_revenue'),
+			'xaxis_label'=>$this->lang->line('reports_items'),
+			'series_name' => 'Produk',
+			'x_axis' => $x_axis,
+			'series_value' => $series_value,
+			'summary' => $summ,
+			'chart_type' => 'bar'
+			);
+
+		echo json_encode($json_data);
+		// $graph_data = array();
+		// foreach($report_data as $row)
+		// {
+		// 	$graph_data[$row['name']] = $row['total'];
+		// }
+
+		// $data = array(
+		// 	"title" => $this->lang->line('reports_items_summary_report'),
+		// 	"xaxis_label"=>$this->lang->line('reports_revenue'),
+		// 	"yaxis_label"=>$this->lang->line('reports_items'),
+		// 	"data" => $graph_data
+		// );
+
+		// $this->load->view("reports/graphs/hbar",$data);
 	}
 
 	//Graphical summary customers report
-	function graphical_summary_categories($start_date, $end_date, $sale_type)
+	function graphical_summary_categories($start_date=null, $end_date=null, $sale_type=null)
 	{
+		if($start_date==null) $start_date = date('Y-m-d', mktime(0,0,0,date("m"),date("d")-30,date("Y"))); // initiate from 30 days ago
+		if($end_date==null) $end_date = date('Y-m-d');
+		if($sale_type==null) $sale_type = 'all';
+
 		$this->load->model('reports/Summary_categories');
 		$model = $this->Summary_categories;
 
-		$data = array(
-			"title" => $this->lang->line('reports_categories_summary_report'),
-			"data_file" => site_url("reports/graphical_summary_categories_graph/$start_date/$end_date/$sale_type"),
-			"subtitle" => date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date)),
-			"summary_data" => $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type))
-		);
+		$data = $this->_get_common_report_data();
+		$data["title"] = $this->lang->line('reports_categories_summary_report');
+		$data["data_file"] = site_url("reports/graphical_summary_categories_graph/$start_date/$end_date/$sale_type");
+		$data["subtitle"] = date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date));
+		$data["summary_data"] = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		$data['mode'] = 'sale';
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'graphical_report';
+		$data['asm_2'] = 'graphical_summary_categories';
+
+		// only for window open
+		$data['init_param_string'] = $start_date.'/'.$end_date.'/'.$sale_type;
 
 		$this->load->view("reports/graphical",$data);
 	}
@@ -468,29 +546,54 @@ class Reports extends Secure_area
 		$graph_data = array();
 		foreach($report_data as $row)
 		{
-			$graph_data[$row['category']] = $row['total'];
+			$graph_data[] = array('name'=>ucwords($row['category']), 'y'=>intval($row['total']));
 		}
 
-		$data = array(
-			"title" => $this->lang->line('reports_categories_summary_report'),
-			"data" => $graph_data
-		);
+		// get summary data
+		$summary = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		// print_r($this->db->last_query());
+		foreach($summary as $name => $value)
+			$summ[] = array('name' => $this->lang->line('reports_'.$name), 'value' => to_currency($value));
 
-		$this->load->view("reports/graphs/pie",$data);
+		$json_data = array(
+			'status' => empty($graph_data) ? '301' : '200',
+			// 'data' => $graph_data,
+			'title' => $this->lang->line('reports_categories_summary_report'),
+			'subtitle' => date($this->config->item('dateformat'), strtotime($start_date)).' - '.date($this->config->item('dateformat'), strtotime($end_date)),
+			'series_name' => 'Kategori',
+			'data' => $graph_data,
+			'chart_type' => 'pie',
+			'summary' => $summ,
+			'start_date' => date($this->config->item('dateformat'), strtotime($start_date)),
+			'end_date' => date($this->config->item('dateformat'), strtotime($end_date))
+			);
+
+		echo json_encode($json_data);
 	}
 
 	//Graphical summary suppliers report
-	function graphical_summary_suppliers($start_date, $end_date, $sale_type)
+	function graphical_summary_suppliers($start_date=null, $end_date=null, $sale_type=null)
 	{
+		if($start_date==null) $start_date = date('Y-m-d', mktime(0,0,0,date("m"),date("d")-30,date("Y"))); // initiate from 30 days ago
+		if($end_date==null) $end_date = date('Y-m-d');
+		if($sale_type==null) $sale_type = 'all';
+
 		$this->load->model('reports/Summary_suppliers');
 		$model = $this->Summary_suppliers;
 
-		$data = array(
-			"title" => $this->lang->line('reports_suppliers_summary_report'),
-			"data_file" => site_url("reports/graphical_summary_suppliers_graph/$start_date/$end_date/$sale_type"),
-			"subtitle" => date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date)),
-			"summary_data" => $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type))
-		);
+		$data = $this->_get_common_report_data();
+		$data["title"] = $this->lang->line('reports_suppliers_summary_report');
+		$data["data_file"] = site_url("reports/graphical_summary_suppliers_graph/$start_date/$end_date/$sale_type");
+		$data["subtitle"] = date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date));
+		$data["summary_data"] = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+
+		$data['mode'] = 'sale';
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'graphical_report';
+		$data['asm_2'] = 'graphical_summary_suppliers';
+
+		// only for window open
+		$data['init_param_string'] = $start_date.'/'.$end_date.'/'.$sale_type;
 
 		$this->load->view("reports/graphical",$data);
 	}
@@ -505,29 +608,66 @@ class Reports extends Secure_area
 		$graph_data = array();
 		foreach($report_data as $row)
 		{
-			$graph_data[$row['supplier']] = $row['total'];
+			$graph_data[] = array('name'=>ucwords($row['supplier']), 'y'=>intval($row['total']));
 		}
 
-		$data = array(
-			"title" => $this->lang->line('reports_suppliers_summary_report'),
-			"data" => $graph_data
-		);
+		// get summary data
+		$summary = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		// print_r($this->db->last_query());
+		foreach($summary as $name => $value)
+			$summ[] = array('name' => $this->lang->line('reports_'.$name), 'value' => to_currency($value));
 
-		$this->load->view("reports/graphs/pie",$data);
+		$json_data = array(
+			'status' => empty($graph_data) ? '301' : '200',
+			// 'data' => $graph_data,
+			'title' => $this->lang->line('reports_suppliers_summary_report'),
+			'subtitle' => date($this->config->item('dateformat'), strtotime($start_date)).' - '.date($this->config->item('dateformat'), strtotime($end_date)),
+			'series_name' => 'Supplier',
+			'data' => $graph_data,
+			'chart_type' => 'pie',
+			'summary' => $summ,
+			'start_date' => date($this->config->item('dateformat'), strtotime($start_date)),
+			'end_date' => date($this->config->item('dateformat'), strtotime($end_date))
+			);
+
+		echo json_encode($json_data);
+		// $graph_data = array();
+		// foreach($report_data as $row)
+		// {
+		// 	$graph_data[$row['supplier']] = $row['total'];
+		// }
+
+		// $data = array(
+		// 	"title" => $this->lang->line('reports_suppliers_summary_report'),
+		// 	"data" => $graph_data
+		// );
+
+		// $this->load->view("reports/graphs/pie",$data);
 	}
 
 	//Graphical summary employees report
-	function graphical_summary_employees($start_date, $end_date, $sale_type)
+	function graphical_summary_employees($start_date=null, $end_date=null, $sale_type=null)
 	{
+		if($start_date==null) $start_date = date('Y-m-d', mktime(0,0,0,date("m"),date("d")-30,date("Y"))); // initiate from 30 days ago
+		if($end_date==null) $end_date = date('Y-m-d');
+		if($sale_type==null) $sale_type = 'all';
+
 		$this->load->model('reports/Summary_employees');
 		$model = $this->Summary_employees;
 
-		$data = array(
-			"title" => $this->lang->line('reports_employees_summary_report'),
-			"data_file" => site_url("reports/graphical_summary_employees_graph/$start_date/$end_date/$sale_type"),
-			"subtitle" => date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date)),
-			"summary_data" => $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type))
-		);
+		$data = $this->_get_common_report_data();
+		$data["title"] = $this->lang->line('reports_employees_summary_report');
+		$data["data_file"] = site_url("reports/graphical_summary_employees_graph/$start_date/$end_date/$sale_type");
+		$data["subtitle"] = date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date));
+		$data["summary_data"] = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+
+		$data['mode'] = 'sale';
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'graphical_report';
+		$data['asm_2'] = 'graphical_summary_employees';
+
+		// only for window open
+		$data['init_param_string'] = $start_date.'/'.$end_date.'/'.$sale_type;
 
 		$this->load->view("reports/graphical",$data);
 	}
@@ -542,29 +682,66 @@ class Reports extends Secure_area
 		$graph_data = array();
 		foreach($report_data as $row)
 		{
-			$graph_data[$row['employee']] = $row['total'];
+			$graph_data[] = array('name'=>ucwords($row['employee']), 'y'=>intval($row['total']));
 		}
 
-		$data = array(
-			"title" => $this->lang->line('reports_employees_summary_report'),
-			"data" => $graph_data
-		);
+		// get summary data
+		$summary = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		// print_r($this->db->last_query());
+		foreach($summary as $name => $value)
+			$summ[] = array('name' => $this->lang->line('reports_'.$name), 'value' => to_currency($value));
 
-		$this->load->view("reports/graphs/pie",$data);
+		$json_data = array(
+			'status' => empty($graph_data) ? '301' : '200',
+			// 'data' => $graph_data,
+			'title' => $this->lang->line('reports_employees_summary_report'),
+			'subtitle' => date($this->config->item('dateformat'), strtotime($start_date)).' - '.date($this->config->item('dateformat'), strtotime($end_date)),
+			'series_name' => 'Pencapaian Karyawan',
+			'data' => $graph_data,
+			'chart_type' => 'pie',
+			'summary' => $summ,
+			'start_date' => date($this->config->item('dateformat'), strtotime($start_date)),
+			'end_date' => date($this->config->item('dateformat'), strtotime($end_date))
+			);
+
+		echo json_encode($json_data);
+		// $graph_data = array();
+		// foreach($report_data as $row)
+		// {
+		// 	$graph_data[$row['employee']] = $row['total'];
+		// }
+
+		// $data = array(
+		// 	"title" => $this->lang->line('reports_employees_summary_report'),
+		// 	"data" => $graph_data
+		// );
+
+		// $this->load->view("reports/graphs/pie",$data);
 	}
 
 	//Graphical summary taxes report
-	function graphical_summary_taxes($start_date, $end_date, $sale_type)
+	function graphical_summary_taxes($start_date=null, $end_date=null, $sale_type=null)
 	{
+		if($start_date==null) $start_date = date('Y-m-d', mktime(0,0,0,date("m"),date("d")-30,date("Y"))); // initiate from 30 days ago
+		if($end_date==null) $end_date = date('Y-m-d');
+		if($sale_type==null) $sale_type = 'all';
+
 		$this->load->model('reports/Summary_taxes');
 		$model = $this->Summary_taxes;
 
-		$data = array(
-			"title" => $this->lang->line('reports_taxes_summary_report'),
-			"data_file" => site_url("reports/graphical_summary_taxes_graph/$start_date/$end_date/$sale_type"),
-			"subtitle" => date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date)),
-			"summary_data" => $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type))
-		);
+		$data = $this->_get_common_report_data();
+		$data["title"] = $this->lang->line('reports_taxes_summary_report');
+		$data["data_file"] = site_url("reports/graphical_summary_taxes_graph/$start_date/$end_date/$sale_type");
+		$data["subtitle"] = date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date));
+		$data["summary_data"] = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+
+		$data['mode'] = 'sale';
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'graphical_report';
+		$data['asm_2'] = 'graphical_summary_taxes';
+
+		// only for window open
+		$data['init_param_string'] = $start_date.'/'.$end_date.'/'.$sale_type;
 
 		$this->load->view("reports/graphical",$data);
 	}
@@ -579,29 +756,65 @@ class Reports extends Secure_area
 		$graph_data = array();
 		foreach($report_data as $row)
 		{
-			$graph_data[$row['percent']] = $row['total'];
+			$graph_data[] = array('name'=>ucwords($row['percent']), 'y'=>intval($row['total']));
 		}
 
-		$data = array(
-			"title" => $this->lang->line('reports_taxes_summary_report'),
-			"data" => $graph_data
-		);
+		// get summary data
+		$summary = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		// print_r($this->db->last_query());
+		foreach($summary as $name => $value)
+			$summ[] = array('name' => $this->lang->line('reports_'.$name), 'value' => to_currency($value));
 
-		$this->load->view("reports/graphs/pie",$data);
+		$json_data = array(
+			'status' => empty($graph_data) ? '301' : '200',
+			// 'data' => $graph_data,
+			'title' => $this->lang->line('reports_taxes_summary_report'),
+			'subtitle' => date($this->config->item('dateformat'), strtotime($start_date)).' - '.date($this->config->item('dateformat'), strtotime($end_date)),
+			'series_name' => 'Pajak',
+			'data' => $graph_data,
+			'chart_type' => 'pie',
+			'summary' => $summ,
+			'start_date' => date($this->config->item('dateformat'), strtotime($start_date)),
+			'end_date' => date($this->config->item('dateformat'), strtotime($end_date))
+			);
+
+		echo json_encode($json_data);
+		// $graph_data = array();
+		// foreach($report_data as $row)
+		// {
+		// 	$graph_data[$row['percent']] = $row['total'];
+		// }
+
+		// $data = array(
+		// 	"title" => $this->lang->line('reports_taxes_summary_report'),
+		// 	"data" => $graph_data
+		// );
+
+		// $this->load->view("reports/graphs/pie",$data);
 	}
 
 	//Graphical summary customers report
-	function graphical_summary_customers($start_date, $end_date, $sale_type)
+	function graphical_summary_customers($start_date=null, $end_date=null, $sale_type=null)
 	{
+		if($start_date==null) $start_date = date('Y-m-d', mktime(0,0,0,date("m"),date("d")-30,date("Y"))); // initiate from 30 days ago
+		if($end_date==null) $end_date = date('Y-m-d');
+		if($sale_type==null) $sale_type = 'all';
+
 		$this->load->model('reports/Summary_customers');
 		$model = $this->Summary_customers;
 
-		$data = array(
-			"title" => $this->lang->line('reports_customers_summary_report'),
-			"data_file" => site_url("reports/graphical_summary_customers_graph/$start_date/$end_date/$sale_type"),
-			"subtitle" => date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date)),
-			"summary_data" => $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type))
-		);
+		$data = $this->_get_common_report_data();
+		$data["title"] = $this->lang->line('reports_customers_summary_report');
+		$data["data_file"] = site_url("reports/graphical_summary_customers_graph/$start_date/$end_date/$sale_type");
+		$data["subtitle"] = date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date));
+		$data["summary_data"] = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		$data['mode'] = 'sale';
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'graphical_report';
+		$data['asm_2'] = 'graphical_summary_customers';
+
+		// only for window open
+		$data['init_param_string'] = $start_date.'/'.$end_date.'/'.$sale_type;
 
 		$this->load->view("reports/graphical",$data);
 	}
@@ -613,34 +826,61 @@ class Reports extends Secure_area
 		$model = $this->Summary_customers;
 		$report_data = $model->getData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
 
-		$graph_data = array();
+		// $graph_data = array();
+		$x_axis = array();
+		$series_value = array();
 		foreach($report_data as $row)
 		{
-			$graph_data[$row['customer']] = $row['total'];
+			array_push($series_value, intval($row['total']));
+			array_push($x_axis, $row['customer']);
 		}
 
-		$data = array(
-			"title" => $this->lang->line('reports_customers_summary_report'),
-			"xaxis_label"=>$this->lang->line('reports_revenue'),
-			"yaxis_label"=>$this->lang->line('reports_customers'),
-			"data" => $graph_data
-		);
+		// get summary data
+		$summary = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		// print_r($this->db->last_query());
+		foreach($summary as $name => $value)
+			$summ[] = array('name' => $this->lang->line('reports_'.$name), 'value' => to_currency($value));
 
-		$this->load->view("reports/graphs/hbar",$data);
+		$json_data = array(
+			'status' => empty($x_axis) ? '301' : '200',
+			// 'data' => $graph_data,
+			'title' => $this->lang->line('reports_customers_summary_report'),
+			'subtitle' => date($this->config->item('dateformat'), strtotime($start_date)).' - '.date($this->config->item('dateformat'), strtotime($end_date)),
+			'yaxis_label'=>$this->lang->line('reports_revenue'),
+			'xaxis_label'=>$this->lang->line('reports_date'),
+			'series_name' => 'Customer',
+			'x_axis' => $x_axis,
+			'series_value' => $series_value,
+			'summary' => $summ,
+			'chart_type' => 'bar'
+			);
+
+		echo json_encode($json_data);
 	}
 
 	//Graphical summary discounts report
-	function graphical_summary_discounts($start_date, $end_date, $sale_type)
+	function graphical_summary_discounts($start_date=null, $end_date=null, $sale_type=null)
 	{
+		if($start_date==null) $start_date = date('Y-m-d', mktime(0,0,0,date("m"),date("d")-30,date("Y"))); // initiate from 30 days ago
+		if($end_date==null) $end_date = date('Y-m-d');
+		if($sale_type==null) $sale_type = 'all';
+
 		$this->load->model('reports/Summary_discounts');
 		$model = $this->Summary_discounts;
 
-		$data = array(
-			"title" => $this->lang->line('reports_discounts_summary_report'),
-			"data_file" => site_url("reports/graphical_summary_discounts_graph/$start_date/$end_date/$sale_type"),
-			"subtitle" => date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date)),
-			"summary_data" => $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type))
-		);
+		$data = $this->_get_common_report_data();
+		$data["title"] = $this->lang->line('reports_discounts_summary_report');
+		$data["data_file"] = site_url("reports/graphical_summary_discounts_graph/$start_date/$end_date/$sale_type");
+		$data["subtitle"] = date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date));
+		$data["summary_data"] = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+
+		$data['mode'] = 'sale';
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'graphical_report';
+		$data['asm_2'] = 'graphical_summary_discounts';
+
+		// only for window open
+		$data['init_param_string'] = $start_date.'/'.$end_date.'/'.$sale_type;
 
 		$this->load->view("reports/graphical",$data);
 	}
@@ -652,34 +892,75 @@ class Reports extends Secure_area
 		$model = $this->Summary_discounts;
 		$report_data = $model->getData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
 
-		$graph_data = array();
+		// $graph_data = array();
+		$x_axis = array();
+		$series_value = array();
 		foreach($report_data as $row)
 		{
-			$graph_data[$row['discount_percent']] = $row['count'];
+			array_push($series_value, intval($row['count']));
+			array_push($x_axis, $row['discount_percent']);
 		}
 
-		$data = array(
-			"title" => $this->lang->line('reports_discounts_summary_report'),
-			"yaxis_label"=>$this->lang->line('reports_count'),
-			"xaxis_label"=>$this->lang->line('reports_discount_percent'),
-			"data" => $graph_data
-		);
+		// get summary data
+		$summary = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		// print_r($this->db->last_query());
+		foreach($summary as $name => $value)
+			$summ[] = array('name' => $this->lang->line('reports_'.$name), 'value' => to_currency($value));
 
-		$this->load->view("reports/graphs/bar",$data);
+		$json_data = array(
+			'status' => empty($x_axis) ? '301' : '200',
+			// 'data' => $graph_data,
+			'title' => $this->lang->line('reports_discounts_summary_report'),
+			'subtitle' => date($this->config->item('dateformat'), strtotime($start_date)).' - '.date($this->config->item('dateformat'), strtotime($end_date)),
+			'yaxis_label'=>$this->lang->line('reports_revenue'),
+			'xaxis_label'=>$this->lang->line('reports_date'),
+			'series_name' => 'Customer',
+			'x_axis' => $x_axis,
+			'series_value' => $series_value,
+			'summary' => $summ,
+			'chart_type' => 'column'
+			);
+
+		echo json_encode($json_data);
+		// $graph_data = array();
+		// foreach($report_data as $row)
+		// {
+		// 	$graph_data[$row['discount_percent']] = $row['count'];
+		// }
+
+		// $data = array(
+		// 	"title" => $this->lang->line('reports_discounts_summary_report'),
+		// 	"yaxis_label"=>$this->lang->line('reports_count'),
+		// 	"xaxis_label"=>$this->lang->line('reports_discount_percent'),
+		// 	"data" => $graph_data
+		// );
+
+		// $this->load->view("reports/graphs/bar",$data);
 	}
 
 	//Graphical summary payments report
-	function graphical_summary_payments($start_date, $end_date, $sale_type)
+	function graphical_summary_payments($start_date=null, $end_date=null, $sale_type=null)
 	{
+		if($start_date==null) $start_date = date('Y-m-d', mktime(0,0,0,date("m"),date("d")-30,date("Y"))); // initiate from 30 days ago
+		if($end_date==null) $end_date = date('Y-m-d');
+		if($sale_type==null) $sale_type = 'all';
+
 		$this->load->model('reports/Summary_payments');
 		$model = $this->Summary_payments;
 
-		$data = array(
-			"title" => $this->lang->line('reports_payments_summary_report'),
-			"data_file" => site_url("reports/graphical_summary_payments_graph/$start_date/$end_date/$sale_type"),
-			"subtitle" => date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date)),
-			"summary_data" => $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type))
-		);
+		$data = $this->_get_common_report_data();
+		$data["title"] = $this->lang->line('reports_payments_summary_report');
+		$data["data_file"] = site_url("reports/graphical_summary_payments_graph/$start_date/$end_date/$sale_type");
+		$data["subtitle"] = date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date));
+		$data["summary_data"] = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+
+		$data['mode'] = 'sale';
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'graphical_report';
+		$data['asm_2'] = 'graphical_summary_payments';
+
+		// only for window open
+		$data['init_param_string'] = $start_date.'/'.$end_date.'/'.$sale_type;
 
 		$this->load->view("reports/graphical",$data);
 	}
@@ -694,17 +975,43 @@ class Reports extends Secure_area
 		$graph_data = array();
 		foreach($report_data as $row)
 		{
-			$graph_data[$row['payment_type']] = $row['payment_amount'];
+			$graph_data[] = array('name'=>ucwords($row['payment_type']), 'y'=>intval($row['payment_amount']));
 		}
 
-		$data = array(
-			"title" => $this->lang->line('reports_payments_summary_report'),
-			"yaxis_label"=>$this->lang->line('reports_revenue'),
-			"xaxis_label"=>$this->lang->line('reports_payment_type'),
-			"data" => $graph_data
-		);
+		// get summary data
+		$summary = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		// print_r($this->db->last_query());
+		foreach($summary as $name => $value)
+			$summ[] = array('name' => $this->lang->line('reports_'.$name), 'value' => to_currency($value));
 
-		$this->load->view("reports/graphs/pie",$data);
+		$json_data = array(
+			'status' => empty($graph_data) ? '301' : '200',
+			// 'data' => $graph_data,
+			'title' => $this->lang->line('reports_payments_summary_report'),
+			'subtitle' => date($this->config->item('dateformat'), strtotime($start_date)).' - '.date($this->config->item('dateformat'), strtotime($end_date)),
+			'series_name' => $this->lang->line('reports_revenue'),
+			'data' => $graph_data,
+			'chart_type' => 'pie',
+			'summary' => $summ,
+			'start_date' => date($this->config->item('dateformat'), strtotime($start_date)),
+			'end_date' => date($this->config->item('dateformat'), strtotime($end_date))
+			);
+
+		echo json_encode($json_data);
+		// $graph_data = array();
+		// foreach($report_data as $row)
+		// {
+		// 	$graph_data[$row['payment_type']] = $row['payment_amount'];
+		// }
+
+		// $data = array(
+		// 	"title" => $this->lang->line('reports_payments_summary_report'),
+		// 	"yaxis_label"=>$this->lang->line('reports_revenue'),
+		// 	"xaxis_label"=>$this->lang->line('reports_payment_type'),
+		// 	"data" => $graph_data
+		// );
+
+		// $this->load->view("reports/graphs/pie",$data);
 	}
 
 	function specific_customer_input()

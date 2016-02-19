@@ -9,7 +9,7 @@
           </h1>
           <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li><a href="active">Dashboard</a></li>
+            <li><a href="active"><?php echo $this->lang->line('reports'); ?></a></li>
           </ol>
         </section>
 
@@ -17,70 +17,68 @@
         <section class="content">
 
           <!-- Default box -->
-          <div class="box">
-            <!-- <div class="box-header with-border">
-              <h3 class="box-title">Penjualan Baru</h3>
-            </div> -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title"><?php echo $this->lang->line('reports_reports'); ?></h3>
+              <!-- <h3><?php echo $this->lang->line('reports_welcome_message'); ?></h3> -->
+            </div>
             <div class="box-body">
-			<div id="page_title" style="margin-bottom:8px;"><?php echo $this->lang->line('reports_reports'); ?></div>
-			<div id="welcome_message"><?php echo $this->lang->line('reports_welcome_message'); ?>
-			<ul id="report_list">
-				<li><h3><?php echo $this->lang->line('reports_graphical_reports'); ?></h3>
-					<ul>
-						<?php
-						foreach($grants as $grant) 
-						{
-							if (!preg_match('/reports_(inventory|receivings)/', $grant['permission_id']))
+            	<div class="row">
+            		<div class="col-md-3">
+            			<h3><?php echo $this->lang->line('reports_graphical_reports'); ?></h3>
+						<ul style="padding:20px">
+							<?php
+							foreach($grants as $grant) 
 							{
-								show_report('graphical_summary',$grant['permission_id']);
+								if (!preg_match('/reports_(inventory|receivings)/', $grant['permission_id']))
+								{
+									show_report('graphical_summary',$grant['permission_id']);
+								}
 							}
-						}
+							?>
+						</ul>
+            		</div>
+            		<div class="col-md-3">
+            			<h3><?php echo $this->lang->line('reports_summary_reports'); ?></h3>
+						<ul style="padding:20px">
+							<?php 
+							foreach($grants as $grant) 
+							{
+								if (!preg_match('/reports_(inventory|receivings)/', $grant['permission_id']))
+								{
+									show_report('summary',$grant['permission_id']);
+								}
+							}
+							?>
+						</ul>
+            		</div>
+            		<div class="col-md-3">
+            			<h3><?php echo $this->lang->line('reports_detailed_reports'); ?></h3>
+						<ul style="padding:20px">
+						<?php 			
+							$person_id = $this->session->userdata('person_id');
+							show_report_if_allowed('detailed', 'sales', $person_id);
+							show_report_if_allowed('detailed', 'receivings', $person_id);
+							show_report_if_allowed('specific', 'customer', $person_id, 'reports_customers');
+							show_report_if_allowed('specific', 'discount', $person_id, 'reports_discounts');
+							show_report_if_allowed('specific', 'employee', $person_id, 'reports_employees');
 						?>
-					</ul>
-				</li>
-				
-				<li><h3><?php echo $this->lang->line('reports_summary_reports'); ?></h3>
-					<ul>
+						</ul>
+            		</div>
+            		<div class="col-md-3">
+            			<?php if ($this->Employee->has_grant('reports_inventory', $this->session->userdata('person_id'))) { ?>
+						<h3><?php echo $this->lang->line('reports_inventory_reports'); ?></h3>
+						<ul style="padding:20px">
 						<?php 
-						foreach($grants as $grant) 
-						{
-							if (!preg_match('/reports_(inventory|receivings)/', $grant['permission_id']))
-							{
-								show_report('summary',$grant['permission_id']);
-							}
-						}
+							show_report('', 'reports_inventory_low');	
+							show_report('', 'reports_inventory_summary');
 						?>
-					</ul>
-				</li>
-				
-				<li><h3><?php echo $this->lang->line('reports_detailed_reports'); ?></h3>
-					<ul>
-					<?php 			
-						$person_id = $this->session->userdata('person_id');
-						show_report_if_allowed('detailed', 'sales', $person_id);
-						show_report_if_allowed('detailed', 'receivings', $person_id);
-						show_report_if_allowed('specific', 'customer', $person_id, 'reports_customers');
-						show_report_if_allowed('specific', 'discount', $person_id, 'reports_discounts');
-						show_report_if_allowed('specific', 'employee', $person_id, 'reports_employees');
-					?>
-					</ul>
-				</li>
-				<?php 
-				if ($this->Employee->has_grant('reports_inventory', $this->session->userdata('person_id')))
-				{
-				?>
-				<li><h3><?php echo $this->lang->line('reports_inventory_reports'); ?></h3>
-					<ul>
-					<?php 
-						show_report('', 'reports_inventory_low');	
-						show_report('', 'reports_inventory_summary');
-					?>
-					</ul>
-				</li>
-				<?php 
-				}
-				?>
-			</ul>
+						</ul>
+						<?php } ?>
+            		</div>
+            	</div>
+			<!-- <div id="page_title" style="margin-bottom:8px;"><?php echo $this->lang->line('reports_reports'); ?></div> -->
+			<!-- <div id="welcome_message"><?php echo $this->lang->line('reports_welcome_message'); ?></div> -->
 			<?php
 			if(isset($error))
 			{
