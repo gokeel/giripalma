@@ -33,7 +33,7 @@ class Summary_discounts extends Report
 		return $this->db->get()->result_array();		
 	}
 	
-	public function getSummaryData(array $inputs)
+	public function getSummaryData(array $inputs) 
 	{
 		$this->db->select('sum(subtotal) as subtotal, sum(total) as total, sum(tax) as tax, sum(cost) as cost, sum(profit) as profit');
 		$this->db->from('sales_items_temp');

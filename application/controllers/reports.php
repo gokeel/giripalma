@@ -109,58 +109,17 @@ class Reports extends Secure_area
 		echo get_sales_summary_totals($summary, $this);
 	}
 
-	//Summary sales report
-	function summary_sales($start_date=null, $end_date=null, $sale_type=null, $export_excel=0)
-	{
-		if($start_date==null) $start_date = date('Y-m-d', mktime(0,0,0,date("m"),date("d")-30,date("Y"))); // initiate from 30 days ago
-		if($end_date==null) $end_date = date('Y-m-d');
-		if($sale_type==null) $sale_type = 'all';
-
-		$data = $this->_get_common_report_data();
-
-		$this->load->model('reports/Summary_sales');
-		$model = $this->Summary_sales;
-		$tabular_data = array();
-		$report_data = $model->getData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
-
-		foreach($report_data as $row)
-		{
-			$tabular_data[] = array($row['sale_date'], intval($row['quantity_purchased']), to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['cost']), to_currency($row['profit']));
-		}
-
-		$data["title"] = $this->lang->line('reports_sales_summary_report');
-		$data["subtitle"] = date($this->config->item('dateformat'), strtotime($start_date)) .' - '.date($this->config->item('dateformat'), strtotime($end_date));
-		$data["headers"] = $model->getDataColumns();
-		$data["data"] = $tabular_data;
-		$data["summary_data"] = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
-		$data["export_excel"] = $export_excel;
-		$data['export_url'] = site_url('reports/export_summary_sales/'.$start_date.'/'.$end_date.'/'.$sale_type.'/excel');
-		$data['am'] = 'reports';
-		$data['asm_1'] = 'summary_report';
-		$data['asm_2'] = 'summary_sales';
-
-		$this->load->view("reports/tabular", $data);
-	}
-
-	function export_summary_sales($start_date, $end_date, $sale_type, $output){
-		$this->load->model('reports/Summary_sales');
-		$model = $this->Summary_sales;
-		$tabular_data = array();
-		$report_data = $model->getData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
-		foreach($report_data as $row)
-		{
-			$tabular_data[] = array($row['sale_date'], intval($row['quantity_purchased']), intval($row['subtotal']), intval($row['total']), intval($row['tax']), intval($row['cost']), intval($row['profit']));
-		}
-
+	// export tool
+	function _export_datatable($function, $title, $model, $tabular_data, $start_date, $end_date, $sale_type, $output){
 		if($output=="json"){
 			$response = array(
 				'status' => (empty($tabular_data) ? '301' : '200'),
-				'title' => $this->lang->line('reports_sales_summary_report'),
+				'title' => $this->lang->line($title),
 				'subtitle' => date($this->config->item('dateformat'), strtotime($start_date)) .' - '.date($this->config->item('dateformat'), strtotime($end_date)),
 				'header' => $model->getDataColumns(),
 				'data' => $tabular_data,
-				'summary' => $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type)),
-				'export_excel' => site_url('reports/export_summary_sales/'.$start_date.'/'.$end_date.'/'.$sale_type.'/excel')
+				'summary' => ($function<>"summary_discounts" ? $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type)) : array()),
+				'export_excel' => site_url('reports/export_'.$function.'/'.$start_date.'/'.$end_date.'/'.$sale_type.'/excel')
 				);
 
 			echo json_encode($response);
@@ -168,7 +127,7 @@ class Reports extends Secure_area
 		else if($output=="excel"){
 			$this->load->library('excel');
 			$this->excel->setActiveSheetIndex(0);
-			$this->excel->getActiveSheet()->setTitle($this->lang->line('reports_sales_summary_report'));
+			$this->excel->getActiveSheet()->setTitle($this->lang->line($title));
 
 			// setting column width
 			$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
@@ -178,6 +137,9 @@ class Reports extends Secure_area
 			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
 			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
 			$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+			$this->excel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+			$this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+			$this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
 
 			//give border to top header
 			$style_top_header = array(
@@ -195,7 +157,7 @@ class Reports extends Secure_area
 				);
 
 			// filling title
-			$this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, 2, $this->lang->line('reports_sales_summary_report'));
+			$this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, 2, $this->lang->line($title));
 			$this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, 3, date($this->config->item('dateformat'), strtotime($start_date)) .' - '.date($this->config->item('dateformat'), strtotime($end_date)));
 			$this->excel->getActiveSheet()->mergeCells('A2:G2');
 			$this->excel->getActiveSheet()->mergeCells('A3:G3');
@@ -238,7 +200,7 @@ class Reports extends Secure_area
 
 
 			header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); //mime type
-			header('Content-Disposition: attachment;filename="'.$this->lang->line('reports_sales_summary_report').'.xlsx"'); //tell browser what's the file name
+			header('Content-Disposition: attachment;filename="'.$this->lang->line($title).'.xlsx"'); //tell browser what's the file name
 			header('Cache-Control: max-age=0'); //no cache
 			//save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
 			//if you want to save it as .XLSX Excel 2007 format
@@ -250,9 +212,61 @@ class Reports extends Secure_area
 		}
 	}
 
-	//Summary categories report
-	function summary_categories($start_date, $end_date, $sale_type, $export_excel=0)
+	//Summary sales report
+	function summary_sales($start_date=null, $end_date=null, $sale_type=null, $export_excel=0)
 	{
+		if($start_date==null) $start_date = date('Y-m-d', mktime(0,0,0,date("m"),date("d")-30,date("Y"))); // initiate from 30 days ago
+		if($end_date==null) $end_date = date('Y-m-d');
+		if($sale_type==null) $sale_type = 'all';
+
+		$data = $this->_get_common_report_data();
+
+		$this->load->model('reports/Summary_sales');
+		$model = $this->Summary_sales;
+		$tabular_data = array();
+		$report_data = $model->getData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+
+		foreach($report_data as $row)
+		{
+			$tabular_data[] = array($row['sale_date'], intval($row['quantity_purchased']), to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['cost']), to_currency($row['profit']));
+		}
+
+		$data["title"] = $this->lang->line('reports_sales_summary_report');
+		$data["subtitle"] = date($this->config->item('dateformat'), strtotime($start_date)) .' - '.date($this->config->item('dateformat'), strtotime($end_date));
+		$data["headers"] = $model->getDataColumns();
+		$data["data"] = $tabular_data;
+		$data["summary_data"] = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		$data["export_excel"] = $export_excel;
+		$data['export_url'] = site_url('reports/export_summary_sales/'.$start_date.'/'.$end_date.'/'.$sale_type.'/excel');
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'summary_report';
+		$data['asm_2'] = 'summary_sales';
+
+		$this->load->view("reports/tabular", $data);
+	}
+
+	function export_summary_sales($start_date, $end_date, $sale_type, $output){
+		$this->load->model('reports/Summary_sales');
+		$model = $this->Summary_sales;
+		$tabular_data = array();
+		$report_data = $model->getData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		foreach($report_data as $row)
+		{
+			$tabular_data[] = array($row['sale_date'], intval($row['quantity_purchased']), to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['cost']), to_currency($row['profit']));
+		}
+
+		$this->_export_datatable('summary_sales', 'reports_sales_summary_report', $model, $tabular_data, $start_date, $end_date, $sale_type, $output);
+	}
+
+	//Summary categories report
+	function summary_categories($start_date=null, $end_date=null, $sale_type=null, $export_excel=0)
+	{
+		if($start_date==null) $start_date = date('Y-m-d', mktime(0,0,0,date("m"),date("d")-30,date("Y"))); // initiate from 30 days ago
+		if($end_date==null) $end_date = date('Y-m-d');
+		if($sale_type==null) $sale_type = 'all';
+
+		$data = $this->_get_common_report_data();
+
 		$this->load->model('reports/Summary_categories');
 		$model = $this->Summary_categories;
 		$tabular_data = array();
@@ -260,24 +274,45 @@ class Reports extends Secure_area
 
 		foreach($report_data as $row)
 		{
-			$tabular_data[] = array($row['category'], $row['quantity_purchased'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['cost']), to_currency($row['profit']));
+			$tabular_data[] = array($row['category'], intval($row['quantity_purchased']), to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['cost']), to_currency($row['profit']));
 		}
 
-		$data = array(
-			"title" => $this->lang->line('reports_categories_summary_report'),
-			"subtitle" => date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date)),
-			"headers" => $model->getDataColumns(),
-			"data" => $tabular_data,
-			"summary_data" => $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type)),
-			"export_excel" => $export_excel
-		);
+		$data["title"] = $this->lang->line('reports_categories_summary_report');
+		$data["subtitle"] = date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date));
+		$data["headers"] = $model->getDataColumns();
+		$data["data"] = $tabular_data;
+		$data["summary_data"] = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		$data["export_excel"] = $export_excel;
+		$data['export_url'] = site_url('reports/export_summary_categories/'.$start_date.'/'.$end_date.'/'.$sale_type.'/excel');
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'summary_report';
+		$data['asm_2'] = 'summary_categories';
 
 		$this->load->view("reports/tabular",$data);
 	}
 
+	function export_summary_categories($start_date, $end_date, $sale_type, $output){
+		$this->load->model('reports/Summary_categories');
+		$model = $this->Summary_categories;
+		$tabular_data = array();
+		$report_data = $model->getData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		foreach($report_data as $row)
+		{
+			$tabular_data[] = array($row['category'], intval($row['quantity_purchased']), to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['cost']), to_currency($row['profit']));
+		}
+
+		$this->_export_datatable('summary_categories', 'reports_categories_summary_report', $model, $tabular_data, $start_date, $end_date, $sale_type, $output);
+	}
+
 	//Summary customers report
-	function summary_customers($start_date, $end_date, $sale_type, $export_excel=0)
+	function summary_customers($start_date=null, $end_date=null, $sale_type=null, $export_excel=0)
 	{
+		if($start_date==null) $start_date = date('Y-m-d', mktime(0,0,0,date("m"),date("d")-30,date("Y"))); // initiate from 30 days ago
+		if($end_date==null) $end_date = date('Y-m-d');
+		if($sale_type==null) $sale_type = 'all';
+
+		$data = $this->_get_common_report_data();
+
 		$this->load->model('reports/Summary_customers');
 		$model = $this->Summary_customers;
 		$tabular_data = array();
@@ -285,24 +320,45 @@ class Reports extends Secure_area
 
 		foreach($report_data as $row)
 		{
-			$tabular_data[] = array($row['customer'], $row['quantity_purchased'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['cost']), to_currency($row['profit']));
+			$tabular_data[] = array($row['customer'], intval($row['quantity_purchased']), to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['cost']), to_currency($row['profit']));
 		}
 
-		$data = array(
-			"title" => $this->lang->line('reports_customers_summary_report'),
-			"subtitle" => date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date)),
-			"headers" => $model->getDataColumns(),
-			"data" => $tabular_data,
-			"summary_data" => $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type)),
-			"export_excel" => $export_excel
-		);
+		$data["title"] = $this->lang->line('reports_customers_summary_report');
+		$data["subtitle"] = date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date));
+		$data["headers"] = $model->getDataColumns();
+		$data["data"] = $tabular_data;
+		$data["summary_data"] = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		$data["export_excel"] = $export_excel;
+		$data['export_url'] = site_url('reports/export_summary_customers/'.$start_date.'/'.$end_date.'/'.$sale_type.'/excel');
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'summary_report';
+		$data['asm_2'] = 'summary_customers';
 
 		$this->load->view("reports/tabular",$data);
 	}
 
+	function export_summary_customers($start_date, $end_date, $sale_type, $output){
+		$this->load->model('reports/Summary_customers');
+		$model = $this->Summary_customers;
+		$tabular_data = array();
+		$report_data = $model->getData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		foreach($report_data as $row)
+		{
+			$tabular_data[] = array($row['customer'], intval($row['quantity_purchased']), to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['cost']), to_currency($row['profit']));
+		}
+
+		$this->_export_datatable('summary_customers', 'reports_customers_summary_report', $model, $tabular_data, $start_date, $end_date, $sale_type, $output);
+	}
+
 	//Summary suppliers report
-	function summary_suppliers($start_date, $end_date, $sale_type, $export_excel=0)
+	function summary_suppliers($start_date=null, $end_date=null, $sale_type=null, $export_excel=0)
 	{
+		if($start_date==null) $start_date = date('Y-m-d', mktime(0,0,0,date("m"),date("d")-30,date("Y"))); // initiate from 30 days ago
+		if($end_date==null) $end_date = date('Y-m-d');
+		if($sale_type==null) $sale_type = 'all';
+
+		$data = $this->_get_common_report_data();
+
 		$this->load->model('reports/Summary_suppliers');
 		$model = $this->Summary_suppliers;
 		$tabular_data = array();
@@ -310,24 +366,45 @@ class Reports extends Secure_area
 
 		foreach($report_data as $row)
 		{
-			$tabular_data[] = array($row['supplier'], $row['quantity_purchased'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['cost']), to_currency($row['profit']));
+			$tabular_data[] = array($row['supplier'], intval($row['quantity_purchased']), to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['cost']), to_currency($row['profit']));
 		}
 
-		$data = array(
-			"title" => $this->lang->line('reports_suppliers_summary_report'),
-			"subtitle" => date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date)),
-			"headers" => $model->getDataColumns(),
-			"data" => $tabular_data,
-			"summary_data" => $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type)),
-			"export_excel" => $export_excel
-		);
+		$data["title"] = $this->lang->line('reports_suppliers_summary_report');
+		$data["subtitle"] = date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date));
+		$data["headers"] = $model->getDataColumns();
+		$data["data"] = $tabular_data;
+		$data["summary_data"] = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		$data["export_excel"] = $export_excel;
+		$data['export_url'] = site_url('reports/export_summary_suppliers/'.$start_date.'/'.$end_date.'/'.$sale_type.'/excel');
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'summary_report';
+		$data['asm_2'] = 'summary_suppliers';
 
 		$this->load->view("reports/tabular",$data);
 	}
 
+	function export_summary_suppliers($start_date, $end_date, $sale_type, $output){
+		$this->load->model('reports/Summary_suppliers');
+		$model = $this->Summary_suppliers;
+		$tabular_data = array();
+		$report_data = $model->getData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		foreach($report_data as $row)
+		{
+			$tabular_data[] = array($row['customer'], intval($row['quantity_purchased']), to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['cost']), to_currency($row['profit']));
+		}
+
+		$this->_export_datatable('summary_suppliers', 'reports_suppliers_summary_report', $model, $tabular_data, $start_date, $end_date, $sale_type, $output);
+	}
+
 	//Summary items report
-	function summary_items($start_date, $end_date, $sale_type, $export_excel=0)
+	function summary_items($start_date=null, $end_date=null, $sale_type=null, $export_excel=0)
 	{
+		if($start_date==null) $start_date = date('Y-m-d', mktime(0,0,0,date("m"),date("d")-30,date("Y"))); // initiate from 30 days ago
+		if($end_date==null) $end_date = date('Y-m-d');
+		if($sale_type==null) $sale_type = 'all';
+
+		$data = $this->_get_common_report_data();
+
 		$this->load->model('reports/Summary_items');
 		$model = $this->Summary_items;
 		$tabular_data = array();
@@ -335,24 +412,45 @@ class Reports extends Secure_area
 
 		foreach($report_data as $row)
 		{
-			$tabular_data[] = array(character_limiter($row['name'], 40), $row['quantity_purchased'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['cost']), to_currency($row['profit']));
+			$tabular_data[] = array(character_limiter($row['name'], 40), intval($row['quantity_purchased']), to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['cost']), to_currency($row['profit']));
 		}
 
-		$data = array(
-			"title" => $this->lang->line('reports_items_summary_report'),
-			"subtitle" => date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date)),
-			"headers" => $model->getDataColumns(),
-			"data" => $tabular_data,
-			"summary_data" => $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type)),
-			"export_excel" => $export_excel
-		);
+		$data["title"] = $this->lang->line('reports_items_summary_report');
+		$data["subtitle"] = date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date));
+		$data["headers"] = $model->getDataColumns();
+		$data["data"] = $tabular_data;
+		$data["summary_data"] = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		$data["export_excel"] = $export_excel;
+		$data['export_url'] = site_url('reports/export_summary_items/'.$start_date.'/'.$end_date.'/'.$sale_type.'/excel');
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'summary_report';
+		$data['asm_2'] = 'summary_items';
 
 		$this->load->view("reports/tabular",$data);
 	}
 
+	function export_summary_items($start_date, $end_date, $sale_type, $output){
+		$this->load->model('reports/Summary_items');
+		$model = $this->Summary_items;
+		$tabular_data = array();
+		$report_data = $model->getData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		foreach($report_data as $row)
+		{
+			$tabular_data[] = array(character_limiter($row['name'], 40), intval($row['quantity_purchased']), to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['cost']), to_currency($row['profit']));
+		}
+
+		$this->_export_datatable('summary_items', 'reports_items_summary_report', $model, $tabular_data, $start_date, $end_date, $sale_type, $output);
+	}
+
 	//Summary employees report
-	function summary_employees($start_date, $end_date, $sale_type, $export_excel=0)
+	function summary_employees($start_date=null, $end_date=null, $sale_type=null, $export_excel=0)
 	{
+		if($start_date==null) $start_date = date('Y-m-d', mktime(0,0,0,date("m"),date("d")-30,date("Y"))); // initiate from 30 days ago
+		if($end_date==null) $end_date = date('Y-m-d');
+		if($sale_type==null) $sale_type = 'all';
+
+		$data = $this->_get_common_report_data();
+
 		$this->load->model('reports/Summary_employees');
 		$model = $this->Summary_employees;
 		$tabular_data = array();
@@ -360,24 +458,45 @@ class Reports extends Secure_area
 
 		foreach($report_data as $row)
 		{
-			$tabular_data[] = array($row['employee'], $row['quantity_purchased'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['cost']), to_currency($row['profit']));
+			$tabular_data[] = array($row['employee'], intval($row['quantity_purchased']), to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['cost']), to_currency($row['profit']));
 		}
 
-		$data = array(
-			"title" => $this->lang->line('reports_employees_summary_report'),
-			"subtitle" => date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date)),
-			"headers" => $model->getDataColumns(),
-			"data" => $tabular_data,
-			"summary_data" => $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type)),
-			"export_excel" => $export_excel
-		);
+		$data["title"] = $this->lang->line('reports_employees_summary_report');
+		$data["subtitle"] = date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date));
+		$data["headers"] = $model->getDataColumns();
+		$data["data"] = $tabular_data;
+		$data["summary_data"] = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		$data["export_excel"] = $export_excel;
+		$data['export_url'] = site_url('reports/export_summary_employees/'.$start_date.'/'.$end_date.'/'.$sale_type.'/excel');
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'summary_report';
+		$data['asm_2'] = 'summary_employees';
 
 		$this->load->view("reports/tabular",$data);
 	}
 
+	function export_summary_employees($start_date, $end_date, $sale_type, $output){
+		$this->load->model('reports/Summary_employees');
+		$model = $this->Summary_employees;
+		$tabular_data = array();
+		$report_data = $model->getData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		foreach($report_data as $row)
+		{
+			$tabular_data[] = array($row['employee'], intval($row['quantity_purchased']), to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']), to_currency($row['cost']), to_currency($row['profit']));
+		}
+
+		$this->_export_datatable('summary_employees', 'reports_employees_summary_report', $model, $tabular_data, $start_date, $end_date, $sale_type, $output);
+	}
+
 	//Summary taxes report
-	function summary_taxes($start_date, $end_date, $sale_type, $export_excel=0)
+	function summary_taxes($start_date=null, $end_date=null, $sale_type=null, $export_excel=0)
 	{
+		if($start_date==null) $start_date = date('Y-m-d', mktime(0,0,0,date("m"),date("d")-30,date("Y"))); // initiate from 30 days ago
+		if($end_date==null) $end_date = date('Y-m-d');
+		if($sale_type==null) $sale_type = 'all';
+
+		$data = $this->_get_common_report_data();
+
 		$this->load->model('reports/Summary_taxes');
 		$model = $this->Summary_taxes;
 		$tabular_data = array();
@@ -388,21 +507,42 @@ class Reports extends Secure_area
 			$tabular_data[] = array($row['percent'], $row['count'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']));
 		}
 
-		$data = array(
-			"title" => $this->lang->line('reports_taxes_summary_report'),
-			"subtitle" => date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date)),
-			"headers" => $model->getDataColumns(),
-			"data" => $tabular_data,
-			"summary_data" => $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type)),
-			"export_excel" => $export_excel
-		);
+		$data["title"] = $this->lang->line('reports_taxes_summary_report');
+		$data["subtitle"] = date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date));
+		$data["headers"] = $model->getDataColumns();
+		$data["data"] = $tabular_data;
+		$data["summary_data"] = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		$data["export_excel"] = $export_excel;
+		$data['export_url'] = site_url('reports/export_summary_taxes/'.$start_date.'/'.$end_date.'/'.$sale_type.'/excel');
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'summary_report';
+		$data['asm_2'] = 'summary_taxes';
 
 		$this->load->view("reports/tabular",$data);
 	}
 
+	function export_summary_taxes($start_date, $end_date, $sale_type, $output){
+		$this->load->model('reports/Summary_taxes');
+		$model = $this->Summary_taxes;
+		$tabular_data = array();
+		$report_data = $model->getData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		foreach($report_data as $row)
+		{
+			$tabular_data[] = array($row['percent'], $row['count'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']));
+		}
+
+		$this->_export_datatable('summary_taxes', 'reports_taxes_summary_report', $model, $tabular_data, $start_date, $end_date, $sale_type, $output);
+	}
+
 	//Summary discounts report
-	function summary_discounts($start_date, $end_date, $sale_type, $export_excel=0)
+	function summary_discounts($start_date=null, $end_date=null, $sale_type=null, $export_excel=0)
 	{
+		if($start_date==null) $start_date = date('Y-m-d', mktime(0,0,0,date("m"),date("d")-30,date("Y"))); // initiate from 30 days ago
+		if($end_date==null) $end_date = date('Y-m-d');
+		if($sale_type==null) $sale_type = 'all';
+
+		$data = $this->_get_common_report_data();
+
 		$this->load->model('reports/Summary_discounts');
 		$model = $this->Summary_discounts;
 		$tabular_data = array();
@@ -413,21 +553,42 @@ class Reports extends Secure_area
 			$tabular_data[] = array($row['discount_percent'], $row['count']);
 		}
 
-		$data = array(
-			"title" => $this->lang->line('reports_discounts_summary_report'),
-			"subtitle" => date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date)),
-			"headers" => $model->getDataColumns(),
-			"data" => $tabular_data,
-			"summary_data" => $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type)),
-			"export_excel" => $export_excel
-		);
+		$data["title"] = $this->lang->line('reports_discounts_summary_report');
+		$data["subtitle"] = date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date));
+		$data["headers"] = $model->getDataColumns();
+		$data["data"] = $tabular_data;
+		$data["summary_data"] = array();
+		$data["export_excel"] = $export_excel;
+		$data['export_url'] = site_url('reports/export_summary_discounts/'.$start_date.'/'.$end_date.'/'.$sale_type.'/excel');
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'summary_report';
+		$data['asm_2'] = 'summary_discounts';
 
 		$this->load->view("reports/tabular",$data);
 	}
 
+	function export_summary_discounts($start_date, $end_date, $sale_type, $output){
+		$this->load->model('reports/Summary_discounts');
+		$model = $this->Summary_discounts;
+		$tabular_data = array();
+		$report_data = $model->getData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		foreach($report_data as $row)
+		{
+			$tabular_data[] = array($row['discount_percent'], $row['count']);
+		}
+
+		$this->_export_datatable('summary_discounts', 'reports_discounts_summary_report', $model, $tabular_data, $start_date, $end_date, $sale_type, $output);
+	}
+
 	//Summary payments report
-	function summary_payments($start_date, $end_date, $sale_type, $export_excel=0)
+	function summary_payments($start_date=null, $end_date=null, $sale_type=null, $export_excel=0)
 	{
+		if($start_date==null) $start_date = date('Y-m-d', mktime(0,0,0,date("m"),date("d")-30,date("Y"))); // initiate from 30 days ago
+		if($end_date==null) $end_date = date('Y-m-d');
+		if($sale_type==null) $sale_type = 'all';
+
+		$data = $this->_get_common_report_data();
+
 		$this->load->model('reports/Summary_payments');
 		$model = $this->Summary_payments;
 		$tabular_data = array();
@@ -438,16 +599,31 @@ class Reports extends Secure_area
 			$tabular_data[] = array($row['payment_type'], $row['count'], to_currency($row['payment_amount']));
 		}
 
-		$data = array(
-			"title" => $this->lang->line('reports_payments_summary_report'),
-			"subtitle" => date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date)),
-			"headers" => $model->getDataColumns(),
-			"data" => $tabular_data,
-			"summary_data" => $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type)),
-			"export_excel" => $export_excel
-		);
+		$data["title"] = $this->lang->line('reports_payments_summary_report');
+		$data["subtitle"] = date($this->config->item('dateformat'), strtotime($start_date)) .'-'.date($this->config->item('dateformat'), strtotime($end_date));
+		$data["headers"] = $model->getDataColumns();
+		$data["data"] = $tabular_data;
+		$data["summary_data"] = $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		$data["export_excel"] = $export_excel;
+		$data['export_url'] = site_url('reports/export_summary_payments/'.$start_date.'/'.$end_date.'/'.$sale_type.'/excel');
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'summary_report';
+		$data['asm_2'] = 'summary_payments';
 
 		$this->load->view("reports/tabular",$data);
+	}
+
+	function export_summary_payments($start_date, $end_date, $sale_type, $output){
+		$this->load->model('reports/Summary_payments');
+		$model = $this->Summary_payments;
+		$tabular_data = array();
+		$report_data = $model->getData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		foreach($report_data as $row)
+		{
+			$tabular_data[] = array($row['payment_type'], $row['count'], to_currency($row['payment_amount']));
+		}
+
+		$this->_export_datatable('summary_payments', 'reports_payments_summary_report', $model, $tabular_data, $start_date, $end_date, $sale_type, $output);
 	}
 
 	//Input for reports that require only a date range. (see routes.php to see that all graphical summary reports route here)

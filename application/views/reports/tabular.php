@@ -213,7 +213,7 @@ $(document).ready(function()
             	for(var row=0; row<data.data.length; row++){
             		data_string += '<tr>';
             		for(var cell=0; cell<data.data[row].length; cell++)
-            			data_string += '<td>'+(cell>0 ? 'Rp '+currency_separator(data.data[row][cell], '.') : data.data[row][cell])+'</td>';
+            			data_string += '<td>'+data.data[row][cell]+'</td>';
             		data_string += '</tr>';
             	}
             	summary_string += '<tr><td><strong>TOTAL</strong></td>';
@@ -225,6 +225,9 @@ $(document).ready(function()
             	$('#table-report').append('<tr>'+header_string+'</tr>'+data_string+summary_string);
 
             	$('#link-export').attr('href', data.export_excel);
+
+            	$('#page_subtitle').empty();
+            	$('#page_subtitle').append(data.subtitle);
           	}
           	else if(data.status=="301"){
 				$('#table-report').append('<tr><td colspan="5">Data tidak ditemukan</td></tr>');
