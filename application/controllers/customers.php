@@ -15,6 +15,7 @@ class Customers extends Person_controller
 		$customers = $this->Customer->get_all($lines_per_page,$limit_from);
 		$data['links'] = $this->_initialize_pagination($this->Customer,$lines_per_page,$limit_from);
 		$data['manage_table']=get_people_manage_table($customers,$this);
+		$data['am'] = 'customers';
 		$this->load->view('people/manage',$data);
 	}
 	

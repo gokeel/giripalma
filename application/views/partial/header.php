@@ -11,14 +11,14 @@
     <!-- Bootstrap 3.3.2 -->
     <link href="themes/adminlte/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <!-- Font Awesome Icons -->
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <!-- Ionicons -->
-    <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/ionicons-2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" />
     <!-- Theme style -->
     <link href="themes/adminlte/dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
     <!-- AdminLTE Skins. Choose a skin from the css/skins 
          folder instead of downloading all of them to reduce the load. -->
-    <link href="themes/adminlte/dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
+    <link href="themes/adminlte/dist/css/skins/_all-skins.css" rel="stylesheet" type="text/css" />
     <!-- daterange picker -->
     <link href="themes/adminlte/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
     <!-- Bootstrap Color Picker -->
@@ -30,8 +30,8 @@
 	<link rel="stylesheet" type="text/css" href="css/ospos_print.css" media="print" />
 	<?php //if ($this->input->cookie('debug') == "true" || $this->input->get("debug") == "true") : ?>
 	<!-- start js template tags -->
-	<!--<script type="text/javascript" src="js/jquery-1.8.3.js" language="javascript"></script>-->
-  <script src="<?php echo ADMIN_LTE_DIR;?>/plugins/jQuery/jQuery-2.1.3.min.js"></script>
+	<script type="text/javascript" src="js/jquery-1.8.3.js" language="javascript"></script>
+  <!--<script src="<?php echo ADMIN_LTE_DIR;?>/plugins/jQuery/jQuery-2.1.3.min.js"></script>-->
 	<script type="text/javascript" src="js/jquery-ui-1.11.4.js" language="javascript"></script>
 	<script type="text/javascript" src="js/jquery-ui-timepicker-addon.js" language="javascript"></script>
 	<script type="text/javascript" src="js/jquery.ajax_queue.js" language="javascript"></script>

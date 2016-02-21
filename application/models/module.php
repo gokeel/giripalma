@@ -59,7 +59,7 @@ class Module extends CI_Model
 		$this->db->join('permissions','permissions.permission_id=modules.module_id');
 		$this->db->join('grants','permissions.permission_id=grants.permission_id');
 		$this->db->where("person_id",$person_id);
-		$this->db->order_by("sort", "asc");
+		$this->db->order_by("sort_number", "asc");
 		return $this->db->get();		
 	}
 	

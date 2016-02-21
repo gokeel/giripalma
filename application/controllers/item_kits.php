@@ -40,6 +40,7 @@ class Item_kits extends Secure_area implements iData_controller
 		
 		$data['links'] = $this->_initialize_pagination($this->Item_kit, $lines_per_page, $limit_from);
 		$data['manage_table'] = get_item_kits_manage_table($item_kits, $this);
+		$data['am'] = 'item_kits';
 
 		$this->load->view('item_kits/manage', $data);
 		$this->_remove_duplicate_cookies();

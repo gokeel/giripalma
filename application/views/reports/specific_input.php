@@ -5,11 +5,11 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            <h3><?php echo $this->lang->line('sales_register'); ?></h3>
+            <h3><?php echo $this->lang->line('reports'); ?></h3>
           </h1>
           <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li><a href="active"><?php echo $this->lang->line('Reporting'); ?></a></li>
+            <li><a href="active"><?php echo $this->lang->line('reports'); ?></a></li>
           </ol>
         </section>
 

@@ -13,6 +13,7 @@ class Config extends Secure_area
 		$location_names = array();
 		$data['stock_locations'] = $this->Stock_location->get_all()->result_array();
 		$data['support_barcode'] = $this->barcode_lib->get_list_barcodes();
+		$data['am'] = 'config';
 		$this->load->view("configs/manage", $data);
 		$this->_remove_duplicate_cookies();
 	}

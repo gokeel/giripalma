@@ -16,6 +16,7 @@ class Suppliers extends Person_controller
 		
 		$data['links'] = $this->_initialize_pagination($this->Supplier,$lines_per_page,$limit_from);
 		$data['manage_table']=get_supplier_manage_table($suppliers,$this);
+		$data['am'] = 'suppliers';
 		$this->load->view('suppliers/manage',$data);
 	}
 	

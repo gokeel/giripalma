@@ -36,7 +36,8 @@ class Items extends Secure_area implements iData_controller
 		$data['stock_location'] = $stock_location;
 		$data['stock_locations'] = $stock_locations;
 		$data['manage_table'] = get_items_manage_table( $this->Item->get_all($stock_location, $lines_per_page, $limit_from), $this );
-
+		$data['am'] = 'items';
+		
 		$this->load->view('items/manage', $data);
 
 		$this->_remove_duplicate_cookies();

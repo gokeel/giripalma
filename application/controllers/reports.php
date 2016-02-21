@@ -643,6 +643,9 @@ class Reports extends Secure_area
 		$stock_locations['all'] =  $this->lang->line('reports_all');
 		$data['stock_locations'] = array_reverse($stock_locations, TRUE);
         $data['mode'] = 'sale';
+        $data['am'] = 'reports';
+        $data['asm_1'] = 'detail_report';
+        $data['asm_2'] = 'detailed_sales';
 		$this->load->view("reports/date_input",$data);
 	}
 
@@ -653,6 +656,9 @@ class Reports extends Secure_area
 		$stock_locations['all'] =  $this->lang->line('reports_all');
 		$data['stock_locations'] = array_reverse($stock_locations, TRUE);
  		$data['mode'] = 'receiving';
+ 		$data['am'] = 'reports';
+        $data['asm_1'] = 'detail_report';
+        $data['asm_2'] = 'detailed_receivings';
         $this->load->view("reports/date_input",$data);
     }
 
@@ -1317,6 +1323,9 @@ class Reports extends Secure_area
 			$customers[$customer->person_id] = $customer->first_name .' '.$customer->last_name;
 		}
 		$data['specific_input_data'] = $customers;
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'detail_report';
+		$data['asm_2'] = 'specific_customer';
 		$this->load->view("reports/specific_input",$data);
 	}
 
@@ -1367,6 +1376,9 @@ class Reports extends Secure_area
 			$employees[$employee->person_id] = $employee->first_name .' '.$employee->last_name;
 		}
 		$data['specific_input_data'] = $employees;
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'detail_report';
+		$data['asm_2'] = 'specific_employee';
 		$this->load->view("reports/specific_input",$data);
 	}
 
@@ -1417,6 +1429,9 @@ class Reports extends Secure_area
 			$discounts[$i] = $i . '%';
 		}
 		$data['specific_input_data'] = $discounts;
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'detail_report';
+		$data['asm_2'] = 'specific_discount';
 		$this->load->view("reports/specific_input",$data);
 	}
 
@@ -1548,7 +1563,7 @@ class Reports extends Secure_area
 		$this->load->view("reports/excel_export",array());
 	}
 
-	function inventory_low($export_excel=0)
+	function inventory_low()
 	{
 		$this->load->model('reports/Inventory_low');
 		$model = $this->Inventory_low;
@@ -1556,7 +1571,7 @@ class Reports extends Secure_area
 		$report_data = $model->getData(array());
 		foreach($report_data as $row)
 		{
-			$tabular_data[] = array($row['name'], $row['item_number'], $row['description'], $row['quantity'], $row['reorder_level'], $row['location_name']);
+			$tabular_data[] = array($row['name'], $row['item_number'], $row['description'], intval($row['quantity']), intval($row['reorder_level']), $row['location_name']);
 		}
 
 		$data = array(
@@ -1565,10 +1580,113 @@ class Reports extends Secure_area
 			"headers" => $model->getDataColumns(),
 			"data" => $tabular_data,
 			"summary_data" => $model->getSummaryData(array()),
-			"export_excel" => $export_excel
+			"export_excel" => 0
 		);
+		$data['export_url'] = site_url('reports/export_inventory_low/excel');
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'stock_report';
+		$data['asm_2'] = 'inventory_low';
 
-		$this->load->view("reports/tabular",$data);
+		$this->load->view("reports/tabular_only",$data);
+	}
+
+	function export_inventory_low($output){
+		$this->load->model('reports/Inventory_low');
+		$model = $this->Inventory_low;
+		$tabular_data = array();
+		$report_data = $model->getData(array());
+		foreach($report_data as $row)
+		{
+			$tabular_data[] = array($row['name'], $row['item_number'], $row['description'], intval($row['quantity']), intval($row['reorder_level']), $row['location_name']);
+		}
+
+		$header = $model->getDataColumns();
+		$summary = $model->getSummaryData(array());
+		if($output=="json"){
+			$response = array(
+				'status' => (empty($tabular_data) ? '301' : '200'),
+				'title' => $this->lang->line('reports_inventory_low_report'),
+				'header' => $header,
+				'data' => $tabular_data,
+				'summary' => $summary,
+				'export_excel' => site_url('reports/export_inventory_low/excel')
+				);
+
+			echo json_encode($response);
+		}
+		else if($output=="excel"){
+			$this->load->library('excel');
+			$this->excel->setActiveSheetIndex(0);
+			$this->excel->getActiveSheet()->setTitle($this->lang->line('reports_inventory_low_report'));
+
+			// setting column width
+			$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+			$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+			$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+			$this->excel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+			$this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+			$this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+
+			//give border to top header
+			$style_top_header = array(
+				'font' => array(
+					'bold' => true,
+					'name' => 'Arial',
+					'size' => '11'
+				),
+			);
+			$alignment = array(
+				'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+					)
+				);
+
+			// filling title
+			$this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, 2, $this->lang->line($title));
+			$this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, 3, date($this->config->item('dateformat'), strtotime($start_date)) .' - '.date($this->config->item('dateformat'), strtotime($end_date)));
+			$this->excel->getActiveSheet()->mergeCells('A2:G2');
+			$this->excel->getActiveSheet()->mergeCells('A3:G3');
+			$this->excel->getActiveSheet()->getStyle('A2:G3')->applyFromArray($style_top_header);
+			$this->excel->getActiveSheet()->getStyle('A2:G3')->applyFromArray($alignment);
+
+			// filling the header
+			$col = 0; // starting at A5
+			$row = 5;
+			foreach($header as $head){
+				$this->excel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $head);
+				$col++;
+			}
+			
+			$this->excel->getActiveSheet()->getStyle('A5:G5')->applyFromArray($style_top_header);
+
+			// filling data
+			// starting at A6
+			$row = 6;
+			foreach($tabular_data as $record){
+				$col = 0; 
+				foreach($record as $rec_data){
+					$this->excel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $rec_data);
+					$col++;
+				}
+				$row++;
+			}
+
+			header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); //mime type
+			header('Content-Disposition: attachment;filename="'.$this->lang->line('reports_inventory_low_report').'.xlsx"'); //tell browser what's the file name
+			header('Cache-Control: max-age=0'); //no cache
+			//save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+			//if you want to save it as .XLSX Excel 2007 format
+			$objWriter = new PHPExcel_Writer_Excel2007($this->excel); 
+			ob_end_clean();
+			//force user to download the Excel file without writing it to server's HD
+			$objWriter->save('php://output');
+			
+		}	
 	}
 
 	function inventory_summary_input()
@@ -1588,8 +1706,16 @@ class Reports extends Secure_area
 
 	function inventory_summary($export_excel=0, $location_id = 'all', $item_count = 'all')
 	{
-		$this->load->model('reports/Inventory_summary');
-		$model = $this->Inventory_summary;
+		$data = array();
+
+		$this->load->model('reports/Inventory_Summary');
+		$model = $this->Inventory_Summary;
+		$data['item_count'] = $model->getItemCountDropdownArray();
+
+		$stock_locations = $this->Stock_location->get_allowed_locations();
+		$stock_locations['all'] =  $this->lang->line('reports_all');
+		$data['stock_locations'] = array_reverse($stock_locations, TRUE);
+
 		$tabular_data = array();
 		$report_data = $model->getData(array('location_id'=>$location_id,'item_count'=>$item_count));
 		foreach($report_data as $row)
@@ -1605,16 +1731,137 @@ class Reports extends Secure_area
 								to_currency($row['sub_total_value']));
 		}
 
-		$data = array(
-			"title" => $this->lang->line('reports_inventory_summary_report'),
-			"subtitle" => '',
-			"headers" => $model->getDataColumns(),
-			"data" => $tabular_data,
-			"summary_data" => $model->getSummaryData($report_data),
-			"export_excel" => $export_excel
-		);
+		$data["title"] = $this->lang->line('reports_inventory_summary_report');
+		$data["subtitle"] = '';
+		$data["headers"] = $model->getDataColumns();
+		$data["data"] = $tabular_data;
+		$data["summary_data"] = $model->getSummaryData($report_data);
+		$data["export_excel"] = $export_excel;
+		$data['export_url'] = site_url('reports/export_inventory_summary/'.$location_id.'/'.$item_count.'/excel');
+		$data['am'] = 'reports';
+		$data['asm_1'] = 'stock_report';
+		$data['asm_2'] = 'inventory_summary';
 
-		$this->load->view("reports/tabular",$data);
+		$this->load->view("reports/tabular_inventory",$data);
+	}
+
+	function export_inventory_summary($location_id = 'all', $item_count = 'all', $output){
+		$this->load->model('reports/Inventory_Summary');
+		$model = $this->Inventory_Summary;
+		$tabular_data = array();
+		$report_data = $model->getData(array('location_id'=>$location_id,'item_count'=>$item_count));
+		foreach($report_data as $row)
+		{
+			$tabular_data[] = array($row['name'],
+								$row['item_number'],
+								$row['description'],
+								$row['quantity'],
+								$row['reorder_level'],
+								$row['location_name'],
+								to_currency($row['cost_price']),
+								to_currency($row['unit_price']),
+								to_currency($row['sub_total_value']));
+		}
+
+		$header = $model->getDataColumns();
+		$summary = $model->getSummaryData($report_data);
+		if($output=="json"){
+			$response = array(
+				'status' => (empty($tabular_data) ? '301' : '200'),
+				'title' => $this->lang->line('reports_inventory_summary_report'),
+				'header' => $header,
+				'data' => $tabular_data,
+				'summary' => $summary,
+				'export_excel' => site_url('reports/export_inventory_summary/'.$location_id.'/'.$item_count.'/excel')
+				);
+
+			echo json_encode($response);
+		}
+		else if($output=="excel"){
+			$this->load->library('excel');
+			$this->excel->setActiveSheetIndex(0);
+			$this->excel->getActiveSheet()->setTitle($this->lang->line('reports_inventory_summary_report'));
+
+			// setting column width
+			$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+			$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+			$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+			$this->excel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+			$this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+			$this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+
+			//give border to top header
+			$style_top_header = array(
+				'font' => array(
+					'bold' => true,
+					'name' => 'Arial',
+					'size' => '11'
+				),
+			);
+			$alignment = array(
+				'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+					)
+				);
+
+			// filling title
+			$this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, 2, $this->lang->line($title));
+			$this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, 3, date($this->config->item('dateformat'), strtotime($start_date)) .' - '.date($this->config->item('dateformat'), strtotime($end_date)));
+			$this->excel->getActiveSheet()->mergeCells('A2:G2');
+			$this->excel->getActiveSheet()->mergeCells('A3:G3');
+			$this->excel->getActiveSheet()->getStyle('A2:G3')->applyFromArray($style_top_header);
+			$this->excel->getActiveSheet()->getStyle('A2:G3')->applyFromArray($alignment);
+
+			// filling the header
+			$col = 0; // starting at A5
+			$row = 5;
+			foreach($header as $head){
+				$this->excel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $head);
+				$col++;
+			}
+			
+			$this->excel->getActiveSheet()->getStyle('A5:G5')->applyFromArray($style_top_header);
+
+			// filling data
+			// starting at A6
+			$row = 6;
+			foreach($tabular_data as $record){
+				$col = 0; 
+				foreach($record as $rec_data){
+					$this->excel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $rec_data);
+					$col++;
+				}
+				$row++;
+			}
+
+			$this->excel->getActiveSheet()->getStyle('C6:G'.$row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+
+			// filling summary
+			$this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, 'TOTAL');
+			$col = 1;
+			foreach($summary as $value){
+				$this->excel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $value);
+				$col++;
+			}
+			$this->excel->getActiveSheet()->getStyle('A'.$row.':G'.$row)->applyFromArray($style_top_header);
+
+
+			header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); //mime type
+			header('Content-Disposition: attachment;filename="'.$this->lang->line('reports_inventory_summary_report').'.xlsx"'); //tell browser what's the file name
+			header('Cache-Control: max-age=0'); //no cache
+			//save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+			//if you want to save it as .XLSX Excel 2007 format
+			$objWriter = new PHPExcel_Writer_Excel2007($this->excel); 
+			ob_end_clean();
+			//force user to download the Excel file without writing it to server's HD
+			$objWriter->save('php://output');
+			
+		}	
 	}
 
 }

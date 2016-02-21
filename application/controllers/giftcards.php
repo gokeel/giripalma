@@ -17,6 +17,7 @@ class Giftcards extends Secure_area implements iData_controller
 		$giftcards = $this->Giftcard->get_all($lines_per_page, $limit_from);
 		$data['links'] = $this->_initialize_pagination($this->Giftcard, $lines_per_page, $limit_from);
 		$data['manage_table'] = get_giftcards_manage_table($giftcards, $this);
+		$data['am'] = 'giftcards';
 		$this->load->view('giftcards/manage', $data);
 	}
 
