@@ -284,7 +284,8 @@ class Sale extends CI_Model
 				'sale_id'=>$sale_id,
 				'payment_type'=>$payment['payment_type'],
 				'payment_amount'=>$payment['payment_amount'],
-				'card_number' => $payment['card_number']
+				'card_number' => $payment['card_number'],
+				'payment_leasing' => $payment['payment_leasing']
 			);
 			$this->db->insert('sales_payments',$sales_payments_data);
 		}

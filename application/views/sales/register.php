@@ -349,7 +349,8 @@
 											<th style="width: 15%;"><?php echo $this->lang->line('common_delete'); ?></th>
 											<th style="width: 25%;"><?php echo $this->lang->line('sales_payment_type'); ?></th>
 											<th style="width: 25%;"><?php echo $this->lang->line('sales_payment_amount'); ?></th>
-											<th style="width: 35%;">Nomor Kartu</th>
+											<th style="width: 10%;">Leasing</th>
+											<th style="width: 25%;">Nomor Kartu</th>
 										</tr>
 									</thead>
 						
@@ -363,6 +364,7 @@
 												<td><?php echo anchor( "sales/delete_payment/$payment_id", '['.$this->lang->line('common_delete').']' ); ?></td>
 												<td><?php echo $payment['payment_type']; ?></td>
 												<td style="text-align: right;"><?php echo to_currency( $payment['payment_amount'] ); ?></td>
+												<td><?php echo $payment['payment_leasing']; ?></td>
 												<td><?php echo $payment['card_number']; ?></td>
 											</tr>
 											
