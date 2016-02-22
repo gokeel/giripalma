@@ -250,9 +250,11 @@ class Sales extends Secure_area
 		{
 			$payment_amount = $this->input->post( 'amount_tendered' );
 			$card_number = $this->input->post('nomorkartu');
+			$payment_leasing = $this->input->post('payment_leasing');
+
 		}
 		
-		if( !$this->sale_lib->add_payment( $payment_type, $payment_amount, $card_number ) )
+		if( !$this->sale_lib->add_payment( $payment_type, $payment_amount, $card_number, $payment_leasing ) )
 		{
 			$data['error']='Unable to Add Payment! Please try again!';
 		}
@@ -747,6 +749,10 @@ class Sales extends Secure_area
 			$this->lang->line('sales_giftcard') => $this->lang->line('sales_giftcard'),
 			$this->lang->line('sales_debit') => $this->lang->line('sales_debit'),
 			$this->lang->line('sales_credit') => $this->lang->line('sales_credit')
+		);
+		$data['payment_leasing'] = array(
+			$this->lang->line('sales_leasing_kreditplus') => $this->lang->line('sales_leasing_kreditplus'),
+			$this->lang->line('sales_leasing_fif') => $this->lang->line('sales_leasing_fif'),
 		);
 
 		$customer_id = $this->sale_lib->get_customer();

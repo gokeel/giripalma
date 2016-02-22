@@ -299,6 +299,22 @@
 											</select> -->
 										</div>
 									</div>
+
+									<div class="form-group">
+										<label class='col-sm-4 text-left'><?php echo $this->lang->line('sales_leasing'); ?></label>
+										<div class='col-sm-8'>
+											<?php echo form_dropdown( 'payment_leasing', $payment_leasing, array(), 'id="payment_leasing"' ); ?>
+											<!-- <select name='payment_type' class="form-control">
+											<?php echo $this->lang->line('sales_leasing').':   ';?>
+												<option value="cash">Cash</option>
+												<option value="cash kredit">Cash Debit</option>
+											    <option value="cash kartu kredit">Cash Kartu Kredit</option>
+											    <option value="kredit leasing">Kredit Leasing</option>
+												<option value="kredit in house">Kredit In House</option>
+												<option value="kredit rekanan">Kredit Rekanan</option>
+											</select> -->
+										</div>
+									</div>
 									<div class="form-group">
 										<label class='col-sm-4 text-left'><?php echo $this->lang->line('sales_nomerkartu'); ?></label>
 										<div class='col-sm-8'>

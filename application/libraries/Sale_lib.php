@@ -111,7 +111,7 @@ class Sale_lib
 		$this->CI->session->unset_userdata('email_receipt');
 	}
 
-	function add_payment( $payment_id, $payment_amount, $card_number )
+	function add_payment( $payment_id, $payment_amount, $card_number, $payment_leasing )
 	{
 		$payments = $this->get_payments();
 		if( isset( $payments[$payment_id] ) )
@@ -126,7 +126,8 @@ class Sale_lib
 			array(
 				'payment_type' => $payment_id,
 				'payment_amount' => $payment_amount,
-				'card_number' => $card_number
+				'card_number' => $card_number,
+				'payment_leasing' => $payment_leasing,
 				)
 			);
 			
