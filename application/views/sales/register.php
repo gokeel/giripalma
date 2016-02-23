@@ -287,7 +287,7 @@
 									<div class="form-group">
 										<label class='col-sm-4 text-left'><?php echo $this->lang->line('sales_payment'); ?></label>
 										<div class='col-sm-8'>
-											<?php echo form_dropdown( 'payment_type', $payment_options, array(), 'id="payment_types"' ); ?>
+											<?php echo form_dropdown( 'payment_type', $payment_options, array(), 'id="payment_types" class= "form-control"'); ?>
 											<!-- <select name='payment_type' class="form-control">
 											<?php echo $this->lang->line('sales_payment').':   ';?>
 												<option value="cash">Cash</option>
@@ -303,7 +303,7 @@
 									<div class="form-group">
 										<label class='col-sm-4 text-left'><?php echo $this->lang->line('sales_leasing'); ?></label>
 										<div class='col-sm-8'>
-											<?php echo form_dropdown( 'payment_leasing', $payment_leasing, array(), 'id="payment_leasing"' ); ?>
+											<?php echo form_dropdown( 'payment_leasing', $payment_leasing, array(), 'id="payment_leasing" class= "form-control"' ); ?>
 											<!-- <select name='payment_type' class="form-control">
 											<?php echo $this->lang->line('sales_leasing').':   ';?>
 												<option value="cash">Cash</option>
@@ -576,7 +576,7 @@
 					var enable_invoice_number = function() 
 					{
 						var enabled = $("#sales_invoice_enable").is(":checked");
-						$("#sales_invoice_number").prop("disabled", !enabled).parents('tr').show();
+						$("#sales_invoice_number").prop("enabled", !enabled).parents('tr').show();
 						return enabled;
 					}
 
