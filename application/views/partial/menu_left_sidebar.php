@@ -52,6 +52,7 @@
                                         echo '<i class="fa fa-angle-left pull-right"></i>';
                                  ?>
                             </a>
+                            <?php if($query->num_rows() > 0) {?>
                             <ul class="treeview-menu">
                                 <?php foreach($query->result() as $sub_2) {?>
                                 <li class="<?php if(isset($asm_2)) if($asm_2==$sub_2->menu_identifier) echo "active"; ?>">
@@ -61,6 +62,7 @@
                                 </li>
                                 <?php } ?>
                             </ul>
+                            <?php } ?>
                         </li>
                         <?php } ?>
                     </ul>
