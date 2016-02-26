@@ -87,3 +87,7 @@ $lang["items_upc_database"] = "Database UPC";
 $lang["items_update"] = "Ubah";
 $lang["items_use_inventory_menu"] = "Gunakan Inv. Menu";
 $lang["items_import_items_excel"] = "Import items from Excel sheet";
+$lang["item_fine"] = "Baik";
+$lang["type_item"] = "Kondisi Barang";
+$lang["item_service"] = "service";
+
