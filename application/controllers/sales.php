@@ -198,6 +198,10 @@ class Sales extends Secure_area
 	{
 		$this->sale_lib->set_print_after_sale($this->input->post('sales_print_after_sale'));
 	}
+	function set_print_produksi()
+	{
+		$this->sale_lib->set_print_after_sale($this->input->post('sales_print_produksi'));
+	}
 	
 	function set_email_receipt()
 	{
@@ -748,11 +752,15 @@ class Sales extends Secure_area
 			$this->lang->line('sales_check') => $this->lang->line('sales_check'),
 			$this->lang->line('sales_giftcard') => $this->lang->line('sales_giftcard'),
 			$this->lang->line('sales_debit') => $this->lang->line('sales_debit'),
-			$this->lang->line('sales_credit') => $this->lang->line('sales_credit')
+			$this->lang->line('sales_credit') => $this->lang->line('sales_credit'),
+			$this->lang->line('sales_kredit_leasing') => $this->lang->line('sales_kredit_leasing'),
+			$this->lang->line('sales_kredit_inhouse') => $this->lang->line('sales_kredit_inhouse'),
+			$this->lang->line('sales_kredit_rekanan') => $this->lang->line('sales_kredit_rekanan')
 		);
 		$data['payment_leasing'] = array(
+			'' => '',
 			$this->lang->line('sales_leasing_kreditplus') => $this->lang->line('sales_leasing_kreditplus'),
-			$this->lang->line('sales_leasing_fif') => $this->lang->line('sales_leasing_fif'),
+			$this->lang->line('sales_leasing_fif') => $this->lang->line('sales_leasing_fif')
 		);
 
 		$customer_id = $this->sale_lib->get_customer();

@@ -176,8 +176,7 @@
 										<tr>
 											<td><?php echo anchor("sales/delete_item/$line",'['.$this->lang->line('common_delete').']');?></td>
 											<td><?php echo $item['item_number']; ?></td>
-											<td style="align: center;"><?php echo base64_decode($item['name']); ?><br /> [<?php echo $item['in_stock'] ?> in <?php echo $item['stock_name']; ?>]
-												<?php echo form_hidden('location', $item['item_location']); ?>
+											<td style="align: center;"><?php echo base64_decode($item['name']); ?>
 											</td>
 
 											<?php if ($items_module_allowed)
@@ -394,6 +393,21 @@
 												<p><?php echo to_currency($total); ?></p>
 											</div>
 										</div>
+										<!--<div class="input-group">
+					                       	<span class="input-group-addon">
+					                          	<?php
+												if ($print_after_sale)
+												{
+													echo form_checkbox(array('name'=>'sales_print_produksi','id'=>'sales_print_produksi','checked'=>'checked'));
+												}
+												else
+												{
+													echo form_checkbox(array('name'=>'sales_print_produksi','id'=>'sales_print_produksi'));
+												}
+												?>
+					                        </span>
+					                        <?php echo $this->lang->line('sales_print_produksi'); ?>
+				                      	</div>
 										<div class="input-group">
 					                        <span class="input-group-addon">
 					                          	<?php
@@ -408,7 +422,7 @@
 												?>
 					                        </span>
 					                        <?php echo $this->lang->line('sales_print_after_sale'); ?>
-				                      	</div>
+				                      	</div>!-->
 				                      	<div class="input-group">
 					                        <span class="input-group-addon">
 					                          	<?php 
@@ -418,7 +432,7 @@
 												}
 												else
 												{
-													echo form_checkbox(array('name'=>'sales_invoice_enable','id'=>'sales_invoice_enable'));
+													echo form_checkbox(array('name'=>'sales_invoice_enable','id'=>'sales_invoice_enable', 'checked'=>'checked'));
 												}
 												?>
 					                        </span>

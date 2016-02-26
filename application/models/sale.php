@@ -311,7 +311,7 @@ class Sale extends CI_Model
 
 			//Update stock quantity
 			$item_quantity = $this->Item_quantity->get_item_quantity($item['item_id'], $item['item_location']);
-			$this->Item_quantity->save(array('quantity'=>$item_quantity->quantity - $item['quantity'],
+			$this->Item_quantity->save(array('quantity'=>$item_quantity->quantity, /*- $item['quantity'],*/
                                               'item_id'=>$item['item_id'],
                                               'location_id'=>$item['item_location']), $item['item_id'], $item['item_location']);
 
