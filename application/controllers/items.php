@@ -280,6 +280,9 @@ class Items extends Secure_area implements iData_controller
 
 		$data['suppliers']=$suppliers;
 		$data['selected_supplier'] = $this->Item->get_info($item_id)->supplier_id;
+		$data['type_item'] = array (
+			$this->lang->line('item_fine') => $this->lang->line('item_fine'),
+			$this->lang->line('item_service') => $this->lang->line('item_service'));
 		$data['default_tax_1_rate']=($item_id==-1) ? $this->Appconfig->get('default_tax_1_rate') : '';
 		$data['default_tax_2_rate']=($item_id==-1) ? $this->Appconfig->get('default_tax_2_rate') : '';
         
@@ -397,6 +400,7 @@ class Items extends Secure_area implements iData_controller
 			'color'=>$this->input->post('color'),
 			'dimension'=>$this->input->post('dimension'),
 			'supplier_id'=>$this->input->post('supplier_id')=='' ? null:$this->input->post('supplier_id'),
+			'type_item'=>$this->input->post('type_item'),
 			'item_number'=>$this->input->post('item_number')=='' ? null:$this->input->post('item_number'),
 			'cost_price'=>$this->input->post('cost_price'),
 			'unit_price'=>$this->input->post('unit_price'),

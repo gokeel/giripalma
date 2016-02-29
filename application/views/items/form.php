@@ -73,6 +73,15 @@ echo form_open('items/save/'.$item_info->item_id,array('id'=>'item_form', 'encty
 </div>
 
 <div class="field_row clearfix">
+<?php echo form_label($this->lang->line('type_item').':', 'type_item',array('class'=>'required wide')); ?>
+	<div class='form_field'>
+	<?php echo form_dropdown('type_item', $type_item);?>
+	</div>
+</div>
+
+
+
+<div class="field_row clearfix">
 <?php echo form_label($this->lang->line('items_cost_price').':', 'cost_price',array('class'=>'required wide')); ?>
 	<div class='form_field'>
 	<?php echo form_input(array(
