@@ -8,7 +8,7 @@ class Sale_lib
 	{
 		$this->CI =& get_instance();
 	}
-
+ 
 	function get_cart()
 	{
 		if(!$this->CI->session->userdata('cart'))

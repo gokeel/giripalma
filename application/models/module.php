@@ -62,6 +62,31 @@ class Module extends CI_Model
 		$this->db->order_by("sort_number", "asc");
 		return $this->db->get();		
 	}
+
+	function get_root_module_menu(){
+		$this->db->from('ospos_menu')->where('depth_level', '0')->order_by('sort_number');
+		$query = $this->db->get();
+		// print_r($this->db->last_query());
+
+		return $query;
+	}
+
+	function get_granted_module_menu($person_id, $root_id){
+		$query = $this->db->query('select * from ospos_grants g
+				join (
+				select  id, name, parent_id, depth_level, module_id, href, menu_identifier, sort_number, font_awesome_icon
+				from    (select * from ospos_menu
+				         order by parent_id, id) menu_sorted,
+				        (select @pv := "'.$root_id.'") initialisation
+				where   find_in_set(parent_id, @pv) > 0
+				and     @pv := concat(@pv, ",", id) 
+				order by sort_number)
+				 as mm on g.permission_id = mm.module_id
+				 where person_id = "'.$person_id.'" 
+				 order by depth_level, sort_number');
+
+		return $query;
+	}
 	
 }
 ?>

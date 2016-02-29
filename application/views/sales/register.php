@@ -432,7 +432,7 @@
 												}
 												else
 												{
-													echo form_checkbox(array('name'=>'sales_invoice_enable','id'=>'sales_invoice_enable', 'checked'=>'checked'));
+													echo form_checkbox(array('name'=>'sales_invoice_enable','id'=>'sales_invoice_enable'));
 												}
 												?>
 					                        </span>

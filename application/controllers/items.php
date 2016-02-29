@@ -37,6 +37,7 @@ class Items extends Secure_area implements iData_controller
 		$data['stock_locations'] = $stock_locations;
 		$data['manage_table'] = get_items_manage_table( $this->Item->get_all($stock_location, $lines_per_page, $limit_from), $this );
 		$data['am'] = 'items';
+		$data['asm_1'] = 'items';
 		
 		$this->load->view('items/manage', $data);
 
@@ -300,6 +301,7 @@ class Items extends Secure_area implements iData_controller
         
         $data['stock_locations'] = array();
         $stock_locations = $this->Stock_location->get_undeleted_all()->result_array();
+        $stock = array();
         foreach($stock_locations as $location_data)
         {            
             $data['stock_locations'][$location_data['location_id']] = $location_data['location_name'];

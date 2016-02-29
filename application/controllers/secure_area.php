@@ -31,6 +31,7 @@ class Secure_area extends CI_Controller
 		{
 			$data['backup_allowed']|=$module['module_id']==='config';
 		}
+		$data['granted_menu'] = $this->format_menu_array($logged_in_employee_info->person_id);
 		$data['user_info']=$logged_in_employee_info;
 		$data['controller_name']=$module_id;
 		$this->controller_name=$module_id;
@@ -110,6 +111,44 @@ class Secure_area extends CI_Controller
 				header ("{$cookie['header_type']}: {$cookie['data']}", false);
 			}
 		}
+	}
+
+	function format_menu_array($person_id){
+		$root_menu = $this->Module->get_root_module_menu();
+		$menu_array = array();
+
+		foreach($root_menu->result() as $root){
+			$menu_array[$root->id] = array(
+				'name' => $root->name,
+				'href' => $root->href,
+				'identifier' => $root->menu_identifier,
+				'fa_icon' => $root->font_awesome_icon,
+				'submenu' => array()
+				);
+			$get_granted = $this->Module->get_granted_module_menu($person_id, $root->id);
+			if($get_granted->num_rows() > 0){
+				foreach($get_granted->result() as $menu){
+					if($menu->depth_level=="1")
+						$menu_array[$root->id]['submenu'][$menu->id] = array(
+							'name' => $menu->name,
+							'href' => $menu->href,
+							'identifier' => $menu->menu_identifier,
+							'fa_icon' => $root->font_awesome_icon,
+							'submenu' => array()
+							);
+					if($menu->depth_level=="2")
+						$menu_array[$root->id]['submenu'][$menu->parent_id]['submenu'][$menu->id] = array(
+							'name' => $menu->name,
+							'href' => $menu->href,
+							'identifier' => $menu->menu_identifier,
+							'fa_icon' => $root->font_awesome_icon,
+							'submenu' => array()
+							);
+				}
+			}
+			// if($root->id=="8") print_r($get_granted->result_array());
+		}
+		return $menu_array;
 	}
 }
 ?>
