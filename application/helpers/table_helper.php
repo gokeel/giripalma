@@ -503,5 +503,101 @@ function get_item_kit_data_row($item_kit, $controller)
 
 	return $table_data_row;
 }
+function get_raw_materials_manage_table($items,$controller)
+{
+	$CI =& get_instance();
+	$table='<table class="tablesorter" id="sortable_table">';
+	
+	$headers = array('<input type="checkbox" id="select_all" />', 
+	$CI->lang->line('items_item_number'),
+	$CI->lang->line('items_name'),
+	$CI->lang->line('items_category'),
+	$CI->lang->line('suppliers_company_name'),
+	$CI->lang->line('items_cost_price'),
+	$CI->lang->line('items_unit_price'),
+	$CI->lang->line('items_quantity'),
+	$CI->lang->line('items_tax_percents'),
+	'&nbsp;',
+	'&nbsp;',
+	'&nbsp;'	
+	);
+	
+	$table.='<thead><tr>';
+	foreach($headers as $header)
+	{
+		$table.="<th>$header</th>";
+	}
+	$table.='</tr></thead><tbody>';
+	$table.=get_items_manage_table_data_rows($items,$controller);
+	$table.='</tbody></table>';
+
+	return $table;
+}
+
+/*
+Gets the html data rows for the items.
+*/
+function get_raw_materials_manage_table_data_rows($items,$controller)
+{
+	$CI =& get_instance();
+	$table_data_rows='';
+	
+	foreach($items->result() as $item)
+	{
+		$table_data_rows.=get_item_data_row($item,$controller);
+	}
+	
+	if($items->num_rows()==0)
+	{
+		$table_data_rows.="<tr><td colspan='12'><div class='warning_message' style='padding:7px;'>".$CI->lang->line('items_no_items_to_display')."</div></td></tr>";
+	}
+	
+	return $table_data_rows;
+}
+
+function get_raw_materials_data_row($item,$controller)
+{
+	$CI =& get_instance();
+	$item_tax_info=$CI->Item_taxes->get_info($item->item_id);
+	$tax_percents = '';
+	foreach($item_tax_info as $tax_info)
+	{
+		$tax_percents.=$tax_info['percent']. '%, ';
+	}
+	$tax_percents=substr($tax_percents, 0, -2);
+	$controller_name=strtolower(get_class($CI));
+	$width = $controller->get_form_width();
+
+    $item_quantity='';
+    
+	$table_data_row='<tr>';
+	$table_data_row.="<td width='3%'><input type='checkbox' id='item_$item->item_id' value='".$item->item_id."'/></td>";
+	$table_data_row.='<td width="15%">'.$item->item_number.'</td>';
+	$table_data_row.='<td width="20%">'.$item->name.'</td>';
+	$table_data_row.='<td width="14%">'.$item->category.'</td>';
+	$table_data_row.='<td width="14%">'.$item->company_name.'</td>';
+	$table_data_row.='<td width="14%">'.to_currency($item->cost_price).'</td>';
+	$table_data_row.='<td width="14%">'.to_currency($item->unit_price).'</td>';
+    $table_data_row.='<td width="14%">'.$item->quantity.'</td>';
+	$table_data_row.='<td width="14%">'.$tax_percents.'</td>';
+	$image = '';
+	if (!empty($item->pic_id))
+	{
+		$images = glob ("uploads/item_pics/" . $item->pic_id . ".*");
+		if (sizeof($images) > 0)
+		{
+			$image.='<a class="rollover" href="'. base_url($images[0]) .'"><img src="'.site_url('items/pic_thumb/'.$item->pic_id).'"></a>';
+		}
+	}
+	$table_data_row.='<td align="center" width="55px">' . $image . '</td>';
+	$table_data_row.='<td width="5%">'.anchor($controller_name."/view/$item->item_id/width:$width", $CI->lang->line('common_edit'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_update'))).'</td>';		
+
+	$table_data_row.='<td width="10%">'.anchor($controller_name."/inventory/$item->item_id/width:$width", $CI->lang->line('common_inv'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_count')))./*'</td>';//inventory count	
+	$table_data_row.='<td width="5%">'*/'&nbsp;&nbsp;&nbsp;&nbsp;'.anchor($controller_name."/count_details/$item->item_id/width:$width", $CI->lang->line('common_det'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_details_count'))).'</td>';//inventory details	
+	
+	$table_data_row.='</tr>';
+
+	return $table_data_row;
+}
 
 ?>
