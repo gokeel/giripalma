@@ -503,7 +503,7 @@ function get_item_kit_data_row($item_kit, $controller)
 
 	return $table_data_row;
 }
-function get_raw_materials_manage_table($items,$controller)
+function get_raw_materials_manage_table($raw_materials,$controller)
 {
 	$CI =& get_instance();
 	$table='<table class="tablesorter" id="sortable_table">';
@@ -528,7 +528,7 @@ function get_raw_materials_manage_table($items,$controller)
 		$table.="<th>$header</th>";
 	}
 	$table.='</tr></thead><tbody>';
-	$table.=get_items_manage_table_data_rows($items,$controller);
+	$table.=get_items_manage_table_data_rows($raw_materials,$controller);
 	$table.='</tbody></table>';
 
 	return $table;
@@ -537,17 +537,17 @@ function get_raw_materials_manage_table($items,$controller)
 /*
 Gets the html data rows for the items.
 */
-function get_raw_materials_manage_table_data_rows($items,$controller)
+function get_raw_materials_manage_table_data_rows($raw_materials,$controller)
 {
 	$CI =& get_instance();
 	$table_data_rows='';
 	
-	foreach($items->result() as $item)
+	foreach($raw_materials->result() as $item)
 	{
 		$table_data_rows.=get_item_data_row($item,$controller);
 	}
 	
-	if($items->num_rows()==0)
+	if($raw_materials->num_rows()==0)
 	{
 		$table_data_rows.="<tr><td colspan='12'><div class='warning_message' style='padding:7px;'>".$CI->lang->line('items_no_items_to_display')."</div></td></tr>";
 	}

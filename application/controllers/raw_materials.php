@@ -18,7 +18,7 @@ class Raw_materials extends Secure_area implements iData_controller
 		$data['controller_name'] = $this->get_controller_name();
 		$data['form_width'] = $this->get_form_width();
 		$lines_per_page = $this->Appconfig->get('lines_per_page');
-		$items = $this->Item->get_all($stock_location, $lines_per_page, $limit_from);
+		$raw_materials = $this->Item->get_all($stock_location, $lines_per_page, $limit_from);
 		$data['links'] = $this->_initialize_pagination($this->Item, $lines_per_page, $limit_from);
 		
 		// assume year 2010 as starting date for OSPOS
@@ -77,11 +77,11 @@ class Raw_materials extends Secure_area implements iData_controller
 						'search_custom' => $this->input->post('search_custom'),
 						'is_deleted' => $this->input->post('is_deleted'));
 		
-		$items = $this->Item->search($search, $filters, $lines_per_page, $limit_from);
-		$data_rows = get_items_manage_table_data_rows($items, $this);
+		$raw_materials = $this->Item->search($search, $filters, $lines_per_page, $limit_from);
+		$data_rows = get_items_manage_table_data_rows($raw_materials, $this);
 		$total_rows = $this->Item->get_found_rows($search, $filters);
 		$links = $this->_initialize_pagination($this->Item, $lines_per_page, $limit_from, $total_rows, 'search');
-		$data_rows = get_items_manage_table_data_rows($items, $this);
+		$data_rows = get_items_manage_table_data_rows($raw_materials, $this);
 		// do not move this line to be after the json_encode otherwise the searhc function won't work!!
 		$this->_remove_duplicate_cookies();
 		
@@ -311,7 +311,7 @@ class Raw_materials extends Secure_area implements iData_controller
             $data['item_quantities'][$location_data['location_id']] = $this->Item_quantity->get_item_quantity($item_id,$location_data['location_id'])->quantity;
         }     
         
-		$this->load->view("items/inventory", $data);
+		$this->load->view("raw_materials/inventory", $data);
 	}
 	
 	function count_details($item_id=-1)
@@ -326,7 +326,7 @@ class Raw_materials extends Secure_area implements iData_controller
             $data['item_quantities'][$location_data['location_id']] = $this->Item_quantity->get_item_quantity($item_id,$location_data['location_id'])->quantity;
         }     
                 
-		$this->load->view("items/count_details", $data);
+		$this->load->view("raw_materials/count_details", $data);
 	}
 
 	function generate_barcodes($item_ids)
@@ -360,7 +360,7 @@ class Raw_materials extends Secure_area implements iData_controller
 				$this->Item->save($item, $item['item_id']);
 			}
 		}
-		$data['items'] = $result;
+		$data['raw_materials'] = $result;
 		// display barcodes
 		$this->load->view("barcode_sheet", $data);
 
@@ -385,7 +385,7 @@ class Raw_materials extends Secure_area implements iData_controller
 			1 =>$this->lang->line('items_change_all_to_serialized'),
 			0 =>$this->lang->line('items_change_all_to_unserialized'));
 
-		$this->load->view("items/form_bulk", $data);
+		$this->load->view("raw_materials/form_bulk", $data);
 	}
 
 	function save($item_id=-1)
@@ -429,7 +429,7 @@ class Raw_materials extends Secure_area implements iData_controller
 		$employee_id = $this->Employee->get_logged_in_employee_info()->person_id;
 		$cur_item_info = $this->Item->get_info($item_id);
 		
-		if($this->Item->save($item_data,$item_id))
+		if($this->Row_materials->save($item_data,$item_id))
 		{
 			$success = TRUE;
 			$new_item = FALSE;
@@ -629,7 +629,7 @@ class Raw_materials extends Secure_area implements iData_controller
 	
 	function excel_import()
 	{
-		$this->load->view("items/excel_import", null);
+		$this->load->view("raw_materials/excel_import", null);
 	}
 
     function do_excel_import()

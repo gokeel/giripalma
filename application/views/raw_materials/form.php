@@ -343,7 +343,7 @@ $(document).ready(function()
 					if (stay_open) 
 					{
 						// set action of item_form to url without item id, so a new one can be created
-				        $("#item_form").attr("action", "<?php echo site_url("items/save/")?>");
+				        $("#item_form").attr("action", "<?php echo site_url("raw_materials/save/")?>");
 						// use a whitelist of fields to minimize unintended side effects
 						$(':text, :password, :file, #description, #item_form').not('.quantity, #reorder_level, #tax_name_1,' + 
 								'#tax_percent_name_1, #reference_number, #name, #cost_price, #unit_price, #taxed_cost_price, #taxed_unit_price').val('');  

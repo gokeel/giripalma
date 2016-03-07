@@ -11,7 +11,6 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 -- Dumping structure for table giripalma.ospos_app_config
-DROP TABLE IF EXISTS `ospos_app_config`;
 CREATE TABLE IF NOT EXISTS `ospos_app_config` (
   `key` varchar(255) NOT NULL,
   `value` varchar(255) NOT NULL,
@@ -88,7 +87,6 @@ INSERT INTO `ospos_app_config` (`key`, `value`) VALUES
 
 
 -- Dumping structure for table giripalma.ospos_customers
-DROP TABLE IF EXISTS `ospos_customers`;
 CREATE TABLE IF NOT EXISTS `ospos_customers` (
   `person_id` int(10) NOT NULL,
   `company_name` varchar(255) DEFAULT NULL,
@@ -110,7 +108,6 @@ INSERT INTO `ospos_customers` (`person_id`, `company_name`, `account_number`, `t
 
 
 -- Dumping structure for table giripalma.ospos_employees
-DROP TABLE IF EXISTS `ospos_employees`;
 CREATE TABLE IF NOT EXISTS `ospos_employees` (
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
@@ -129,7 +126,6 @@ INSERT INTO `ospos_employees` (`username`, `password`, `person_id`, `deleted`) V
 
 
 -- Dumping structure for table giripalma.ospos_giftcards
-DROP TABLE IF EXISTS `ospos_giftcards`;
 CREATE TABLE IF NOT EXISTS `ospos_giftcards` (
   `record_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `giftcard_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -151,7 +147,6 @@ INSERT INTO `ospos_giftcards` (`record_time`, `giftcard_id`, `giftcard_number`, 
 
 
 -- Dumping structure for table giripalma.ospos_grants
-DROP TABLE IF EXISTS `ospos_grants`;
 CREATE TABLE IF NOT EXISTS `ospos_grants` (
   `permission_id` varchar(255) NOT NULL,
   `person_id` int(10) NOT NULL,
@@ -220,7 +215,6 @@ INSERT INTO `ospos_grants` (`permission_id`, `person_id`) VALUES
 
 
 -- Dumping structure for table giripalma.ospos_inventory
-DROP TABLE IF EXISTS `ospos_inventory`;
 CREATE TABLE IF NOT EXISTS `ospos_inventory` (
   `trans_id` int(11) NOT NULL AUTO_INCREMENT,
   `trans_items` int(11) NOT NULL DEFAULT '0',
@@ -236,9 +230,9 @@ CREATE TABLE IF NOT EXISTS `ospos_inventory` (
   CONSTRAINT `ospos_inventory_ibfk_1` FOREIGN KEY (`trans_items`) REFERENCES `ospos_items` (`item_id`),
   CONSTRAINT `ospos_inventory_ibfk_2` FOREIGN KEY (`trans_user`) REFERENCES `ospos_employees` (`person_id`),
   CONSTRAINT `ospos_inventory_ibfk_3` FOREIGN KEY (`trans_location`) REFERENCES `ospos_stock_locations` (`location_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=172 DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_inventory: ~101 rows (approximately)
+-- Dumping data for table giripalma.ospos_inventory: ~171 rows (approximately)
 /*!40000 ALTER TABLE `ospos_inventory` DISABLE KEYS */;
 INSERT INTO `ospos_inventory` (`trans_id`, `trans_items`, `trans_user`, `trans_date`, `trans_comment`, `trans_location`, `trans_inventory`) VALUES
 	(1, 1, 1, '2016-01-25 23:01:23', 'Manual Edit of Quantity', 1, 10),
@@ -341,12 +335,81 @@ INSERT INTO `ospos_inventory` (`trans_id`, `trans_items`, `trans_user`, `trans_d
 	(98, 7, 1, '2016-02-26 17:41:27', 'Perubahan jumlah Stok secara manual', 7, 1),
 	(99, 7, 1, '2016-02-26 17:41:27', 'Perubahan jumlah Stok secara manual', 8, 1),
 	(100, 7, 1, '2016-02-26 17:41:27', 'Perubahan jumlah Stok secara manual', 10, 1),
-	(101, 7, 1, '2016-02-26 17:41:27', 'Perubahan jumlah Stok secara manual', 1, 18);
+	(101, 7, 1, '2016-02-26 17:41:27', 'Perubahan jumlah Stok secara manual', 1, 18),
+	(102, 8, 1, '2016-03-04 11:19:18', 'Perubahan jumlah Stok secara manual', 9, 2),
+	(103, 8, 1, '2016-03-04 11:19:19', 'Perubahan jumlah Stok secara manual', 2, 0),
+	(104, 8, 1, '2016-03-04 11:19:19', 'Perubahan jumlah Stok secara manual', 3, 0),
+	(105, 8, 1, '2016-03-04 11:19:19', 'Perubahan jumlah Stok secara manual', 4, 0),
+	(106, 8, 1, '2016-03-04 11:19:19', 'Perubahan jumlah Stok secara manual', 5, 0),
+	(107, 8, 1, '2016-03-04 11:19:19', 'Perubahan jumlah Stok secara manual', 6, 0),
+	(108, 8, 1, '2016-03-04 11:19:19', 'Perubahan jumlah Stok secara manual', 7, 0),
+	(109, 8, 1, '2016-03-04 11:19:19', 'Perubahan jumlah Stok secara manual', 8, 0),
+	(110, 8, 1, '2016-03-04 11:19:19', 'Perubahan jumlah Stok secara manual', 10, 0),
+	(111, 8, 1, '2016-03-04 11:19:19', 'Perubahan jumlah Stok secara manual', 1, 2),
+	(112, 9, 1, '2016-03-04 11:30:30', 'Perubahan jumlah Stok secara manual', 9, 2),
+	(113, 9, 1, '2016-03-04 11:30:30', 'Perubahan jumlah Stok secara manual', 2, 0),
+	(114, 9, 1, '2016-03-04 11:30:30', 'Perubahan jumlah Stok secara manual', 3, 0),
+	(115, 9, 1, '2016-03-04 11:30:30', 'Perubahan jumlah Stok secara manual', 4, 0),
+	(116, 9, 1, '2016-03-04 11:30:30', 'Perubahan jumlah Stok secara manual', 5, 0),
+	(117, 9, 1, '2016-03-04 11:30:30', 'Perubahan jumlah Stok secara manual', 6, 0),
+	(118, 9, 1, '2016-03-04 11:30:30', 'Perubahan jumlah Stok secara manual', 7, 0),
+	(119, 9, 1, '2016-03-04 11:30:30', 'Perubahan jumlah Stok secara manual', 8, 0),
+	(120, 9, 1, '2016-03-04 11:30:30', 'Perubahan jumlah Stok secara manual', 10, 0),
+	(121, 9, 1, '2016-03-04 11:30:30', 'Perubahan jumlah Stok secara manual', 1, 2),
+	(122, 10, 1, '2016-03-05 02:09:35', 'Perubahan jumlah Stok secara manual', 9, 2),
+	(123, 10, 1, '2016-03-05 02:09:35', 'Perubahan jumlah Stok secara manual', 2, 0),
+	(124, 10, 1, '2016-03-05 02:09:35', 'Perubahan jumlah Stok secara manual', 3, 0),
+	(125, 10, 1, '2016-03-05 02:09:35', 'Perubahan jumlah Stok secara manual', 4, 0),
+	(126, 10, 1, '2016-03-05 02:09:35', 'Perubahan jumlah Stok secara manual', 5, 0),
+	(127, 10, 1, '2016-03-05 02:09:35', 'Perubahan jumlah Stok secara manual', 6, 0),
+	(128, 10, 1, '2016-03-05 02:09:35', 'Perubahan jumlah Stok secara manual', 7, 0),
+	(129, 10, 1, '2016-03-05 02:09:35', 'Perubahan jumlah Stok secara manual', 8, 0),
+	(130, 10, 1, '2016-03-05 02:09:35', 'Perubahan jumlah Stok secara manual', 10, 0),
+	(131, 10, 1, '2016-03-05 02:09:35', 'Perubahan jumlah Stok secara manual', 1, 2),
+	(132, 11, 1, '2016-03-05 02:11:43', 'Perubahan jumlah Stok secara manual', 9, 10),
+	(133, 11, 1, '2016-03-05 02:11:43', 'Perubahan jumlah Stok secara manual', 2, 0),
+	(134, 11, 1, '2016-03-05 02:11:43', 'Perubahan jumlah Stok secara manual', 3, 0),
+	(135, 11, 1, '2016-03-05 02:11:43', 'Perubahan jumlah Stok secara manual', 4, 0),
+	(136, 11, 1, '2016-03-05 02:11:43', 'Perubahan jumlah Stok secara manual', 5, 0),
+	(137, 11, 1, '2016-03-05 02:11:43', 'Perubahan jumlah Stok secara manual', 6, 0),
+	(138, 11, 1, '2016-03-05 02:11:43', 'Perubahan jumlah Stok secara manual', 7, 0),
+	(139, 11, 1, '2016-03-05 02:11:43', 'Perubahan jumlah Stok secara manual', 8, 0),
+	(140, 11, 1, '2016-03-05 02:11:43', 'Perubahan jumlah Stok secara manual', 10, 0),
+	(141, 11, 1, '2016-03-05 02:11:43', 'Perubahan jumlah Stok secara manual', 1, 10),
+	(142, 12, 1, '2016-03-05 02:18:46', 'Perubahan jumlah Stok secara manual', 9, 2),
+	(143, 12, 1, '2016-03-05 02:18:46', 'Perubahan jumlah Stok secara manual', 2, 0),
+	(144, 12, 1, '2016-03-05 02:18:46', 'Perubahan jumlah Stok secara manual', 3, 0),
+	(145, 12, 1, '2016-03-05 02:18:47', 'Perubahan jumlah Stok secara manual', 4, 0),
+	(146, 12, 1, '2016-03-05 02:18:47', 'Perubahan jumlah Stok secara manual', 5, 0),
+	(147, 12, 1, '2016-03-05 02:18:47', 'Perubahan jumlah Stok secara manual', 6, 0),
+	(148, 12, 1, '2016-03-05 02:18:47', 'Perubahan jumlah Stok secara manual', 7, 0),
+	(149, 12, 1, '2016-03-05 02:18:47', 'Perubahan jumlah Stok secara manual', 8, 0),
+	(150, 12, 1, '2016-03-05 02:18:47', 'Perubahan jumlah Stok secara manual', 10, 0),
+	(151, 12, 1, '2016-03-05 02:18:47', 'Perubahan jumlah Stok secara manual', 1, 1),
+	(152, 13, 1, '2016-03-05 02:22:08', 'Perubahan jumlah Stok secara manual', 9, 22),
+	(153, 13, 1, '2016-03-05 02:22:08', 'Perubahan jumlah Stok secara manual', 2, 0),
+	(154, 13, 1, '2016-03-05 02:22:08', 'Perubahan jumlah Stok secara manual', 3, 0),
+	(155, 13, 1, '2016-03-05 02:22:08', 'Perubahan jumlah Stok secara manual', 4, 0),
+	(156, 13, 1, '2016-03-05 02:22:08', 'Perubahan jumlah Stok secara manual', 5, 0),
+	(157, 13, 1, '2016-03-05 02:22:08', 'Perubahan jumlah Stok secara manual', 6, 0),
+	(158, 13, 1, '2016-03-05 02:22:08', 'Perubahan jumlah Stok secara manual', 7, 0),
+	(159, 13, 1, '2016-03-05 02:22:08', 'Perubahan jumlah Stok secara manual', 8, 0),
+	(160, 13, 1, '2016-03-05 02:22:08', 'Perubahan jumlah Stok secara manual', 10, 0),
+	(161, 13, 1, '2016-03-05 02:22:08', 'Perubahan jumlah Stok secara manual', 1, 22),
+	(162, 14, 1, '2016-03-05 02:27:30', 'Perubahan jumlah Stok secara manual', 9, 10),
+	(163, 14, 1, '2016-03-05 02:27:30', 'Perubahan jumlah Stok secara manual', 2, 0),
+	(164, 14, 1, '2016-03-05 02:27:30', 'Perubahan jumlah Stok secara manual', 3, 0),
+	(165, 14, 1, '2016-03-05 02:27:30', 'Perubahan jumlah Stok secara manual', 4, 0),
+	(166, 14, 1, '2016-03-05 02:27:30', 'Perubahan jumlah Stok secara manual', 5, 0),
+	(167, 14, 1, '2016-03-05 02:27:30', 'Perubahan jumlah Stok secara manual', 6, 0),
+	(168, 14, 1, '2016-03-05 02:27:30', 'Perubahan jumlah Stok secara manual', 7, 0),
+	(169, 14, 1, '2016-03-05 02:27:30', 'Perubahan jumlah Stok secara manual', 8, 0),
+	(170, 14, 1, '2016-03-05 02:27:31', 'Perubahan jumlah Stok secara manual', 10, 0),
+	(171, 14, 1, '2016-03-05 02:27:31', 'Perubahan jumlah Stok secara manual', 1, 10);
 /*!40000 ALTER TABLE `ospos_inventory` ENABLE KEYS */;
 
 
 -- Dumping structure for table giripalma.ospos_items
-DROP TABLE IF EXISTS `ospos_items`;
 CREATE TABLE IF NOT EXISTS `ospos_items` (
   `name` varchar(255) NOT NULL,
   `category` varchar(255) NOT NULL,
@@ -379,9 +442,9 @@ CREATE TABLE IF NOT EXISTS `ospos_items` (
   UNIQUE KEY `item_number` (`item_number`),
   KEY `supplier_id` (`supplier_id`),
   CONSTRAINT `ospos_items_ibfk_1` FOREIGN KEY (`supplier_id`) REFERENCES `ospos_suppliers` (`person_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_items: ~7 rows (approximately)
+-- Dumping data for table giripalma.ospos_items: ~14 rows (approximately)
 /*!40000 ALTER TABLE `ospos_items` DISABLE KEYS */;
 INSERT INTO `ospos_items` (`name`, `category`, `supplier_id`, `type_item`, `item_number`, `description`, `color`, `dimension`, `cost_price`, `unit_price`, `reorder_level`, `receiving_quantity`, `item_id`, `pic_id`, `allow_alt_description`, `is_serialized`, `deleted`, `custom1`, `custom2`, `custom3`, `custom4`, `custom5`, `custom6`, `custom7`, `custom8`, `custom9`, `custom10`) VALUES
 	('meja', 'kredit', NULL, NULL, NULL, '', '', '', 40000.00, 50000.00, 5.00, 0, 1, NULL, 0, 0, 1, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
@@ -390,12 +453,18 @@ INSERT INTO `ospos_items` (`name`, `category`, `supplier_id`, `type_item`, `item
 	('Kursi Syahrini', 'new', NULL, NULL, 'K002', '', 'merah', '20x25', 100000.00, 300000.00, 1.00, 0, 4, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
 	('Kursi Tunggu', 'kursi', NULL, NULL, '56746774276356', '', 'Hitam', '45 x 200', 600000.00, 900000.00, 20.00, 60, 5, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
 	('Komputer PC', 'Komputer', 4, NULL, 'PC2837849', '', 'Putih', '14"', 3000000.00, 4500000.00, 4.00, 10, 6, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
-	('meja coba', 'apa ya', 4, 'service', 'kcoba1', '', 'hijau', '50 x 80', 200000.00, 200000.00, 0.00, 0, 7, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+	('meja coba', 'apa ya', 4, 'service', 'kcoba1', '', 'hijau', '50 x 80', 200000.00, 200000.00, 0.00, 0, 7, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
+	('raw', 'bahan', NULL, '0', '1234', '', 'biru', '60 x 5', 1000000.00, 1000000.00, 1.00, 0, 8, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
+	('material', 'new', NULL, '0', '12345', '', 'biru', '50 x 60 ', 1000000.00, 1000000.00, 1.00, 0, 9, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
+	('kayu', 'new', NULL, '0', '12', '', 'coklat', '70 x 5', 1000.00, 1000.00, 1.00, 0, 10, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
+	('mur', 'new', NULL, '0', '1', '', 'huyM', '56', 12.00, 12.00, 2.00, 0, 11, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
+	('TES', 'new', NULL, '0', '123456', '', 'g', 'e', 1.00, 1.00, 0.00, 0, 12, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
+	('we', 'we', NULL, '0', 'new', '', 'wq', 'wr', 123.00, 123.00, 1.00, 0, 13, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
+	('m', 'mm', NULL, '0', 'm', '', 'm', 'm', 1.00, 1.00, 1.00, 0, 14, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
 /*!40000 ALTER TABLE `ospos_items` ENABLE KEYS */;
 
 
 -- Dumping structure for table giripalma.ospos_items_taxes
-DROP TABLE IF EXISTS `ospos_items_taxes`;
 CREATE TABLE IF NOT EXISTS `ospos_items_taxes` (
   `item_id` int(10) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -404,17 +473,23 @@ CREATE TABLE IF NOT EXISTS `ospos_items_taxes` (
   CONSTRAINT `ospos_items_taxes_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `ospos_items` (`item_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_items_taxes: ~3 rows (approximately)
+-- Dumping data for table giripalma.ospos_items_taxes: ~10 rows (approximately)
 /*!40000 ALTER TABLE `ospos_items_taxes` DISABLE KEYS */;
 INSERT INTO `ospos_items_taxes` (`item_id`, `name`, `percent`) VALUES
 	(5, 'Pajak Penjualan1', 10.00),
 	(6, 'Pajak Penjualan1', 10.00),
-	(7, 'Pajak Penjualan1', 10.00);
+	(7, 'Pajak Penjualan1', 10.00),
+	(8, 'Pajak Penjualan1', 10.00),
+	(9, 'Pajak Penjualan1', 10.00),
+	(10, 'Pajak Penjualan1', 10.00),
+	(11, 'Pajak Penjualan1', 10.00),
+	(12, 'Pajak Penjualan1', 10.00),
+	(13, 'Pajak Penjualan1', 10.00),
+	(14, 'Pajak Penjualan1', 10.00);
 /*!40000 ALTER TABLE `ospos_items_taxes` ENABLE KEYS */;
 
 
 -- Dumping structure for table giripalma.ospos_item_kits
-DROP TABLE IF EXISTS `ospos_item_kits`;
 CREATE TABLE IF NOT EXISTS `ospos_item_kits` (
   `item_kit_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -430,7 +505,6 @@ INSERT INTO `ospos_item_kits` (`item_kit_id`, `name`, `description`) VALUES
 
 
 -- Dumping structure for table giripalma.ospos_item_kit_items
-DROP TABLE IF EXISTS `ospos_item_kit_items`;
 CREATE TABLE IF NOT EXISTS `ospos_item_kit_items` (
   `item_kit_id` int(11) NOT NULL,
   `item_id` int(11) NOT NULL,
@@ -450,7 +524,6 @@ INSERT INTO `ospos_item_kit_items` (`item_kit_id`, `item_id`, `quantity`) VALUES
 
 
 -- Dumping structure for table giripalma.ospos_item_quantities
-DROP TABLE IF EXISTS `ospos_item_quantities`;
 CREATE TABLE IF NOT EXISTS `ospos_item_quantities` (
   `item_id` int(11) NOT NULL,
   `location_id` int(11) NOT NULL,
@@ -462,7 +535,7 @@ CREATE TABLE IF NOT EXISTS `ospos_item_quantities` (
   CONSTRAINT `ospos_item_quantities_ibfk_2` FOREIGN KEY (`location_id`) REFERENCES `ospos_stock_locations` (`location_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_item_quantities: ~70 rows (approximately)
+-- Dumping data for table giripalma.ospos_item_quantities: ~140 rows (approximately)
 /*!40000 ALTER TABLE `ospos_item_quantities` DISABLE KEYS */;
 INSERT INTO `ospos_item_quantities` (`item_id`, `location_id`, `quantity`) VALUES
 	(1, 1, 10),
@@ -534,12 +607,81 @@ INSERT INTO `ospos_item_quantities` (`item_id`, `location_id`, `quantity`) VALUE
 	(7, 7, 1),
 	(7, 8, 1),
 	(7, 9, 10),
-	(7, 10, 1);
+	(7, 10, 1),
+	(8, 1, 2),
+	(8, 2, 0),
+	(8, 3, 0),
+	(8, 4, 0),
+	(8, 5, 0),
+	(8, 6, 0),
+	(8, 7, 0),
+	(8, 8, 0),
+	(8, 9, 2),
+	(8, 10, 0),
+	(9, 1, 2),
+	(9, 2, 0),
+	(9, 3, 0),
+	(9, 4, 0),
+	(9, 5, 0),
+	(9, 6, 0),
+	(9, 7, 0),
+	(9, 8, 0),
+	(9, 9, 2),
+	(9, 10, 0),
+	(10, 1, 2),
+	(10, 2, 0),
+	(10, 3, 0),
+	(10, 4, 0),
+	(10, 5, 0),
+	(10, 6, 0),
+	(10, 7, 0),
+	(10, 8, 0),
+	(10, 9, 2),
+	(10, 10, 0),
+	(11, 1, 10),
+	(11, 2, 0),
+	(11, 3, 0),
+	(11, 4, 0),
+	(11, 5, 0),
+	(11, 6, 0),
+	(11, 7, 0),
+	(11, 8, 0),
+	(11, 9, 10),
+	(11, 10, 0),
+	(12, 1, 1),
+	(12, 2, 0),
+	(12, 3, 0),
+	(12, 4, 0),
+	(12, 5, 0),
+	(12, 6, 0),
+	(12, 7, 0),
+	(12, 8, 0),
+	(12, 9, 2),
+	(12, 10, 0),
+	(13, 1, 22),
+	(13, 2, 0),
+	(13, 3, 0),
+	(13, 4, 0),
+	(13, 5, 0),
+	(13, 6, 0),
+	(13, 7, 0),
+	(13, 8, 0),
+	(13, 9, 22),
+	(13, 10, 0),
+	(14, 1, 10),
+	(14, 2, 0),
+	(14, 3, 0),
+	(14, 4, 0),
+	(14, 5, 0),
+	(14, 6, 0),
+	(14, 7, 0),
+	(14, 8, 0),
+	(14, 9, 10),
+	(14, 10, 0);
 /*!40000 ALTER TABLE `ospos_item_quantities` ENABLE KEYS */;
 
 
 -- Dumping structure for table giripalma.ospos_menu
-DROP TABLE IF EXISTS `ospos_menu`;
 CREATE TABLE IF NOT EXISTS `ospos_menu` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
@@ -551,7 +693,7 @@ CREATE TABLE IF NOT EXISTS `ospos_menu` (
   `menu_identifier` varchar(100) DEFAULT NULL,
   `font_awesome_icon` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table giripalma.ospos_menu: ~48 rows (approximately)
 /*!40000 ALTER TABLE `ospos_menu` DISABLE KEYS */;
@@ -608,7 +750,6 @@ INSERT INTO `ospos_menu` (`id`, `name`, `module_id`, `depth_level`, `parent_id`,
 
 
 -- Dumping structure for table giripalma.ospos_modules
-DROP TABLE IF EXISTS `ospos_modules`;
 CREATE TABLE IF NOT EXISTS `ospos_modules` (
   `name_lang_key` varchar(255) NOT NULL,
   `desc_lang_key` varchar(255) NOT NULL,
@@ -640,7 +781,6 @@ INSERT INTO `ospos_modules` (`name_lang_key`, `desc_lang_key`, `sort`, `module_i
 
 
 -- Dumping structure for table giripalma.ospos_people
-DROP TABLE IF EXISTS `ospos_people`;
 CREATE TABLE IF NOT EXISTS `ospos_people` (
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
@@ -670,7 +810,6 @@ INSERT INTO `ospos_people` (`first_name`, `last_name`, `gender`, `phone_number`,
 
 
 -- Dumping structure for table giripalma.ospos_permissions
-DROP TABLE IF EXISTS `ospos_permissions`;
 CREATE TABLE IF NOT EXISTS `ospos_permissions` (
   `permission_id` varchar(255) NOT NULL,
   `module_id` varchar(255) NOT NULL,
@@ -741,7 +880,6 @@ INSERT INTO `ospos_permissions` (`permission_id`, `module_id`, `location_id`) VA
 
 
 -- Dumping structure for table giripalma.ospos_raw_materials
-DROP TABLE IF EXISTS `ospos_raw_materials`;
 CREATE TABLE IF NOT EXISTS `ospos_raw_materials` (
   `name` varchar(255) NOT NULL,
   `category` varchar(255) NOT NULL,
@@ -774,15 +912,28 @@ CREATE TABLE IF NOT EXISTS `ospos_raw_materials` (
   UNIQUE KEY `item_number` (`item_number`),
   KEY `supplier_id` (`supplier_id`),
   CONSTRAINT `ospos_raw_materials_ibfk_1` FOREIGN KEY (`supplier_id`) REFERENCES `ospos_suppliers` (`person_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- Dumping data for table giripalma.ospos_raw_materials: ~0 rows (approximately)
 /*!40000 ALTER TABLE `ospos_raw_materials` DISABLE KEYS */;
 /*!40000 ALTER TABLE `ospos_raw_materials` ENABLE KEYS */;
 
 
+-- Dumping structure for table giripalma.ospos_raw_materials_tax
+CREATE TABLE IF NOT EXISTS `ospos_raw_materials_tax` (
+  `item_id` int(10) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `percent` decimal(15,2) NOT NULL,
+  PRIMARY KEY (`item_id`,`name`,`percent`),
+  CONSTRAINT `ospos_raw_materials_tax_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `ospos_items` (`item_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+-- Dumping data for table giripalma.ospos_raw_materials_tax: ~0 rows (approximately)
+/*!40000 ALTER TABLE `ospos_raw_materials_tax` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ospos_raw_materials_tax` ENABLE KEYS */;
+
+
 -- Dumping structure for table giripalma.ospos_receivings
-DROP TABLE IF EXISTS `ospos_receivings`;
 CREATE TABLE IF NOT EXISTS `ospos_receivings` (
   `receiving_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `supplier_id` int(10) DEFAULT NULL,
@@ -808,7 +959,6 @@ INSERT INTO `ospos_receivings` (`receiving_time`, `supplier_id`, `employee_id`, 
 
 
 -- Dumping structure for table giripalma.ospos_receivings_items
-DROP TABLE IF EXISTS `ospos_receivings_items`;
 CREATE TABLE IF NOT EXISTS `ospos_receivings_items` (
   `receiving_id` int(10) NOT NULL DEFAULT '0',
   `item_id` int(10) NOT NULL DEFAULT '0',
@@ -837,7 +987,6 @@ INSERT INTO `ospos_receivings_items` (`receiving_id`, `item_id`, `description`, 
 
 
 -- Dumping structure for table giripalma.ospos_sales
-DROP TABLE IF EXISTS `ospos_sales`;
 CREATE TABLE IF NOT EXISTS `ospos_sales` (
   `sale_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `customer_id` int(10) DEFAULT NULL,
@@ -896,7 +1045,6 @@ INSERT INTO `ospos_sales` (`sale_time`, `customer_id`, `employee_id`, `comment`,
 
 
 -- Dumping structure for table giripalma.ospos_sales_items
-DROP TABLE IF EXISTS `ospos_sales_items`;
 CREATE TABLE IF NOT EXISTS `ospos_sales_items` (
   `sale_id` int(10) NOT NULL DEFAULT '0',
   `item_id` int(10) NOT NULL DEFAULT '0',
@@ -960,7 +1108,6 @@ INSERT INTO `ospos_sales_items` (`sale_id`, `item_id`, `description`, `serialnum
 
 
 -- Dumping structure for table giripalma.ospos_sales_items_taxes
-DROP TABLE IF EXISTS `ospos_sales_items_taxes`;
 CREATE TABLE IF NOT EXISTS `ospos_sales_items_taxes` (
   `sale_id` int(10) NOT NULL,
   `item_id` int(10) NOT NULL,
@@ -986,7 +1133,6 @@ INSERT INTO `ospos_sales_items_taxes` (`sale_id`, `item_id`, `line`, `name`, `pe
 
 
 -- Dumping structure for table giripalma.ospos_sales_payments
-DROP TABLE IF EXISTS `ospos_sales_payments`;
 CREATE TABLE IF NOT EXISTS `ospos_sales_payments` (
   `sale_id` int(10) NOT NULL,
   `payment_type` varchar(40) NOT NULL,
@@ -1042,7 +1188,6 @@ INSERT INTO `ospos_sales_payments` (`sale_id`, `payment_type`, `payment_leasing`
 
 
 -- Dumping structure for table giripalma.ospos_sales_suspended
-DROP TABLE IF EXISTS `ospos_sales_suspended`;
 CREATE TABLE IF NOT EXISTS `ospos_sales_suspended` (
   `sale_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `customer_id` int(10) DEFAULT NULL,
@@ -1063,7 +1208,6 @@ CREATE TABLE IF NOT EXISTS `ospos_sales_suspended` (
 
 
 -- Dumping structure for table giripalma.ospos_sales_suspended_items
-DROP TABLE IF EXISTS `ospos_sales_suspended_items`;
 CREATE TABLE IF NOT EXISTS `ospos_sales_suspended_items` (
   `sale_id` int(10) NOT NULL DEFAULT '0',
   `item_id` int(10) NOT NULL DEFAULT '0',
@@ -1090,7 +1234,6 @@ CREATE TABLE IF NOT EXISTS `ospos_sales_suspended_items` (
 
 
 -- Dumping structure for table giripalma.ospos_sales_suspended_items_taxes
-DROP TABLE IF EXISTS `ospos_sales_suspended_items_taxes`;
 CREATE TABLE IF NOT EXISTS `ospos_sales_suspended_items_taxes` (
   `sale_id` int(10) NOT NULL,
   `item_id` int(10) NOT NULL,
@@ -1109,7 +1252,6 @@ CREATE TABLE IF NOT EXISTS `ospos_sales_suspended_items_taxes` (
 
 
 -- Dumping structure for table giripalma.ospos_sales_suspended_payments
-DROP TABLE IF EXISTS `ospos_sales_suspended_payments`;
 CREATE TABLE IF NOT EXISTS `ospos_sales_suspended_payments` (
   `sale_id` int(10) NOT NULL,
   `payment_type` varchar(40) NOT NULL,
@@ -1124,7 +1266,6 @@ CREATE TABLE IF NOT EXISTS `ospos_sales_suspended_payments` (
 
 
 -- Dumping structure for table giripalma.ospos_sessions
-DROP TABLE IF EXISTS `ospos_sessions`;
 CREATE TABLE IF NOT EXISTS `ospos_sessions` (
   `session_id` varchar(40) NOT NULL DEFAULT '0',
   `ip_address` varchar(45) NOT NULL DEFAULT '0',
@@ -1134,7 +1275,7 @@ CREATE TABLE IF NOT EXISTS `ospos_sessions` (
   PRIMARY KEY (`session_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_sessions: ~52 rows (approximately)
+-- Dumping data for table giripalma.ospos_sessions: ~49 rows (approximately)
 /*!40000 ALTER TABLE `ospos_sessions` DISABLE KEYS */;
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 	('0148a39435b34ebc75678e1cf9007048', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455095550, 'a:8:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"3";}'),
@@ -1144,11 +1285,11 @@ INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_ac
 	('19112963f16bec54180c9e6862d6531d', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454402471, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}'),
 	('1936b89fd4c6e58ca1236bab292ee2e4', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454402519, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}'),
 	('1a0f512b7f383c6dd52f66b70942f79e', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454402754, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}'),
+	('1e3d03b0db576231ac31ee2177396a30', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1457285807, 'a:9:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"item_location";s:1:"1";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:2:"14";}'),
 	('20374eff3972a47e6ab12613972bfa3b', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454418265, 'a:8:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"2";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"2";}'),
 	('22c8e20ea4055fc8b013781bdb5d6dfe', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455116410, 'a:3:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"sale_location";s:1:"1";}'),
 	('2a976145064e7c01688d29cfe1f12df3', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455671545, ''),
 	('316077144bd572eec734882f7f3e73cd', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455403415, ''),
-	('39c9a89d75941617da42dfc035332091', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1456994889, 'a:3:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"item_location";s:1:"1";}'),
 	('4134dd990883ef5b10f75a86cef04e86', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454402573, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}'),
 	('43d558b908656d17f7b9620ddf2827b9', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.57 Safari/537.36', 1453801341, 'a:9:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"sale_location";s:1:"1";s:13:"item_location";s:1:"1";s:4:"cart";a:1:{i:1;a:16:{s:7:"item_id";s:1:"1";s:13:"item_location";s:1:"1";s:10:"stock_name";s:5:"stock";s:4:"line";i:1;s:4:"name";s:8:"bWVqYQ==";s:11:"item_number";N;s:11:"description";s:0:"";s:12:"serialnumber";s:0:"";s:21:"allow_alt_description";s:1:"0";s:13:"is_serialized";s:1:"0";s:8:"quantity";s:1:"2";s:8:"discount";s:1:"0";s:8:"in_stock";s:2:"10";s:5:"price";s:8:"50000.00";s:5:"total";s:9:"100000.00";s:16:"discounted_total";s:12:"100000.00000";}}s:9:"sale_mode";s:4:"sale";s:8:"customer";i:-1;s:8:"payments";a:2:{s:4:"Cash";a:2:{s:12:"payment_type";s:4:"Cash";s:14:"payment_amount";s:8:"50000.00";}s:5:"Tunai";a:2:{s:12:"payment_type";s:5:"Tunai";s:14:"payment_amount";s:12:"150000.00000";}}s:20:"sales_invoice_number";s:1:"0";}'),
 	('515270df63a524dd29693fca40f51890', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455180365, ''),
@@ -1156,6 +1297,7 @@ INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_ac
 	('570d2cd2522e5e7d8d3e841a72dc7dec', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455528976, 'a:15:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"item_location";s:1:"1";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"5";s:8:"cartRecv";a:0:{}s:9:"recv_mode";s:6:"return";s:17:"recv_stock_source";s:1:"1";s:22:"recv_stock_destination";s:1:"1";s:8:"supplier";i:-1;s:19:"recv_invoice_number";s:1:"0";}'),
 	('5add28dabaae11de799d4bd7407f7ffa', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455180361, ''),
 	('5bd7c0d9cedd069dd1adfbd77fcd938f', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454484331, 'a:15:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"2";s:13:"item_location";s:1:"1";s:8:"cartRecv";a:0:{}s:9:"recv_mode";s:7:"receive";s:17:"recv_stock_source";s:1:"1";s:22:"recv_stock_destination";s:1:"1";s:8:"supplier";i:-1;s:19:"recv_invoice_number";s:1:"0";}'),
+	('5dd01646e007261db55e01c59726b246', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1457285941, 'a:2:{s:9:"person_id";s:1:"1";s:13:"item_location";s:1:"1";}'),
 	('69eb7c0cdfef78ac5103a393ea0de3aa', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0', 1455085692, 'a:16:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"sale_location";s:1:"3";s:22:"sales_print_after_sale";s:4:"true";s:28:"sales_invoice_number_enabled";s:4:"true";s:9:"sale_mode";s:4:"sale";s:4:"cart";a:1:{i:1;a:16:{s:7:"item_id";s:1:"4";s:13:"item_location";s:1:"3";s:10:"stock_name";s:16:"GP2 - Toko Utama";s:4:"line";i:1;s:4:"name";s:20:"S3Vyc2kgU3lhaHJpbmk=";s:11:"item_number";s:4:"K002";s:11:"description";s:0:"";s:12:"serialnumber";s:0:"";s:21:"allow_alt_description";s:1:"0";s:13:"is_serialized";s:1:"0";s:8:"quantity";i:1;s:8:"discount";s:1:"0";s:8:"in_stock";s:2:"-1";s:5:"price";s:9:"300000.00";s:5:"total";s:9:"300000.00";s:16:"discounted_total";s:12:"300000.00000";}}s:8:"customer";i:-1;s:8:"payments";a:1:{s:4:"cash";a:2:{s:12:"payment_type";s:4:"cash";s:14:"payment_amount";s:6:"400000";}}s:20:"sales_invoice_number";s:1:"3";s:8:"cartRecv";a:0:{}s:9:"recv_mode";s:7:"receive";s:17:"recv_stock_source";s:1:"1";s:22:"recv_stock_destination";s:1:"1";s:8:"supplier";i:-1;s:19:"recv_invoice_number";s:1:"0";}'),
 	('6a8fdebce7133d9e2012242a253eef77', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454400230, ''),
 	('6c4a8c0b7cf444f441ba2e033f272168', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455529829, ''),
@@ -1193,7 +1335,6 @@ INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_ac
 
 
 -- Dumping structure for table giripalma.ospos_stock_locations
-DROP TABLE IF EXISTS `ospos_stock_locations`;
 CREATE TABLE IF NOT EXISTS `ospos_stock_locations` (
   `location_id` int(11) NOT NULL AUTO_INCREMENT,
   `location_name` varchar(255) DEFAULT NULL,
@@ -1218,7 +1359,6 @@ INSERT INTO `ospos_stock_locations` (`location_id`, `location_name`, `deleted`) 
 
 
 -- Dumping structure for table giripalma.ospos_suppliers
-DROP TABLE IF EXISTS `ospos_suppliers`;
 CREATE TABLE IF NOT EXISTS `ospos_suppliers` (
   `person_id` int(10) NOT NULL,
   `company_name` varchar(255) NOT NULL,
