@@ -172,7 +172,7 @@
               <div class="row">
                 <div class="col-md-4">
                 <div class="box-header with-border">
-                 <div id="title" class="float_left"><?php echo $this->lang->line('common_list_of').' '.$this->lang->line('module_'.$controller_name); ?></div>
+                 <div id="title" class="float_left">List</div>
               </div>
 
                 </div>
