@@ -53,7 +53,7 @@ class Raw_material extends CI_Model
 
 		if ($filters['stock_location_id'] > -1)
 		{
-			$this->db->join('item_quantities', 'item_quantities.item_id = raw_materials.item_id');
+			$this->db->join('ospos_raw_material_quantities', 'ospos_raw_material_quantities.item_id = raw_materials.item_id');
 			$this->db->where('location_id', $filters['stock_location_id']);
 		}
 
@@ -129,7 +129,7 @@ class Raw_material extends CI_Model
 
 		if ($stock_location_id > -1)
 		{
-			$this->db->join('item_quantities', 'item_quantities.item_id=raw_materials.item_id');
+			$this->db->join('ospos_raw_material_quantities', 'ospos_raw_material_quantities.item_id=raw_materials.item_id');
 			$this->db->where('location_id', $stock_location_id);
 		}
 
@@ -675,7 +675,7 @@ class Raw_material extends CI_Model
 	 * $old_price (optional) : the current-cost-price
 	 * 
 	 * used in receiving-process to update cost-price if changed
-	 * caution: must be used there before item_quantities gets updated, otherwise average price is wrong!
+	 * caution: must be used there before ospos_raw_material_quantities gets updated, otherwise average price is wrong!
 	 * 
 	 */
 	public function change_cost_price($item_id, $items_received, $new_price, $old_price = null)
@@ -686,10 +686,10 @@ class Raw_material extends CI_Model
 			$old_price = $item_info->cost_price;
 		}
 
-		$this->db->from('item_quantities');
+		$this->db->from('ospos_raw_material_quantities');
 		$this->db->select_sum('quantity');
         $this->db->where('item_id', $item_id);
-		$this->db->join('stock_locations', 'stock_locations.location_id=item_quantities.location_id');
+		$this->db->join('stock_locations', 'stock_locations.location_id=ospos_raw_material_quantities.location_id');
         $this->db->where('stock_locations.deleted', 0);
 		$old_total_quantity = $this->db->get()->row()->quantity;
 

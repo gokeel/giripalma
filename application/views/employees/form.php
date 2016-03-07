@@ -60,7 +60,7 @@ foreach($all_modules->result() as $module)
 <span class="medium"><?php echo $this->lang->line('module_'.$module->module_id);?>:</span>
 <span class="small"><?php echo $this->lang->line('module_'.$module->module_id.'_desc');?></span>
 <?php
-	foreach($all_subpermissions->result() as $permission)
+	foreach($all_subpermissions->result() as $permission) 
 	{
 		$exploded_permission = explode('_', $permission->permission_id);
 		if ($permission->module_id == $module->module_id)

@@ -22,7 +22,7 @@ class Raw_material_taxes extends CI_Model
 
 		$this->delete($item_id);
 		$result = TRUE;
-		foreach ($raw_material_taxes as $row)
+		foreach ($raw_material_tax as $row)
 		{
 			$row['item_id'] = $item_id;
 			$result &= $this->db->insert('items_taxes',$row);		

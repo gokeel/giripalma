@@ -1,7 +1,7 @@
 <div id="required_fields_message"><?php echo $this->lang->line('common_fields_required_message'); ?></div>
 <ul id="error_message_box" class="error_message_box"></ul>
 <?php
-echo form_open('Items/save/'.$item_info->item_id,array('id'=>'item_form', 'enctype'=>'multipart/form-data'));
+echo form_open('Raw_materials/save/'.$item_info->item_id,array('id'=>'item_form', 'enctype'=>'multipart/form-data'));
 ?>
 <fieldset id="item_basic_info">
 	<legend><?php echo $this->lang->line("items_basic_information"); ?></legend>
@@ -307,12 +307,12 @@ $(document).ready(function()
     });
 	
 	var no_op = function(event, data, formatted){};
-	$("#category").autocomplete("<?php echo site_url('items/suggest_category');?>",{max:100,minChars:0,delay:10}).result(no_op).search();
+	$("#category").autocomplete("<?php echo site_url('raw_materials/suggest_category');?>",{max:100,minChars:0,delay:10}).result(no_op).search();
 
 	<?php for ($i = 0; $i < 11; $i++) 
 	{ 
 	?>
-	$("#custom"+<?php echo $i; ?>).autocomplete("<?php echo site_url('items/suggest_custom'.$i);?>",{max:100,minChars:0,delay:10}).result(no_op).search();
+	$("#custom"+<?php echo $i; ?>).autocomplete("<?php echo site_url('raw_materials/suggest_custom'.$i);?>",{max:100,minChars:0,delay:10}).result(no_op).search();
 	<?php 
 	}
 	?>
@@ -354,7 +354,7 @@ $(document).ready(function()
 					{
 						tb_remove();
 					}
-					post_item_form_submit(response, stay_open);	
+					window.location.href = "<?php echo site_url('raw_materials');?>";
 				},
 				dataType:'json'
 			});

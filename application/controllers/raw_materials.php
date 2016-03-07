@@ -18,7 +18,7 @@ class Raw_materials extends Secure_area implements iData_controller
 		$data['controller_name'] = $this->get_controller_name();
 		$data['form_width'] = $this->get_form_width();
 		$lines_per_page = $this->Appconfig->get('lines_per_page');
-		$raw_materials = $this->Item->get_all($stock_location, $lines_per_page, $limit_from);
+		$raw_materials = $this->Raw_material->get_all($stock_location, $lines_per_page, $limit_from);
 		$data['links'] = $this->_initialize_pagination($this->Item, $lines_per_page, $limit_from);
 		
 		// assume year 2010 as starting date for OSPOS
@@ -47,7 +47,7 @@ class Raw_materials extends Secure_area implements iData_controller
 	function find_item_info()
 	{
 		$item_number=$this->input->post('scan_item_number');
-		echo json_encode($this->Item->find_item_info($item_number));
+		echo json_encode($this->Raw_material->find_item_info($item_number));
 	}
 
 	function search()
@@ -77,9 +77,9 @@ class Raw_materials extends Secure_area implements iData_controller
 						'search_custom' => $this->input->post('search_custom'),
 						'is_deleted' => $this->input->post('is_deleted'));
 		
-		$raw_materials = $this->Item->search($search, $filters, $lines_per_page, $limit_from);
+		$raw_materials = $this->Raw_material->search($search, $filters, $lines_per_page, $limit_from);
 		$data_rows = get_items_manage_table_data_rows($raw_materials, $this);
-		$total_rows = $this->Item->get_found_rows($search, $filters);
+		$total_rows = $this->Raw_material->get_found_rows($search, $filters);
 		$links = $this->_initialize_pagination($this->Item, $lines_per_page, $limit_from, $total_rows, 'search');
 		$data_rows = get_items_manage_table_data_rows($raw_materials, $this);
 		// do not move this line to be after the json_encode otherwise the searhc function won't work!!
@@ -121,7 +121,7 @@ class Raw_materials extends Secure_area implements iData_controller
 	*/
 	function suggest()
 	{
-		$suggestions = $this->Item->get_search_suggestions($this->input->post('q'), $this->input->post('limit'),
+		$suggestions = $this->Raw_material->get_search_suggestions($this->input->post('q'), $this->input->post('limit'),
 															$this->input->post('search_custom'), $this->input->post('is_deleted'));
 
 		echo implode("\n",$suggestions);
@@ -129,7 +129,7 @@ class Raw_materials extends Secure_area implements iData_controller
 	
 	function item_search()
 	{
-		$suggestions = $this->Item->get_item_search_suggestions($this->input->post('q'), $this->input->post('limit'));
+		$suggestions = $this->Raw_material->get_item_search_suggestions($this->input->post('q'), $this->input->post('limit'));
 
 		echo implode("\n",$suggestions);
 	}
@@ -139,7 +139,7 @@ class Raw_materials extends Secure_area implements iData_controller
 	*/
 	function suggest_category()
 	{
-		$suggestions = $this->Item->get_category_suggestions($this->input->post('q'));
+		$suggestions = $this->Raw_material->get_category_suggestions($this->input->post('q'));
 
 		echo implode("\n",$suggestions);
 	}
@@ -149,7 +149,7 @@ class Raw_materials extends Secure_area implements iData_controller
 	*/
 	function suggest_location()
 	{
-		$suggestions = $this->Item->get_location_suggestions($this->input->post('q'));
+		$suggestions = $this->Raw_material->get_location_suggestions($this->input->post('q'));
 
 		echo implode("\n",$suggestions);
 	}
@@ -159,7 +159,7 @@ class Raw_materials extends Secure_area implements iData_controller
 	*/
 	function suggest_custom1()
 	{
-		$suggestions = $this->Item->get_custom1_suggestions($this->input->post('q'));
+		$suggestions = $this->Raw_material->get_custom1_suggestions($this->input->post('q'));
 
 		echo implode("\n",$suggestions);
 	}
@@ -169,7 +169,7 @@ class Raw_materials extends Secure_area implements iData_controller
 	*/
 	function suggest_custom2()
 	{
-		$suggestions = $this->Item->get_custom2_suggestions($this->input->post('q'));
+		$suggestions = $this->Raw_material->get_custom2_suggestions($this->input->post('q'));
 
 		echo implode("\n",$suggestions);
 	}
@@ -179,7 +179,7 @@ class Raw_materials extends Secure_area implements iData_controller
 	*/
 	function suggest_custom3()
 	{
-		$suggestions = $this->Item->get_custom3_suggestions($this->input->post('q'));
+		$suggestions = $this->Raw_material->get_custom3_suggestions($this->input->post('q'));
 
 		echo implode("\n",$suggestions);
 	}
@@ -189,7 +189,7 @@ class Raw_materials extends Secure_area implements iData_controller
 	*/
 	function suggest_custom4()
 	{
-		$suggestions = $this->Item->get_custom4_suggestions($this->input->post('q'));
+		$suggestions = $this->Raw_material->get_custom4_suggestions($this->input->post('q'));
 
 		echo implode("\n",$suggestions);
 	}
@@ -199,7 +199,7 @@ class Raw_materials extends Secure_area implements iData_controller
 	*/
 	function suggest_custom5()
 	{
-		$suggestions = $this->Item->get_custom5_suggestions($this->input->post('q'));
+		$suggestions = $this->Raw_material->get_custom5_suggestions($this->input->post('q'));
 
 		echo implode("\n",$suggestions);
 	}
@@ -209,7 +209,7 @@ class Raw_materials extends Secure_area implements iData_controller
 	*/
 	function suggest_custom6()
 	{
-		$suggestions = $this->Item->get_custom6_suggestions($this->input->post('q'));
+		$suggestions = $this->Raw_material->get_custom6_suggestions($this->input->post('q'));
 
 		echo implode("\n",$suggestions);
 	}
@@ -219,7 +219,7 @@ class Raw_materials extends Secure_area implements iData_controller
 	*/
 	function suggest_custom7()
 	{
-		$suggestions = $this->Item->get_custom7_suggestions($this->input->post('q'));
+		$suggestions = $this->Raw_material->get_custom7_suggestions($this->input->post('q'));
 
 		echo implode("\n",$suggestions);
 	}
@@ -229,7 +229,7 @@ class Raw_materials extends Secure_area implements iData_controller
 	*/
 	function suggest_custom8()
 	{
-		$suggestions = $this->Item->get_custom8_suggestions($this->input->post('q'));
+		$suggestions = $this->Raw_material->get_custom8_suggestions($this->input->post('q'));
 
 		echo implode("\n",$suggestions);
 	}
@@ -239,7 +239,7 @@ class Raw_materials extends Secure_area implements iData_controller
 	*/
 	function suggest_custom9()
 	{
-		$suggestions = $this->Item->get_custom9_suggestions($this->input->post('q'));
+		$suggestions = $this->Raw_material->get_custom9_suggestions($this->input->post('q'));
 
 		echo implode("\n",$suggestions);
 	}
@@ -249,7 +249,7 @@ class Raw_materials extends Secure_area implements iData_controller
 	*/
 	function suggest_custom10()
 	{
-		$suggestions = $this->Item->get_custom10_suggestions($this->input->post('q'));
+		$suggestions = $this->Raw_material->get_custom10_suggestions($this->input->post('q'));
 
 		echo implode("\n",$suggestions);
 	}
@@ -257,7 +257,7 @@ class Raw_materials extends Secure_area implements iData_controller
 	function get_row()
 	{
 		$item_id = $this->input->post('row_id');
-		$item_info = $this->Item->get_info($item_id);
+		$item_info = $this->Raw_material->get_info($item_id);
 		$stock_location = $this->item_lib->get_item_location();
 		$item_quantity = $this->Item_quantity->get_item_quantity($item_id,$stock_location);
 		$item_info->quantity = $item_quantity->quantity; 
@@ -270,7 +270,7 @@ class Raw_materials extends Secure_area implements iData_controller
 
 	function view($item_id=-1)
 	{
-		$data['item_info']=$this->Item->get_info($item_id);
+		$data['item_info']=$this->Raw_material->get_info($item_id);
 		$data['item_tax_info']=$this->Item_taxes->get_info($item_id);
 		$suppliers = array('' => $this->lang->line('items_none'));
 		foreach($this->Supplier->get_all()->result_array() as $row)
@@ -279,7 +279,7 @@ class Raw_materials extends Secure_area implements iData_controller
 		}
 
 		$data['suppliers']=$suppliers;
-		$data['selected_supplier'] = $this->Item->get_info($item_id)->supplier_id;
+		$data['selected_supplier'] = $this->Raw_material->get_info($item_id)->supplier_id;
 		$data['type_item'] = array (
 			$this->lang->line('item_fine') => $this->lang->line('item_fine'),
 			$this->lang->line('item_service') => $this->lang->line('item_service'));
@@ -300,7 +300,7 @@ class Raw_materials extends Secure_area implements iData_controller
     
 	function inventory($item_id=-1)
 	{
-		$data['item_info']=$this->Item->get_info($item_id);
+		$data['item_info']=$this->Raw_material->get_info($item_id);
         
         $data['stock_locations'] = array();
         $stock_locations = $this->Stock_location->get_undeleted_all()->result_array();
@@ -316,7 +316,7 @@ class Raw_materials extends Secure_area implements iData_controller
 	
 	function count_details($item_id=-1)
 	{
-		$data['item_info']=$this->Item->get_info($item_id);
+		$data['item_info']=$this->Raw_material->get_info($item_id);
         
         $data['stock_locations'] = array();
         $stock_locations = $this->Stock_location->get_undeleted_all()->result_array();
@@ -335,7 +335,7 @@ class Raw_materials extends Secure_area implements iData_controller
 		$result = array();
 
 		$item_ids = explode(':', $item_ids);
-		$result = $this->Item->get_multiple_info($item_ids)->result_array();
+		$result = $this->Raw_material->get_multiple_info($item_ids)->result_array();
 		$config = $this->barcode_lib->get_barcode_config();
 
 		$data['barcode_config'] = $config;
@@ -357,7 +357,7 @@ class Raw_materials extends Secure_area implements iData_controller
 				unset($item['agency_name']);
 				
 				// update the item in the database in order to save the UPC/EAN/ISBN field
-				$this->Item->save($item, $item['item_id']);
+				$this->Raw_material->save($item, $item['item_id']);
 			}
 		}
 		$data['raw_materials'] = $result;
@@ -427,9 +427,9 @@ class Raw_materials extends Secure_area implements iData_controller
 		}
 		
 		$employee_id = $this->Employee->get_logged_in_employee_info()->person_id;
-		$cur_item_info = $this->Raw_materials->get_info($item_id);
+		$cur_item_info = $this->Raw_material->get_info($item_id);
 		
-		if($this->Raw_materials->save($item_data,$item_id))
+		if($this->Raw_material->save($item_data,$item_id))
 		{
 			$success = TRUE;
 			$new_item = FALSE;
@@ -450,7 +450,7 @@ class Raw_materials extends Secure_area implements iData_controller
 					$raw_material_tax[] = array('name'=>$tax_names[$k], 'percent'=>$tax_percents[$k] );
 				}
 			}
-			$success &= $this->Item_taxes->save($raw_material_tax, $item_id);
+			$success &= $this->Raw_material_taxes->save($raw_material_tax, $item_id);
             
             //Save item quantity
             $stock_locations = $this->Stock_location->get_undeleted_all()->result_array();
@@ -460,21 +460,21 @@ class Raw_materials extends Secure_area implements iData_controller
                 $location_detail = array('item_id'=>$item_id,
                                         'location_id'=>$location_data['location_id'],
                                         'quantity'=>$updated_quantity);  
-                $item_quantity = $this->Raw_material_quantities->get_raw_material_quantities($item_id, $location_data['location_id']);
+                $item_quantity = $this->Raw_material_quantities->get_item_quantity($item_id, $location_data['location_id']);
                 if ($item_quantity->quantity != $updated_quantity || $new_item) 
                 {              
 	                $success &= $this->Raw_material_quantities->save($location_detail, $item_id, $location_data['location_id']);
 	                
-	                $inv_data = array(
-	                    'trans_date'=>date('Y-m-d H:i:s'),
-	                    'trans_items'=>$item_id,
-	                    'trans_user'=>$employee_id,
-	                    'trans_location'=>$location_data['location_id'],
-	                    'trans_comment'=>$this->lang->line('items_manually_editing_of_quantity'),
-	                    'trans_inventory'=>$updated_quantity - $item_quantity->quantity
-	                );
+	                // $inv_data = array(
+	                //     'trans_date'=>date('Y-m-d H:i:s'),
+	                //     'trans_items'=>$item_id,
+	                //     'trans_user'=>$employee_id,
+	                //     'trans_location'=>$location_data['location_id'],
+	                //     'trans_comment'=>$this->lang->line('items_manually_editing_of_quantity'),
+	                //     'trans_inventory'=>$updated_quantity - $item_quantity->quantity
+	                // );
 
-	                $success &= $this->Inventory->insert($inv_data);       
+	                // $success &= $this->Inventory->insert($inv_data);       
                 }                                            
             }        
             
@@ -505,7 +505,7 @@ class Raw_materials extends Secure_area implements iData_controller
 	
 	function check_item_number()
 	{
-		$exists = $this->Item->item_number_exists($this->input->post('item_number'),$this->input->post('item_id'));
+		$exists = $this->Raw_material->item_number_exists($this->input->post('item_number'),$this->input->post('item_id'));
 		echo json_encode(array('success'=>!$exists,'message'=>$this->lang->line('items_item_number_duplicate')));
 	}
 	
@@ -531,7 +531,7 @@ class Raw_materials extends Secure_area implements iData_controller
 	function save_inventory($item_id=-1)
 	{	
 		$employee_id=$this->Employee->get_logged_in_employee_info()->person_id;
-		$cur_item_info = $this->Item->get_info($item_id);
+		$cur_item_info = $this->Raw_material->get_info($item_id);
         $location_id = $this->input->post('stock_location');
 		$inv_data = array(
 			'trans_date'=>date('Y-m-d H:i:s'),
@@ -583,7 +583,7 @@ class Raw_materials extends Secure_area implements iData_controller
 		}
 
 		//Item data could be empty if tax information is being updated
-		if(empty($item_data) || $this->Item->update_multiple($item_data,$items_to_update))
+		if(empty($item_data) || $this->Raw_material->update_multiple($item_data,$items_to_update))
 		{
 			$items_taxes_data = array();
 			$tax_names = $this->input->post('tax_names');
@@ -609,7 +609,7 @@ class Raw_materials extends Secure_area implements iData_controller
 	{
 		$items_to_delete=$this->input->post('ids');
 
-		if($this->Item->delete_list($items_to_delete))
+		if($this->Raw_material->delete_list($items_to_delete))
 		{
 			echo json_encode(array('success'=>true,'message'=>$this->lang->line('items_successful_deleted').' '.
 			count($items_to_delete).' '.$this->lang->line('items_one_or_multiple')));
@@ -680,14 +680,14 @@ class Raw_materials extends Secure_area implements iData_controller
 	                    if ($item_number != "")
 	                    {
 	                    	$item_data['item_number'] = $item_number;
-		                    $invalidated = $this->Item->item_number_exists($item_number);
+		                    $invalidated = $this->Raw_material->item_number_exists($item_number);
 	                    }
 					}
 					else 
 					{
 						$invalidated = true;
 					}
-                    if(!$invalidated && $this->Item->save($item_data)) 
+                    if(!$invalidated && $this->Raw_material->save($item_data)) 
                     {
                         $items_taxes_data = null;
                         //tax 1

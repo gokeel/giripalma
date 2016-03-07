@@ -1,5 +1,5 @@
 <?php
-class Raw_material_quantity extends CI_Model
+class Raw_material_quantities extends CI_Model
 {
     function exists($item_id,$location_id)
     {
