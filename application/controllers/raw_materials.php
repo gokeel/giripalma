@@ -427,9 +427,9 @@ class Raw_materials extends Secure_area implements iData_controller
 		}
 		
 		$employee_id = $this->Employee->get_logged_in_employee_info()->person_id;
-		$cur_item_info = $this->Item->get_info($item_id);
+		$cur_item_info = $this->Raw_materials->get_info($item_id);
 		
-		if($this->Row_materials->save($item_data,$item_id))
+		if($this->Raw_materials->save($item_data,$item_id))
 		{
 			$success = TRUE;
 			$new_item = FALSE;
@@ -440,17 +440,17 @@ class Raw_materials extends Secure_area implements iData_controller
 				$new_item = TRUE;
 			}
 			
-			$items_taxes_data = array();
+			$raw_material_tax = array();
 			$tax_names = $this->input->post('tax_names');
 			$tax_percents = $this->input->post('tax_percents');
 			for($k=0;$k<count($tax_percents);$k++)
 			{
 				if (is_numeric($tax_percents[$k]))
 				{
-					$items_taxes_data[] = array('name'=>$tax_names[$k], 'percent'=>$tax_percents[$k] );
+					$raw_material_tax[] = array('name'=>$tax_names[$k], 'percent'=>$tax_percents[$k] );
 				}
 			}
-			$success &= $this->Item_taxes->save($items_taxes_data, $item_id);
+			$success &= $this->Item_taxes->save($raw_material_tax, $item_id);
             
             //Save item quantity
             $stock_locations = $this->Stock_location->get_undeleted_all()->result_array();
@@ -460,10 +460,10 @@ class Raw_materials extends Secure_area implements iData_controller
                 $location_detail = array('item_id'=>$item_id,
                                         'location_id'=>$location_data['location_id'],
                                         'quantity'=>$updated_quantity);  
-                $item_quantity = $this->Item_quantity->get_item_quantity($item_id, $location_data['location_id']);
+                $item_quantity = $this->Raw_material_quantities->get_raw_material_quantities($item_id, $location_data['location_id']);
                 if ($item_quantity->quantity != $updated_quantity || $new_item) 
                 {              
-	                $success &= $this->Item_quantity->save($location_detail, $item_id, $location_data['location_id']);
+	                $success &= $this->Raw_material_quantities->save($location_detail, $item_id, $location_data['location_id']);
 	                
 	                $inv_data = array(
 	                    'trans_date'=>date('Y-m-d H:i:s'),
