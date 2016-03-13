@@ -1,7 +1,7 @@
 <div id="required_fields_message"><?php echo $this->lang->line('items_edit_fields_you_want_to_update'); ?></div>
 <ul id="error_message_box" class="error_message_box"></ul>
 <?php
-echo form_open('items/bulk_update/',array('id'=>'item_form'));
+echo form_open('raw_materials/bulk_update/',array('id'=>'item_form'));
 ?>
 <fieldset id="item_basic_info">
 <legend><?php echo $this->lang->line("items_basic_information"); ?></legend>
@@ -157,7 +157,7 @@ echo form_close();
 //validation and submit handling
 $(document).ready(function()
 {	
-	$("#category").autocomplete("<?php echo site_url('items/suggest_category');?>",{max:100,minChars:0,delay:10});
+	$("#category").autocomplete("<?php echo site_url('raw_materials/suggest_category');?>",{max:100,minChars:0,delay:10});
     $("#category").result(function(event, data, formatted)
     {
     });

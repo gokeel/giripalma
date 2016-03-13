@@ -1,5 +1,5 @@
 <?php
-echo form_open('items/save_inventory/'.$item_info->item_id,array('id'=>'item_form'));
+echo form_open('raw_materials/save_inventory/'.$item_info->item_id,array('id'=>'item_form'));
 ?>
 <fieldset id="inv_item_basic_info">
 <legend><?php echo $this->lang->line("items_basic_information"); ?></legend>
@@ -76,7 +76,7 @@ echo form_open('items/save_inventory/'.$item_info->item_id,array('id'=>'item_for
 	
 		'name'=>'quantity',
 		'id'=>'quantity',
-		'value'=>current($item_quantities),
+		'value'=>current($raw_material_quantities),
 		'style'       => 'border:none',
 		'readonly' => 'readonly'
 		);
@@ -122,8 +122,8 @@ $(document).ready(function()
 
 function display_stock(location_id)
 {
-    var item_quantities= <?php echo json_encode($item_quantities ); ?>;
-    document.getElementById("quantity").value = item_quantities[location_id];
+    var raw_material_quantities= <?php echo json_encode($raw_material_quantities ); ?>;
+    document.getElementById("quantity").value = raw_material_quantities[location_id];
     
     var inventory_data = <?php echo json_encode($inventory_array); ?>;
     var employee_data = <?php echo json_encode($employee_name); ?>;

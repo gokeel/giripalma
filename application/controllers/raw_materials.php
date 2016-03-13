@@ -323,7 +323,7 @@ class Raw_materials extends Secure_area implements iData_controller
         foreach($stock_locations as $location_data)
         {            
             $data['stock_locations'][$location_data['location_id']] = $location_data['location_name'];
-            $data['item_quantities'][$location_data['location_id']] = $this->Item_quantity->get_item_quantity($item_id,$location_data['location_id'])->quantity;
+            $data['raw_material_quantities'][$location_data['location_id']] = $this->Raw_material_quantities->get_item_quantity($item_id,$location_data['location_id'])->quantity;
         }     
                 
 		$this->load->view("raw_materials/count_details", $data);
@@ -545,14 +545,14 @@ class Raw_materials extends Secure_area implements iData_controller
 		$this->Inventory->insert($inv_data);
 		
 		//Update stock quantity
-		$item_quantity= $this->Item_quantity->get_item_quantity($item_id,$location_id);
-		$item_quantity_data = array(
+		$raw_material_quantities= $this->Raw_material_quantities->get_item_quantity($item_id,$location_id);
+		$raw_material_quantities = array(
 			'item_id'=>$item_id,
 			'location_id'=>$location_id,
-			'quantity'=>$item_quantity->quantity + $this->input->post('newquantity')
+			'quantity'=>$raw_material_quantities->quantity + $this->input->post('newquantity')
 		);
 
-		if($this->Item_quantity->save($item_quantity_data,$item_id,$location_id))
+		if($this->Raw_material_quantities->save($item_quantity_data,$item_id,$location_id))
 		{			
 			echo json_encode(array('success'=>true,'message'=>$this->lang->line('items_successful_updating').' '.
 			$cur_item_info->name,'item_id'=>$item_id));
@@ -585,17 +585,17 @@ class Raw_materials extends Secure_area implements iData_controller
 		//Item data could be empty if tax information is being updated
 		if(empty($item_data) || $this->Raw_material->update_multiple($item_data,$items_to_update))
 		{
-			$items_taxes_data = array();
+			$raw_material_tax = array();
 			$tax_names = $this->input->post('tax_names');
 			$tax_percents = $this->input->post('tax_percents');
 			for($k=0;$k<count($tax_percents);$k++)
 			{
 				if (is_numeric($tax_percents[$k]))
 				{
-					$items_taxes_data[] = array('name'=>$tax_names[$k], 'percent'=>$tax_percents[$k] );
+					$raw_material_tax[] = array('name'=>$tax_names[$k], 'percent'=>$tax_percents[$k] );
 				}
 			}
-			$this->Item_taxes->save_multiple($items_taxes_data, $items_to_update);
+			$this->Raw_material_taxes->save_multiple($raw_material_tax, $items_to_update);
 
 			echo json_encode(array('success'=>true,'message'=>$this->lang->line('items_successful_bulk_edit')));
 		}
