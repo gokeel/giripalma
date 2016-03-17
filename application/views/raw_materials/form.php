@@ -48,7 +48,7 @@ echo form_open('Raw_materials/save/'.$item_info->item_id,array('id'=>'item_form'
 	echo form_input(array(
 		'name'=>'color',
 		'id'=>'color',
-		'value'=>$item_info->category)
+		'value'=>$item_info->color)
 	);?>
 	</div>
 </div>
@@ -60,7 +60,7 @@ echo form_open('Raw_materials/save/'.$item_info->item_id,array('id'=>'item_form'
 	echo form_input(array(
 		'name'=>'dimension',
 		'id'=>'dimension',
-		'value'=>$item_info->category)
+		'value'=>$item_info->dimension)
 	);?>
 	</div>
 </div>
@@ -277,7 +277,7 @@ foreach($stock_locations as $key=>$location_detail)
 echo form_submit(array(
 	'name'=>'submit',
 	'id'=>'submit',
-	'value'=>$this->lang->line('common_submit'),
+	'value'=>$this->lang->line('ruban_submit'),
 	'class'=>'submit_button float_right')
 );
 echo form_submit(array(

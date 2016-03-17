@@ -42,25 +42,25 @@ echo form_open('items/save/'.$item_info->item_id,array('id'=>'item_form', 'encty
 </div>
 
 <div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_color').':', 'color',array('class'=>'required wide')); ?>
+<?php echo form_label($this->lang->line('items_color').':', 'color',array('class'=>'wide')); ?>
 	<div class='form_field'>
 	<?php 
 	echo form_input(array(
 		'name'=>'color',
 		'id'=>'color',
-		'value'=>$item_info->category)
+		'value'=>$item_info->color)
 	);?>
 	</div>
 </div>
 
 <div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_dimension').':', 'dimension',array('class'=>'required wide')); ?>
+<?php echo form_label($this->lang->line('items_dimension').':', 'dimension',array('class'=>'wide')); ?>
 	<div class='form_field'>
 	<?php 
 	echo form_input(array(
 		'name'=>'dimension',
 		'id'=>'dimension',
-		'value'=>$item_info->category)
+		'value'=>$item_info->dimension)
 	);?>
 	</div>
 </div>
