@@ -309,6 +309,7 @@ class Item extends CI_Model
 			$suggestions[] = $row->name;
 		}
 
+
 		$this->db->select('item_number');
 		$this->db->from('items');
 		$this->db->like('item_number', $search);
@@ -380,6 +381,7 @@ class Item extends CI_Model
 		{
 			$suggestions[] = $row->item_id.'|'.$row->name;
 		}
+
 
 		$this->db->select('item_id, item_number');
 		$this->db->from('items');

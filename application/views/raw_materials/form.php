@@ -42,7 +42,7 @@ echo form_open('Raw_materials/save/'.$item_info->item_id,array('id'=>'item_form'
 </div>
 
 <div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_color').':', 'color',array('class'=>'required wide')); ?>
+<?php echo form_label($this->lang->line('items_color').':', 'color',array('class'=>'wide')); ?>
 	<div class='form_field'>
 	<?php 
 	echo form_input(array(
@@ -54,7 +54,7 @@ echo form_open('Raw_materials/save/'.$item_info->item_id,array('id'=>'item_form'
 </div>
 
 <div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_dimension').':', 'dimension',array('class'=>'required wide')); ?>
+<?php echo form_label($this->lang->line('items_dimension').':', 'dimension',array('class'=>'wide')); ?>
 	<div class='form_field'>
 	<?php 
 	echo form_input(array(
