@@ -11,6 +11,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 -- Dumping structure for table giripalma.osposs_app_config
+DROP TABLE IF EXISTS `osposs_app_config`;
 CREATE TABLE IF NOT EXISTS `osposs_app_config` (
   `key` varchar(255) NOT NULL,
   `value` varchar(255) NOT NULL,
@@ -23,6 +24,7 @@ CREATE TABLE IF NOT EXISTS `osposs_app_config` (
 
 
 -- Dumping structure for table giripalma.ospos_app_config
+DROP TABLE IF EXISTS `ospos_app_config`;
 CREATE TABLE IF NOT EXISTS `ospos_app_config` (
   `key` varchar(255) NOT NULL,
   `value` varchar(255) NOT NULL,
@@ -99,6 +101,7 @@ INSERT INTO `ospos_app_config` (`key`, `value`) VALUES
 
 
 -- Dumping structure for table giripalma.ospos_customers
+DROP TABLE IF EXISTS `ospos_customers`;
 CREATE TABLE IF NOT EXISTS `ospos_customers` (
   `person_id` int(10) NOT NULL,
   `company_name` varchar(255) DEFAULT NULL,
@@ -120,6 +123,7 @@ INSERT INTO `ospos_customers` (`person_id`, `company_name`, `account_number`, `t
 
 
 -- Dumping structure for table giripalma.ospos_employees
+DROP TABLE IF EXISTS `ospos_employees`;
 CREATE TABLE IF NOT EXISTS `ospos_employees` (
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
@@ -138,6 +142,7 @@ INSERT INTO `ospos_employees` (`username`, `password`, `person_id`, `deleted`) V
 
 
 -- Dumping structure for table giripalma.ospos_giftcards
+DROP TABLE IF EXISTS `ospos_giftcards`;
 CREATE TABLE IF NOT EXISTS `ospos_giftcards` (
   `record_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `giftcard_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -159,6 +164,7 @@ INSERT INTO `ospos_giftcards` (`record_time`, `giftcard_id`, `giftcard_number`, 
 
 
 -- Dumping structure for table giripalma.ospos_grants
+DROP TABLE IF EXISTS `ospos_grants`;
 CREATE TABLE IF NOT EXISTS `ospos_grants` (
   `permission_id` varchar(255) NOT NULL,
   `person_id` int(10) NOT NULL,
@@ -227,6 +233,7 @@ INSERT INTO `ospos_grants` (`permission_id`, `person_id`) VALUES
 
 
 -- Dumping structure for table giripalma.ospos_inventory
+DROP TABLE IF EXISTS `ospos_inventory`;
 CREATE TABLE IF NOT EXISTS `ospos_inventory` (
   `trans_id` int(11) NOT NULL AUTO_INCREMENT,
   `trans_items` int(11) NOT NULL DEFAULT '0',
@@ -385,6 +392,7 @@ INSERT INTO `ospos_inventory` (`trans_id`, `trans_items`, `trans_user`, `trans_d
 
 
 -- Dumping structure for table giripalma.ospos_items
+DROP TABLE IF EXISTS `ospos_items`;
 CREATE TABLE IF NOT EXISTS `ospos_items` (
   `name` varchar(255) NOT NULL,
   `category` varchar(255) NOT NULL,
@@ -436,6 +444,7 @@ INSERT INTO `ospos_items` (`name`, `category`, `supplier_id`, `type_item`, `item
 
 
 -- Dumping structure for table giripalma.ospos_items_taxes
+DROP TABLE IF EXISTS `ospos_items_taxes`;
 CREATE TABLE IF NOT EXISTS `ospos_items_taxes` (
   `item_id` int(10) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -455,6 +464,7 @@ INSERT INTO `ospos_items_taxes` (`item_id`, `name`, `percent`) VALUES
 
 
 -- Dumping structure for table giripalma.ospos_item_kits
+DROP TABLE IF EXISTS `ospos_item_kits`;
 CREATE TABLE IF NOT EXISTS `ospos_item_kits` (
   `item_kit_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -470,6 +480,7 @@ INSERT INTO `ospos_item_kits` (`item_kit_id`, `name`, `description`) VALUES
 
 
 -- Dumping structure for table giripalma.ospos_item_kit_items
+DROP TABLE IF EXISTS `ospos_item_kit_items`;
 CREATE TABLE IF NOT EXISTS `ospos_item_kit_items` (
   `item_kit_id` int(11) NOT NULL,
   `item_id` int(11) NOT NULL,
@@ -489,6 +500,7 @@ INSERT INTO `ospos_item_kit_items` (`item_kit_id`, `item_id`, `quantity`) VALUES
 
 
 -- Dumping structure for table giripalma.ospos_item_quantities
+DROP TABLE IF EXISTS `ospos_item_quantities`;
 CREATE TABLE IF NOT EXISTS `ospos_item_quantities` (
   `item_id` int(11) NOT NULL,
   `location_id` int(11) NOT NULL,
@@ -607,6 +619,7 @@ INSERT INTO `ospos_item_quantities` (`item_id`, `location_id`, `quantity`) VALUE
 
 
 -- Dumping structure for table giripalma.ospos_menu
+DROP TABLE IF EXISTS `ospos_menu`;
 CREATE TABLE IF NOT EXISTS `ospos_menu` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
@@ -675,6 +688,7 @@ INSERT INTO `ospos_menu` (`id`, `name`, `module_id`, `depth_level`, `parent_id`,
 
 
 -- Dumping structure for table giripalma.ospos_menu_copy
+DROP TABLE IF EXISTS `ospos_menu_copy`;
 CREATE TABLE IF NOT EXISTS `ospos_menu_copy` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
@@ -724,6 +738,7 @@ INSERT INTO `ospos_menu_copy` (`id`, `name`, `module`, `parent_id`, `href`, `sor
 
 
 -- Dumping structure for table giripalma.ospos_modules
+DROP TABLE IF EXISTS `ospos_modules`;
 CREATE TABLE IF NOT EXISTS `ospos_modules` (
   `name_lang_key` varchar(255) NOT NULL,
   `desc_lang_key` varchar(255) NOT NULL,
@@ -755,6 +770,7 @@ INSERT INTO `ospos_modules` (`name_lang_key`, `desc_lang_key`, `sort`, `module_i
 
 
 -- Dumping structure for table giripalma.ospos_people
+DROP TABLE IF EXISTS `ospos_people`;
 CREATE TABLE IF NOT EXISTS `ospos_people` (
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
@@ -784,6 +800,7 @@ INSERT INTO `ospos_people` (`first_name`, `last_name`, `gender`, `phone_number`,
 
 
 -- Dumping structure for table giripalma.ospos_permissions
+DROP TABLE IF EXISTS `ospos_permissions`;
 CREATE TABLE IF NOT EXISTS `ospos_permissions` (
   `permission_id` varchar(255) NOT NULL,
   `module_id` varchar(255) NOT NULL,
@@ -854,6 +871,7 @@ INSERT INTO `ospos_permissions` (`permission_id`, `module_id`, `location_id`) VA
 
 
 -- Dumping structure for table giripalma.ospos_raw_materials
+DROP TABLE IF EXISTS `ospos_raw_materials`;
 CREATE TABLE IF NOT EXISTS `ospos_raw_materials` (
   `name` varchar(255) NOT NULL,
   `category` varchar(255) NOT NULL,
@@ -909,6 +927,7 @@ INSERT INTO `ospos_raw_materials` (`name`, `category`, `supplier_id`, `type_item
 
 
 -- Dumping structure for table giripalma.ospos_raw_materials_tax
+DROP TABLE IF EXISTS `ospos_raw_materials_tax`;
 CREATE TABLE IF NOT EXISTS `ospos_raw_materials_tax` (
   `item_id` int(10) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -923,6 +942,7 @@ CREATE TABLE IF NOT EXISTS `ospos_raw_materials_tax` (
 
 
 -- Dumping structure for table giripalma.ospos_raw_material_quantities
+DROP TABLE IF EXISTS `ospos_raw_material_quantities`;
 CREATE TABLE IF NOT EXISTS `ospos_raw_material_quantities` (
   `item_id` int(11) NOT NULL,
   `location_id` int(11) NOT NULL,
@@ -991,6 +1011,7 @@ INSERT INTO `ospos_raw_material_quantities` (`item_id`, `location_id`, `quantity
 
 
 -- Dumping structure for table giripalma.ospos_receivings
+DROP TABLE IF EXISTS `ospos_receivings`;
 CREATE TABLE IF NOT EXISTS `ospos_receivings` (
   `receiving_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `supplier_id` int(10) DEFAULT NULL,
@@ -1016,6 +1037,7 @@ INSERT INTO `ospos_receivings` (`receiving_time`, `supplier_id`, `employee_id`, 
 
 
 -- Dumping structure for table giripalma.ospos_receivings_items
+DROP TABLE IF EXISTS `ospos_receivings_items`;
 CREATE TABLE IF NOT EXISTS `ospos_receivings_items` (
   `receiving_id` int(10) NOT NULL DEFAULT '0',
   `item_id` int(10) NOT NULL DEFAULT '0',
@@ -1044,6 +1066,7 @@ INSERT INTO `ospos_receivings_items` (`receiving_id`, `item_id`, `description`, 
 
 
 -- Dumping structure for table giripalma.ospos_sales
+DROP TABLE IF EXISTS `ospos_sales`;
 CREATE TABLE IF NOT EXISTS `ospos_sales` (
   `sale_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `customer_id` int(10) DEFAULT NULL,
@@ -1105,6 +1128,7 @@ INSERT INTO `ospos_sales` (`sale_time`, `customer_id`, `employee_id`, `comment`,
 
 
 -- Dumping structure for table giripalma.ospos_sales_items
+DROP TABLE IF EXISTS `ospos_sales_items`;
 CREATE TABLE IF NOT EXISTS `ospos_sales_items` (
   `sale_id` int(10) NOT NULL DEFAULT '0',
   `item_id` int(10) NOT NULL DEFAULT '0',
@@ -1171,6 +1195,7 @@ INSERT INTO `ospos_sales_items` (`sale_id`, `item_id`, `description`, `serialnum
 
 
 -- Dumping structure for table giripalma.ospos_sales_items_taxes
+DROP TABLE IF EXISTS `ospos_sales_items_taxes`;
 CREATE TABLE IF NOT EXISTS `ospos_sales_items_taxes` (
   `sale_id` int(10) NOT NULL,
   `item_id` int(10) NOT NULL,
@@ -1198,6 +1223,7 @@ INSERT INTO `ospos_sales_items_taxes` (`sale_id`, `item_id`, `line`, `name`, `pe
 
 
 -- Dumping structure for table giripalma.ospos_sales_payments
+DROP TABLE IF EXISTS `ospos_sales_payments`;
 CREATE TABLE IF NOT EXISTS `ospos_sales_payments` (
   `sale_id` int(10) NOT NULL,
   `payment_type` varchar(40) NOT NULL,
@@ -1256,6 +1282,7 @@ INSERT INTO `ospos_sales_payments` (`sale_id`, `payment_type`, `payment_leasing`
 
 
 -- Dumping structure for table giripalma.ospos_sales_suspended
+DROP TABLE IF EXISTS `ospos_sales_suspended`;
 CREATE TABLE IF NOT EXISTS `ospos_sales_suspended` (
   `sale_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `customer_id` int(10) DEFAULT NULL,
@@ -1276,6 +1303,7 @@ CREATE TABLE IF NOT EXISTS `ospos_sales_suspended` (
 
 
 -- Dumping structure for table giripalma.ospos_sales_suspended_items
+DROP TABLE IF EXISTS `ospos_sales_suspended_items`;
 CREATE TABLE IF NOT EXISTS `ospos_sales_suspended_items` (
   `sale_id` int(10) NOT NULL DEFAULT '0',
   `item_id` int(10) NOT NULL DEFAULT '0',
@@ -1302,6 +1330,7 @@ CREATE TABLE IF NOT EXISTS `ospos_sales_suspended_items` (
 
 
 -- Dumping structure for table giripalma.ospos_sales_suspended_items_taxes
+DROP TABLE IF EXISTS `ospos_sales_suspended_items_taxes`;
 CREATE TABLE IF NOT EXISTS `ospos_sales_suspended_items_taxes` (
   `sale_id` int(10) NOT NULL,
   `item_id` int(10) NOT NULL,
@@ -1320,6 +1349,7 @@ CREATE TABLE IF NOT EXISTS `ospos_sales_suspended_items_taxes` (
 
 
 -- Dumping structure for table giripalma.ospos_sales_suspended_payments
+DROP TABLE IF EXISTS `ospos_sales_suspended_payments`;
 CREATE TABLE IF NOT EXISTS `ospos_sales_suspended_payments` (
   `sale_id` int(10) NOT NULL,
   `payment_type` varchar(40) NOT NULL,
@@ -1334,6 +1364,7 @@ CREATE TABLE IF NOT EXISTS `ospos_sales_suspended_payments` (
 
 
 -- Dumping structure for table giripalma.ospos_sessions
+DROP TABLE IF EXISTS `ospos_sessions`;
 CREATE TABLE IF NOT EXISTS `ospos_sessions` (
   `session_id` varchar(40) NOT NULL DEFAULT '0',
   `ip_address` varchar(45) NOT NULL DEFAULT '0',
@@ -1343,7 +1374,7 @@ CREATE TABLE IF NOT EXISTS `ospos_sessions` (
   PRIMARY KEY (`session_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_sessions: ~73 rows (approximately)
+-- Dumping data for table giripalma.ospos_sessions: ~63 rows (approximately)
 /*!40000 ALTER TABLE `ospos_sessions` DISABLE KEYS */;
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 	('0148a39435b34ebc75678e1cf9007048', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455095550, 'a:8:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"3";}'),
@@ -1413,6 +1444,7 @@ INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_ac
 
 
 -- Dumping structure for table giripalma.ospos_stock_locations
+DROP TABLE IF EXISTS `ospos_stock_locations`;
 CREATE TABLE IF NOT EXISTS `ospos_stock_locations` (
   `location_id` int(11) NOT NULL AUTO_INCREMENT,
   `location_name` varchar(255) DEFAULT NULL,
@@ -1437,6 +1469,7 @@ INSERT INTO `ospos_stock_locations` (`location_id`, `location_name`, `deleted`) 
 
 
 -- Dumping structure for table giripalma.ospos_suppliers
+DROP TABLE IF EXISTS `ospos_suppliers`;
 CREATE TABLE IF NOT EXISTS `ospos_suppliers` (
   `person_id` int(10) NOT NULL,
   `company_name` varchar(255) NOT NULL,
