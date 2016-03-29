@@ -42,11 +42,11 @@
 					<div class="col-md-12">
 						<?php echo form_open("sales/change_mode",array('id'=>'mode_form', 'class'=>'form-horizontal')); ?>
 							<div class="row">
-								<div class="col-md-4">
+								<div class="col-md-2">
 									<span><?php echo $this->lang->line('sales_mode') ?></span>
 									<?php echo form_dropdown('mode',$modes,$mode,'onchange="$(\'#mode_form\').submit();" class="form-control"'); ?>
 								</div>
-								<div class="col-md-4">
+								<div class="col-md-3">
 									<?php
 									if (count($stock_locations) > 1)
 									{
@@ -56,6 +56,10 @@
 									<?php
 									}
 									?>
+								</div>
+								<div class="col-md-3">
+									<span><?php echo $this->lang->line('sales_mode') ?></span>
+									<?php echo form_dropdown('mode',$modes,$mode,'onchange="$(\'#mode_form\').submit();" class="form-control"'); ?>
 								</div>
 								<div class="col-md-2">
 									<?php

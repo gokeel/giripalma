@@ -90,4 +90,6 @@ $lang["items_import_items_excel"] = "Import items from Excel sheet";
 $lang["item_fine"] = "Baik";
 $lang["type_item"] = "Kondisi Barang";
 $lang["item_service"] = "service";
+$lang["item_satuan"] = "satuan";
+
 

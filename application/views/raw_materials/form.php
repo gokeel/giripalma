@@ -66,6 +66,18 @@ echo form_open('Raw_materials/save/'.$item_info->item_id,array('id'=>'item_form'
 </div>
 
 <div class="field_row clearfix">
+<?php echo form_label($this->lang->line('items_satuan').':', 'satuan',array('class'=>'wide')); ?>
+	<div class='form_field'>
+	<?php 
+	echo form_input(array(
+		'name'=>'satuan',
+		'id'=>'satuan',
+		'value'=>$item_info->satuan)
+	);?>
+	</div>
+</div>
+
+<div class="field_row clearfix">
 <?php echo form_label($this->lang->line('items_supplier').':', 'supplier',array('class'=>'required wide')); ?>
 	<div class='form_field'>
 	<?php echo form_dropdown('supplier_id', $suppliers, $selected_supplier);?>
@@ -277,7 +289,7 @@ foreach($stock_locations as $key=>$location_detail)
 echo form_submit(array(
 	'name'=>'submit',
 	'id'=>'submit',
-	'value'=>$this->lang->line('ruban_submit'),
+	'value'=>$this->lang->line('raw_submit'),
 	'class'=>'submit_button float_right')
 );
 echo form_submit(array(

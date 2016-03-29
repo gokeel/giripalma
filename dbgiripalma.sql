@@ -10,6 +10,18 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
+-- Dumping structure for table giripalma.osposs_app_config
+CREATE TABLE IF NOT EXISTS `osposs_app_config` (
+  `key` varchar(255) NOT NULL,
+  `value` varchar(255) NOT NULL,
+  PRIMARY KEY (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table giripalma.osposs_app_config: ~0 rows (approximately)
+/*!40000 ALTER TABLE `osposs_app_config` DISABLE KEYS */;
+/*!40000 ALTER TABLE `osposs_app_config` ENABLE KEYS */;
+
+
 -- Dumping structure for table giripalma.ospos_app_config
 CREATE TABLE IF NOT EXISTS `ospos_app_config` (
   `key` varchar(255) NOT NULL,
@@ -230,9 +242,9 @@ CREATE TABLE IF NOT EXISTS `ospos_inventory` (
   CONSTRAINT `ospos_inventory_ibfk_1` FOREIGN KEY (`trans_items`) REFERENCES `ospos_items` (`item_id`),
   CONSTRAINT `ospos_inventory_ibfk_2` FOREIGN KEY (`trans_user`) REFERENCES `ospos_employees` (`person_id`),
   CONSTRAINT `ospos_inventory_ibfk_3` FOREIGN KEY (`trans_location`) REFERENCES `ospos_stock_locations` (`location_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=172 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=135 DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_inventory: ~171 rows (approximately)
+-- Dumping data for table giripalma.ospos_inventory: ~134 rows (approximately)
 /*!40000 ALTER TABLE `ospos_inventory` DISABLE KEYS */;
 INSERT INTO `ospos_inventory` (`trans_id`, `trans_items`, `trans_user`, `trans_date`, `trans_comment`, `trans_location`, `trans_inventory`) VALUES
 	(1, 1, 1, '2016-01-25 23:01:23', 'Manual Edit of Quantity', 1, 10),
@@ -336,76 +348,39 @@ INSERT INTO `ospos_inventory` (`trans_id`, `trans_items`, `trans_user`, `trans_d
 	(99, 7, 1, '2016-02-26 17:41:27', 'Perubahan jumlah Stok secara manual', 8, 1),
 	(100, 7, 1, '2016-02-26 17:41:27', 'Perubahan jumlah Stok secara manual', 10, 1),
 	(101, 7, 1, '2016-02-26 17:41:27', 'Perubahan jumlah Stok secara manual', 1, 18),
-	(102, 8, 1, '2016-03-04 11:19:18', 'Perubahan jumlah Stok secara manual', 9, 2),
-	(103, 8, 1, '2016-03-04 11:19:19', 'Perubahan jumlah Stok secara manual', 2, 0),
-	(104, 8, 1, '2016-03-04 11:19:19', 'Perubahan jumlah Stok secara manual', 3, 0),
-	(105, 8, 1, '2016-03-04 11:19:19', 'Perubahan jumlah Stok secara manual', 4, 0),
-	(106, 8, 1, '2016-03-04 11:19:19', 'Perubahan jumlah Stok secara manual', 5, 0),
-	(107, 8, 1, '2016-03-04 11:19:19', 'Perubahan jumlah Stok secara manual', 6, 0),
-	(108, 8, 1, '2016-03-04 11:19:19', 'Perubahan jumlah Stok secara manual', 7, 0),
-	(109, 8, 1, '2016-03-04 11:19:19', 'Perubahan jumlah Stok secara manual', 8, 0),
-	(110, 8, 1, '2016-03-04 11:19:19', 'Perubahan jumlah Stok secara manual', 10, 0),
-	(111, 8, 1, '2016-03-04 11:19:19', 'Perubahan jumlah Stok secara manual', 1, 2),
-	(112, 9, 1, '2016-03-04 11:30:30', 'Perubahan jumlah Stok secara manual', 9, 2),
-	(113, 9, 1, '2016-03-04 11:30:30', 'Perubahan jumlah Stok secara manual', 2, 0),
-	(114, 9, 1, '2016-03-04 11:30:30', 'Perubahan jumlah Stok secara manual', 3, 0),
-	(115, 9, 1, '2016-03-04 11:30:30', 'Perubahan jumlah Stok secara manual', 4, 0),
-	(116, 9, 1, '2016-03-04 11:30:30', 'Perubahan jumlah Stok secara manual', 5, 0),
-	(117, 9, 1, '2016-03-04 11:30:30', 'Perubahan jumlah Stok secara manual', 6, 0),
-	(118, 9, 1, '2016-03-04 11:30:30', 'Perubahan jumlah Stok secara manual', 7, 0),
-	(119, 9, 1, '2016-03-04 11:30:30', 'Perubahan jumlah Stok secara manual', 8, 0),
-	(120, 9, 1, '2016-03-04 11:30:30', 'Perubahan jumlah Stok secara manual', 10, 0),
-	(121, 9, 1, '2016-03-04 11:30:30', 'Perubahan jumlah Stok secara manual', 1, 2),
-	(122, 10, 1, '2016-03-05 02:09:35', 'Perubahan jumlah Stok secara manual', 9, 2),
-	(123, 10, 1, '2016-03-05 02:09:35', 'Perubahan jumlah Stok secara manual', 2, 0),
-	(124, 10, 1, '2016-03-05 02:09:35', 'Perubahan jumlah Stok secara manual', 3, 0),
-	(125, 10, 1, '2016-03-05 02:09:35', 'Perubahan jumlah Stok secara manual', 4, 0),
-	(126, 10, 1, '2016-03-05 02:09:35', 'Perubahan jumlah Stok secara manual', 5, 0),
-	(127, 10, 1, '2016-03-05 02:09:35', 'Perubahan jumlah Stok secara manual', 6, 0),
-	(128, 10, 1, '2016-03-05 02:09:35', 'Perubahan jumlah Stok secara manual', 7, 0),
-	(129, 10, 1, '2016-03-05 02:09:35', 'Perubahan jumlah Stok secara manual', 8, 0),
-	(130, 10, 1, '2016-03-05 02:09:35', 'Perubahan jumlah Stok secara manual', 10, 0),
-	(131, 10, 1, '2016-03-05 02:09:35', 'Perubahan jumlah Stok secara manual', 1, 2),
-	(132, 11, 1, '2016-03-05 02:11:43', 'Perubahan jumlah Stok secara manual', 9, 10),
-	(133, 11, 1, '2016-03-05 02:11:43', 'Perubahan jumlah Stok secara manual', 2, 0),
-	(134, 11, 1, '2016-03-05 02:11:43', 'Perubahan jumlah Stok secara manual', 3, 0),
-	(135, 11, 1, '2016-03-05 02:11:43', 'Perubahan jumlah Stok secara manual', 4, 0),
-	(136, 11, 1, '2016-03-05 02:11:43', 'Perubahan jumlah Stok secara manual', 5, 0),
-	(137, 11, 1, '2016-03-05 02:11:43', 'Perubahan jumlah Stok secara manual', 6, 0),
-	(138, 11, 1, '2016-03-05 02:11:43', 'Perubahan jumlah Stok secara manual', 7, 0),
-	(139, 11, 1, '2016-03-05 02:11:43', 'Perubahan jumlah Stok secara manual', 8, 0),
-	(140, 11, 1, '2016-03-05 02:11:43', 'Perubahan jumlah Stok secara manual', 10, 0),
-	(141, 11, 1, '2016-03-05 02:11:43', 'Perubahan jumlah Stok secara manual', 1, 10),
-	(142, 12, 1, '2016-03-05 02:18:46', 'Perubahan jumlah Stok secara manual', 9, 2),
-	(143, 12, 1, '2016-03-05 02:18:46', 'Perubahan jumlah Stok secara manual', 2, 0),
-	(144, 12, 1, '2016-03-05 02:18:46', 'Perubahan jumlah Stok secara manual', 3, 0),
-	(145, 12, 1, '2016-03-05 02:18:47', 'Perubahan jumlah Stok secara manual', 4, 0),
-	(146, 12, 1, '2016-03-05 02:18:47', 'Perubahan jumlah Stok secara manual', 5, 0),
-	(147, 12, 1, '2016-03-05 02:18:47', 'Perubahan jumlah Stok secara manual', 6, 0),
-	(148, 12, 1, '2016-03-05 02:18:47', 'Perubahan jumlah Stok secara manual', 7, 0),
-	(149, 12, 1, '2016-03-05 02:18:47', 'Perubahan jumlah Stok secara manual', 8, 0),
-	(150, 12, 1, '2016-03-05 02:18:47', 'Perubahan jumlah Stok secara manual', 10, 0),
-	(151, 12, 1, '2016-03-05 02:18:47', 'Perubahan jumlah Stok secara manual', 1, 1),
-	(152, 13, 1, '2016-03-05 02:22:08', 'Perubahan jumlah Stok secara manual', 9, 22),
-	(153, 13, 1, '2016-03-05 02:22:08', 'Perubahan jumlah Stok secara manual', 2, 0),
-	(154, 13, 1, '2016-03-05 02:22:08', 'Perubahan jumlah Stok secara manual', 3, 0),
-	(155, 13, 1, '2016-03-05 02:22:08', 'Perubahan jumlah Stok secara manual', 4, 0),
-	(156, 13, 1, '2016-03-05 02:22:08', 'Perubahan jumlah Stok secara manual', 5, 0),
-	(157, 13, 1, '2016-03-05 02:22:08', 'Perubahan jumlah Stok secara manual', 6, 0),
-	(158, 13, 1, '2016-03-05 02:22:08', 'Perubahan jumlah Stok secara manual', 7, 0),
-	(159, 13, 1, '2016-03-05 02:22:08', 'Perubahan jumlah Stok secara manual', 8, 0),
-	(160, 13, 1, '2016-03-05 02:22:08', 'Perubahan jumlah Stok secara manual', 10, 0),
-	(161, 13, 1, '2016-03-05 02:22:08', 'Perubahan jumlah Stok secara manual', 1, 22),
-	(162, 14, 1, '2016-03-05 02:27:30', 'Perubahan jumlah Stok secara manual', 9, 10),
-	(163, 14, 1, '2016-03-05 02:27:30', 'Perubahan jumlah Stok secara manual', 2, 0),
-	(164, 14, 1, '2016-03-05 02:27:30', 'Perubahan jumlah Stok secara manual', 3, 0),
-	(165, 14, 1, '2016-03-05 02:27:30', 'Perubahan jumlah Stok secara manual', 4, 0),
-	(166, 14, 1, '2016-03-05 02:27:30', 'Perubahan jumlah Stok secara manual', 5, 0),
-	(167, 14, 1, '2016-03-05 02:27:30', 'Perubahan jumlah Stok secara manual', 6, 0),
-	(168, 14, 1, '2016-03-05 02:27:30', 'Perubahan jumlah Stok secara manual', 7, 0),
-	(169, 14, 1, '2016-03-05 02:27:30', 'Perubahan jumlah Stok secara manual', 8, 0),
-	(170, 14, 1, '2016-03-05 02:27:31', 'Perubahan jumlah Stok secara manual', 10, 0),
-	(171, 14, 1, '2016-03-05 02:27:31', 'Perubahan jumlah Stok secara manual', 1, 10);
+	(102, 8, 1, '2016-03-07 16:36:16', 'Perubahan jumlah Stok secara manual', 9, 0),
+	(103, 8, 1, '2016-03-07 16:36:16', 'Perubahan jumlah Stok secara manual', 2, 0),
+	(104, 8, 1, '2016-03-07 16:36:16', 'Perubahan jumlah Stok secara manual', 3, 0),
+	(105, 8, 1, '2016-03-07 16:36:16', 'Perubahan jumlah Stok secara manual', 4, 0),
+	(106, 8, 1, '2016-03-07 16:36:17', 'Perubahan jumlah Stok secara manual', 5, 0),
+	(107, 8, 1, '2016-03-07 16:36:17', 'Perubahan jumlah Stok secara manual', 6, 0),
+	(108, 8, 1, '2016-03-07 16:36:17', 'Perubahan jumlah Stok secara manual', 7, 0),
+	(109, 8, 1, '2016-03-07 16:36:17', 'Perubahan jumlah Stok secara manual', 8, 0),
+	(110, 8, 1, '2016-03-07 16:36:17', 'Perubahan jumlah Stok secara manual', 10, 0),
+	(111, 8, 1, '2016-03-07 16:36:17', 'Perubahan jumlah Stok secara manual', 1, 5),
+	(112, 9, 1, '2016-03-07 16:52:02', 'Perubahan jumlah Stok secara manual', 9, 0),
+	(113, 9, 1, '2016-03-07 16:52:02', 'Perubahan jumlah Stok secara manual', 2, 0),
+	(114, 9, 1, '2016-03-07 16:52:02', 'Perubahan jumlah Stok secara manual', 3, 0),
+	(115, 9, 1, '2016-03-07 16:52:02', 'Perubahan jumlah Stok secara manual', 4, 0),
+	(116, 9, 1, '2016-03-07 16:52:03', 'Perubahan jumlah Stok secara manual', 5, 0),
+	(117, 9, 1, '2016-03-07 16:52:03', 'Perubahan jumlah Stok secara manual', 6, 0),
+	(118, 9, 1, '2016-03-07 16:52:03', 'Perubahan jumlah Stok secara manual', 7, 0),
+	(119, 9, 1, '2016-03-07 16:52:03', 'Perubahan jumlah Stok secara manual', 8, 0),
+	(120, 9, 1, '2016-03-07 16:52:03', 'Perubahan jumlah Stok secara manual', 10, 0),
+	(121, 9, 1, '2016-03-07 16:52:03', 'Perubahan jumlah Stok secara manual', 1, 50),
+	(122, 10, 1, '2016-03-22 10:48:58', 'Perubahan jumlah Stok secara manual', 9, 10),
+	(123, 10, 1, '2016-03-22 10:48:58', 'Perubahan jumlah Stok secara manual', 2, 0),
+	(124, 10, 1, '2016-03-22 10:48:58', 'Perubahan jumlah Stok secara manual', 3, 0),
+	(125, 10, 1, '2016-03-22 10:48:59', 'Perubahan jumlah Stok secara manual', 4, 0),
+	(126, 10, 1, '2016-03-22 10:48:59', 'Perubahan jumlah Stok secara manual', 5, 0),
+	(127, 10, 1, '2016-03-22 10:48:59', 'Perubahan jumlah Stok secara manual', 6, 0),
+	(128, 10, 1, '2016-03-22 10:48:59', 'Perubahan jumlah Stok secara manual', 7, 0),
+	(129, 10, 1, '2016-03-22 10:48:59', 'Perubahan jumlah Stok secara manual', 8, 0),
+	(130, 10, 1, '2016-03-22 10:48:59', 'Perubahan jumlah Stok secara manual', 10, 0),
+	(131, 10, 1, '2016-03-22 10:48:59', 'Perubahan jumlah Stok secara manual', 1, 10),
+	(132, 4, 1, '2016-03-24 16:44:16', 'POS 36', 1, -1),
+	(133, 6, 1, '2016-03-24 16:46:18', 'POS 37', 1, -1),
+	(134, 6, 1, '2016-03-29 10:37:36', 'POS 38', 1, -1);
 /*!40000 ALTER TABLE `ospos_inventory` ENABLE KEYS */;
 
 
@@ -442,9 +417,9 @@ CREATE TABLE IF NOT EXISTS `ospos_items` (
   UNIQUE KEY `item_number` (`item_number`),
   KEY `supplier_id` (`supplier_id`),
   CONSTRAINT `ospos_items_ibfk_1` FOREIGN KEY (`supplier_id`) REFERENCES `ospos_suppliers` (`person_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_items: ~14 rows (approximately)
+-- Dumping data for table giripalma.ospos_items: ~10 rows (approximately)
 /*!40000 ALTER TABLE `ospos_items` DISABLE KEYS */;
 INSERT INTO `ospos_items` (`name`, `category`, `supplier_id`, `type_item`, `item_number`, `description`, `color`, `dimension`, `cost_price`, `unit_price`, `reorder_level`, `receiving_quantity`, `item_id`, `pic_id`, `allow_alt_description`, `is_serialized`, `deleted`, `custom1`, `custom2`, `custom3`, `custom4`, `custom5`, `custom6`, `custom7`, `custom8`, `custom9`, `custom10`) VALUES
 	('meja', 'kredit', NULL, NULL, NULL, '', '', '', 40000.00, 50000.00, 5.00, 0, 1, NULL, 0, 0, 1, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
@@ -454,13 +429,9 @@ INSERT INTO `ospos_items` (`name`, `category`, `supplier_id`, `type_item`, `item
 	('Kursi Tunggu', 'kursi', NULL, NULL, '56746774276356', '', 'Hitam', '45 x 200', 600000.00, 900000.00, 20.00, 60, 5, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
 	('Komputer PC', 'Komputer', 4, NULL, 'PC2837849', '', 'Putih', '14"', 3000000.00, 4500000.00, 4.00, 10, 6, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
 	('meja coba', 'apa ya', 4, 'service', 'kcoba1', '', 'hijau', '50 x 80', 200000.00, 200000.00, 0.00, 0, 7, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
-	('raw', 'bahan', NULL, '0', '1234', '', 'biru', '60 x 5', 1000000.00, 1000000.00, 1.00, 0, 8, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
-	('material', 'new', NULL, '0', '12345', '', 'biru', '50 x 60 ', 1000000.00, 1000000.00, 1.00, 0, 9, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
-	('kayu', 'new', NULL, '0', '12', '', 'coklat', '70 x 5', 1000.00, 1000.00, 1.00, 0, 10, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
-	('mur', 'new', NULL, '0', '1', '', 'huyM', '56', 12.00, 12.00, 2.00, 0, 11, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
-	('TES', 'new', NULL, '0', '123456', '', 'g', 'e', 1.00, 1.00, 0.00, 0, 12, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
-	('we', 'we', NULL, '0', 'new', '', 'wq', 'wr', 123.00, 123.00, 1.00, 0, 13, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
-	('m', 'mm', NULL, '0', 'm', '', 'm', 'm', 1.00, 1.00, 1.00, 0, 14, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+	('Kain 50meter', 'Kain', NULL, '0', '2222', '', 'Biru', '50 meter', 800000.00, 900000.00, 3.00, 0, 8, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
+	('56hhh', 'Kain', NULL, '0', '535365', '', 'Kuning', '', 150000.00, 230000.00, 20.00, 0, 9, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
+	('Kursi syahrini', 'new', NULL, 'Baik', 'K003', '', 'hijau', '20 x 25', 1000.00, 1200.00, 1.00, 0, 10, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
 /*!40000 ALTER TABLE `ospos_items` ENABLE KEYS */;
 
 
@@ -473,19 +444,13 @@ CREATE TABLE IF NOT EXISTS `ospos_items_taxes` (
   CONSTRAINT `ospos_items_taxes_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `ospos_items` (`item_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_items_taxes: ~10 rows (approximately)
+-- Dumping data for table giripalma.ospos_items_taxes: ~4 rows (approximately)
 /*!40000 ALTER TABLE `ospos_items_taxes` DISABLE KEYS */;
 INSERT INTO `ospos_items_taxes` (`item_id`, `name`, `percent`) VALUES
 	(5, 'Pajak Penjualan1', 10.00),
 	(6, 'Pajak Penjualan1', 10.00),
 	(7, 'Pajak Penjualan1', 10.00),
-	(8, 'Pajak Penjualan1', 10.00),
-	(9, 'Pajak Penjualan1', 10.00),
-	(10, 'Pajak Penjualan1', 10.00),
-	(11, 'Pajak Penjualan1', 10.00),
-	(12, 'Pajak Penjualan1', 10.00),
-	(13, 'Pajak Penjualan1', 10.00),
-	(14, 'Pajak Penjualan1', 10.00);
+	(10, 'Pajak Penjualan1', 10.00);
 /*!40000 ALTER TABLE `ospos_items_taxes` ENABLE KEYS */;
 
 
@@ -535,7 +500,7 @@ CREATE TABLE IF NOT EXISTS `ospos_item_quantities` (
   CONSTRAINT `ospos_item_quantities_ibfk_2` FOREIGN KEY (`location_id`) REFERENCES `ospos_stock_locations` (`location_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_item_quantities: ~140 rows (approximately)
+-- Dumping data for table giripalma.ospos_item_quantities: ~100 rows (approximately)
 /*!40000 ALTER TABLE `ospos_item_quantities` DISABLE KEYS */;
 INSERT INTO `ospos_item_quantities` (`item_id`, `location_id`, `quantity`) VALUES
 	(1, 1, 10),
@@ -608,7 +573,7 @@ INSERT INTO `ospos_item_quantities` (`item_id`, `location_id`, `quantity`) VALUE
 	(7, 8, 1),
 	(7, 9, 10),
 	(7, 10, 1),
-	(8, 1, 2),
+	(8, 1, 5),
 	(8, 2, 0),
 	(8, 3, 0),
 	(8, 4, 0),
@@ -616,9 +581,9 @@ INSERT INTO `ospos_item_quantities` (`item_id`, `location_id`, `quantity`) VALUE
 	(8, 6, 0),
 	(8, 7, 0),
 	(8, 8, 0),
-	(8, 9, 2),
+	(8, 9, 0),
 	(8, 10, 0),
-	(9, 1, 2),
+	(9, 1, 50),
 	(9, 2, 0),
 	(9, 3, 0),
 	(9, 4, 0),
@@ -626,9 +591,9 @@ INSERT INTO `ospos_item_quantities` (`item_id`, `location_id`, `quantity`) VALUE
 	(9, 6, 0),
 	(9, 7, 0),
 	(9, 8, 0),
-	(9, 9, 2),
+	(9, 9, 0),
 	(9, 10, 0),
-	(10, 1, 2),
+	(10, 1, 10),
 	(10, 2, 0),
 	(10, 3, 0),
 	(10, 4, 0),
@@ -636,48 +601,8 @@ INSERT INTO `ospos_item_quantities` (`item_id`, `location_id`, `quantity`) VALUE
 	(10, 6, 0),
 	(10, 7, 0),
 	(10, 8, 0),
-	(10, 9, 2),
-	(10, 10, 0),
-	(11, 1, 10),
-	(11, 2, 0),
-	(11, 3, 0),
-	(11, 4, 0),
-	(11, 5, 0),
-	(11, 6, 0),
-	(11, 7, 0),
-	(11, 8, 0),
-	(11, 9, 10),
-	(11, 10, 0),
-	(12, 1, 1),
-	(12, 2, 0),
-	(12, 3, 0),
-	(12, 4, 0),
-	(12, 5, 0),
-	(12, 6, 0),
-	(12, 7, 0),
-	(12, 8, 0),
-	(12, 9, 2),
-	(12, 10, 0),
-	(13, 1, 22),
-	(13, 2, 0),
-	(13, 3, 0),
-	(13, 4, 0),
-	(13, 5, 0),
-	(13, 6, 0),
-	(13, 7, 0),
-	(13, 8, 0),
-	(13, 9, 22),
-	(13, 10, 0),
-	(14, 1, 10),
-	(14, 2, 0),
-	(14, 3, 0),
-	(14, 4, 0),
-	(14, 5, 0),
-	(14, 6, 0),
-	(14, 7, 0),
-	(14, 8, 0),
-	(14, 9, 10),
-	(14, 10, 0);
+	(10, 9, 10),
+	(10, 10, 0);
 /*!40000 ALTER TABLE `ospos_item_quantities` ENABLE KEYS */;
 
 
@@ -747,6 +672,55 @@ INSERT INTO `ospos_menu` (`id`, `name`, `module_id`, `depth_level`, `parent_id`,
 	(62, 'Persediaan Rendah', 'reports', 2, 24, 'reports/inventory_low', 1, 'inventory_low', NULL),
 	(63, 'Ringkasan Persediaan', 'reports', 2, 24, 'reports/inventory_summary', 2, 'inventory_summary', NULL);
 /*!40000 ALTER TABLE `ospos_menu` ENABLE KEYS */;
+
+
+-- Dumping structure for table giripalma.ospos_menu_copy
+CREATE TABLE IF NOT EXISTS `ospos_menu_copy` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL,
+  `module` varchar(50) DEFAULT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  `href` varchar(255) DEFAULT NULL,
+  `sort_number` int(11) DEFAULT NULL,
+  `menu_identifier` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+-- Dumping data for table giripalma.ospos_menu_copy: ~31 rows (approximately)
+/*!40000 ALTER TABLE `ospos_menu_copy` DISABLE KEYS */;
+INSERT INTO `ospos_menu_copy` (`id`, `name`, `module`, `parent_id`, `href`, `sort_number`, `menu_identifier`) VALUES
+	(1, 'Laporan Grafik', 'reports', NULL, '#', 1, 'graphical_report'),
+	(2, 'Ringkasan Laporan', 'reports', NULL, '#', 2, 'summary_report'),
+	(3, 'Rincian Laporan', 'reports', NULL, '#', 3, 'detail_report'),
+	(4, 'Laporan Persediaan', 'reports', NULL, '#', 4, 'stock_report'),
+	(5, 'Penjualan', NULL, 1, 'reports/graphical_summary_sales', 1, 'graphical_summary_sales'),
+	(6, 'Kategori', NULL, 1, 'reports/graphical_summary_categories', 2, 'graphical_summary_categories'),
+	(7, 'Pelanggan', NULL, 1, 'reports/graphical_summary_customers', 3, 'graphical_summary_customers'),
+	(8, 'Diskon', NULL, 1, 'reports/graphical_summary_discounts', 4, 'graphical_summary_discounts'),
+	(9, 'Produk/Item', NULL, 1, 'reports/graphical_summary_items', 5, 'graphical_summary_items'),
+	(10, 'Pembayaran', NULL, 1, 'reports/graphical_summary_payments', 6, 'graphical_summary_payments'),
+	(11, 'Karyawan', NULL, 1, 'reports/graphical_summary_employees', 7, 'graphical_summary_employees'),
+	(12, 'Pemasok', NULL, 1, 'reports/graphical_summary_suppliers', 8, 'graphical_summary_suppliers'),
+	(13, 'Pajak', NULL, 1, 'reports/graphical_summary_taxes', 9, 'graphical_summary_taxes'),
+	(14, 'Penjualan', NULL, 2, 'reports/summary_sales', 1, 'summary_sales'),
+	(15, 'Kategori', NULL, 2, 'reports/summary_categories', 2, 'summary_categories'),
+	(16, 'Pelanggan', NULL, 2, 'reports/summary_customers', 3, 'summary_customers'),
+	(17, 'Diskon', NULL, 2, 'reports/summary_discounts', 4, 'summary_discounts'),
+	(18, 'Produk/Item', NULL, 2, 'reports/summary_items', 5, 'summary_items'),
+	(19, 'Pembayaran', NULL, 2, 'reports/summary_payments', 6, 'summary_payments'),
+	(20, 'Karyawan', NULL, 2, 'reports/summary_employees', 7, 'summary_employees'),
+	(21, 'Pemasok', NULL, 2, 'reports/summary_suppliers', 8, 'summary_suppliers'),
+	(22, 'Pajak', NULL, 2, 'reports/summary_taxes', 9, 'summary_taxes'),
+	(29, 'Penjualan', NULL, 3, 'reports/detailed_sales', 1, 'detailed_sales'),
+	(30, 'Barang Masuk', NULL, 3, 'reports/detailed_receivings', 2, 'detailed_receivings'),
+	(31, 'Pelanggan', NULL, 3, 'reports/specific_customer', 3, 'specific_customer'),
+	(32, 'Diskon', NULL, 3, 'reports/specific_discount', 4, 'specific_discount'),
+	(33, 'Karyawan', NULL, 3, 'reports/specific_employee', 5, 'specific_employee'),
+	(34, 'Persediaan Rendah', NULL, 4, 'reports/inventory_low', 1, 'inventory_low'),
+	(35, 'Ringkasan Persediaan', NULL, 4, 'reports/inventory_summary', 2, 'inventory_summary'),
+	(36, 'Surat Pesanan', 'sales', NULL, 'sales', 1, 'sales_order'),
+	(37, 'Surat Jalan', 'sales', NULL, 'shipments', 2, 'shipment');
+/*!40000 ALTER TABLE `ospos_menu_copy` ENABLE KEYS */;
 
 
 -- Dumping structure for table giripalma.ospos_modules
@@ -889,6 +863,7 @@ CREATE TABLE IF NOT EXISTS `ospos_raw_materials` (
   `description` varchar(255) NOT NULL,
   `color` varchar(255) NOT NULL,
   `dimension` varchar(255) NOT NULL,
+  `satuan` varchar(255) NOT NULL,
   `cost_price` decimal(15,2) NOT NULL,
   `unit_price` decimal(15,2) NOT NULL,
   `reorder_level` decimal(15,2) NOT NULL DEFAULT '0.00',
@@ -912,10 +887,24 @@ CREATE TABLE IF NOT EXISTS `ospos_raw_materials` (
   UNIQUE KEY `item_number` (`item_number`),
   KEY `supplier_id` (`supplier_id`),
   CONSTRAINT `ospos_raw_materials_ibfk_1` FOREIGN KEY (`supplier_id`) REFERENCES `ospos_suppliers` (`person_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
--- Dumping data for table giripalma.ospos_raw_materials: ~0 rows (approximately)
+-- Dumping data for table giripalma.ospos_raw_materials: ~13 rows (approximately)
 /*!40000 ALTER TABLE `ospos_raw_materials` DISABLE KEYS */;
+INSERT INTO `ospos_raw_materials` (`name`, `category`, `supplier_id`, `type_item`, `item_number`, `description`, `color`, `dimension`, `satuan`, `cost_price`, `unit_price`, `reorder_level`, `receiving_quantity`, `item_id`, `pic_id`, `allow_alt_description`, `is_serialized`, `deleted`, `custom1`, `custom2`, `custom3`, `custom4`, `custom5`, `custom6`, `custom7`, `custom8`, `custom9`, `custom10`) VALUES
+	('Kayu Jati', 'Kayu', NULL, '0', '6354749', '', '', '', '', 1000000.00, 2000000.00, 10.00, 0, 14, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
+	('Coba', 'Kain', NULL, '0', '890', '', '', '', '', 10000.00, 20000.00, 4.00, 0, 15, NULL, 0, 0, 1, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
+	('Coba 2', 'Kayu', NULL, '0', '6474950', '', 'Manis', '', '', 90000.00, 100000.00, 2.00, 0, 16, NULL, 0, 0, 1, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
+	('Coba 3', 'Kayu', NULL, '0', '878787', '', 'Merah', '', '', 20000.00, 40000.00, 10.00, 0, 17, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
+	('Ususmurah', 'Makananbergiziloh', NULL, '0', '8292', '', 'biru', 'Makananbergizienak', '', 500.00, 1000.00, 3.00, 0, 18, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
+	('buaut', 'new', 4, '0', '123', '', 'hitam', '20', '', 1000.00, 1200.00, 1.00, 0, 19, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
+	('buaut', 'new', 4, '0', 'new123', '', 'hitam', '20', '', 1000.00, 1200.00, 1.00, 0, 20, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
+	('buaut', 'new', 4, '0', 'br1', '', 'hitam', '20', '', 1000.00, 1200.00, 1.00, 0, 21, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
+	('buaut', 'new', 4, '0', '17', '', 'hitam', '20', '', 1000.00, 1200.00, 1.00, 0, 22, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
+	('buaut', 'new', 4, '0', '20000', '', 'hitam', '20', '', 1000.00, 1200.00, 1.00, 0, 23, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
+	('murbaut', 'new', NULL, '0', 'q1q1', '', 'hitam', '60 x 5', '', 1111.00, 1121.00, 4.00, 0, 24, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
+	('buautmur', 'new', NULL, '0', '1w1w', '', 'merah', '6', '', 90.00, 900.00, 5.00, 0, 25, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'),
+	('muuuur', 'new', NULL, '0', 'ny', '', 'hitam', '90', '', 9000.00, 10000.00, 9.00, 0, 26, NULL, 0, 0, 0, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
 /*!40000 ALTER TABLE `ospos_raw_materials` ENABLE KEYS */;
 
 
@@ -931,6 +920,74 @@ CREATE TABLE IF NOT EXISTS `ospos_raw_materials_tax` (
 -- Dumping data for table giripalma.ospos_raw_materials_tax: ~0 rows (approximately)
 /*!40000 ALTER TABLE `ospos_raw_materials_tax` DISABLE KEYS */;
 /*!40000 ALTER TABLE `ospos_raw_materials_tax` ENABLE KEYS */;
+
+
+-- Dumping structure for table giripalma.ospos_raw_material_quantities
+CREATE TABLE IF NOT EXISTS `ospos_raw_material_quantities` (
+  `item_id` int(11) NOT NULL,
+  `location_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`item_id`,`location_id`),
+  KEY `item_id` (`item_id`),
+  KEY `location_id` (`location_id`),
+  CONSTRAINT `ospos_raw_material_quantities_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `ospos_raw_materials` (`item_id`),
+  CONSTRAINT `ospos_raw_material_quantities_ibfk_2` FOREIGN KEY (`location_id`) REFERENCES `ospos_stock_locations` (`location_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+-- Dumping data for table giripalma.ospos_raw_material_quantities: ~50 rows (approximately)
+/*!40000 ALTER TABLE `ospos_raw_material_quantities` DISABLE KEYS */;
+INSERT INTO `ospos_raw_material_quantities` (`item_id`, `location_id`, `quantity`) VALUES
+	(14, 1, 20),
+	(14, 2, 0),
+	(14, 3, 0),
+	(14, 4, 0),
+	(14, 5, 0),
+	(14, 6, 50),
+	(14, 7, 0),
+	(14, 8, 0),
+	(14, 9, 0),
+	(14, 10, 0),
+	(15, 1, 10),
+	(15, 2, 0),
+	(15, 3, 0),
+	(15, 4, 0),
+	(15, 5, 0),
+	(15, 6, 0),
+	(15, 7, 0),
+	(15, 8, 0),
+	(15, 9, 0),
+	(15, 10, 0),
+	(16, 1, 10),
+	(16, 2, 0),
+	(16, 3, 0),
+	(16, 4, 0),
+	(16, 5, 0),
+	(16, 6, 0),
+	(16, 7, 0),
+	(16, 8, 0),
+	(16, 9, 0),
+	(16, 10, 0),
+	(17, 1, 100),
+	(17, 2, 0),
+	(17, 3, 0),
+	(17, 4, 0),
+	(17, 5, 0),
+	(17, 6, 100),
+	(17, 7, 0),
+	(17, 8, 0),
+	(17, 9, 0),
+	(17, 10, 0),
+	(18, 1, 5),
+	(18, 2, 0),
+	(18, 3, 0),
+	(18, 4, 0),
+	(18, 5, 0),
+	(18, 6, 0),
+	(18, 7, 0),
+	(18, 8, 0),
+	(18, 9, 0),
+	(18, 10, 0);
+/*!40000 ALTER TABLE `ospos_raw_material_quantities` ENABLE KEYS */;
 
 
 -- Dumping structure for table giripalma.ospos_receivings
@@ -1001,9 +1058,9 @@ CREATE TABLE IF NOT EXISTS `ospos_sales` (
   KEY `sale_time` (`sale_time`),
   CONSTRAINT `ospos_sales_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `ospos_employees` (`person_id`),
   CONSTRAINT `ospos_sales_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `ospos_customers` (`person_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_sales: ~35 rows (approximately)
+-- Dumping data for table giripalma.ospos_sales: ~38 rows (approximately)
 /*!40000 ALTER TABLE `ospos_sales` DISABLE KEYS */;
 INSERT INTO `ospos_sales` (`sale_time`, `customer_id`, `employee_id`, `comment`, `invoice_number`, `sale_id`) VALUES
 	('2016-01-27 02:12:18', NULL, 1, '', NULL, 1),
@@ -1040,7 +1097,10 @@ INSERT INTO `ospos_sales` (`sale_time`, `customer_id`, `employee_id`, `comment`,
 	('2016-02-26 11:00:50', NULL, 1, '', NULL, 32),
 	('2016-02-26 11:03:38', NULL, 1, '', '12', 33),
 	('2016-02-26 11:04:42', NULL, 1, '', '14', 34),
-	('2016-02-26 11:10:43', NULL, 1, '', '15', 35);
+	('2016-02-26 11:10:43', NULL, 1, '', '15', 35),
+	('2016-03-24 16:44:16', NULL, 1, '', NULL, 36),
+	('2016-03-24 16:46:18', NULL, 1, '', NULL, 37),
+	('2016-03-29 10:37:36', 2, 1, '', NULL, 38);
 /*!40000 ALTER TABLE `ospos_sales` ENABLE KEYS */;
 
 
@@ -1065,7 +1125,7 @@ CREATE TABLE IF NOT EXISTS `ospos_sales_items` (
   CONSTRAINT `ospos_sales_items_ibfk_3` FOREIGN KEY (`item_location`) REFERENCES `ospos_stock_locations` (`location_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_sales_items: ~36 rows (approximately)
+-- Dumping data for table giripalma.ospos_sales_items: ~39 rows (approximately)
 /*!40000 ALTER TABLE `ospos_sales_items` DISABLE KEYS */;
 INSERT INTO `ospos_sales_items` (`sale_id`, `item_id`, `description`, `serialnumber`, `line`, `quantity_purchased`, `item_cost_price`, `item_unit_price`, `discount_percent`, `item_location`) VALUES
 	(1, 2, '', '', 1, 1.00, 20000.00, 30000.00, 0.00, 2),
@@ -1103,7 +1163,10 @@ INSERT INTO `ospos_sales_items` (`sale_id`, `item_id`, `description`, `serialnum
 	(32, 4, '', '', 1, 1.00, 100000.00, 300000.00, 0.00, 5),
 	(33, 4, '', '', 1, 1.00, 100000.00, 300000.00, 0.00, 5),
 	(34, 4, '', '', 1, 2.00, 100000.00, 300000.00, 0.00, 5),
-	(35, 6, '', '', 1, 1.00, 3000000.00, 4500000.00, 0.00, 5);
+	(35, 6, '', '', 1, 1.00, 3000000.00, 4500000.00, 0.00, 5),
+	(36, 4, '', '', 1, 1.00, 100000.00, 300000.00, 0.00, 1),
+	(37, 6, '', '', 1, 1.00, 3000000.00, 4500000.00, 0.00, 1),
+	(38, 6, '', '', 1, 1.00, 3000000.00, 4500000.00, 0.00, 1);
 /*!40000 ALTER TABLE `ospos_sales_items` ENABLE KEYS */;
 
 
@@ -1121,14 +1184,16 @@ CREATE TABLE IF NOT EXISTS `ospos_sales_items_taxes` (
   CONSTRAINT `ospos_sales_items_taxes_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `ospos_items` (`item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_sales_items_taxes: ~5 rows (approximately)
+-- Dumping data for table giripalma.ospos_sales_items_taxes: ~7 rows (approximately)
 /*!40000 ALTER TABLE `ospos_sales_items_taxes` DISABLE KEYS */;
 INSERT INTO `ospos_sales_items_taxes` (`sale_id`, `item_id`, `line`, `name`, `percent`) VALUES
 	(12, 5, 1, 'Pajak Penjualan1', 10.00),
 	(13, 5, 1, 'Pajak Penjualan1', 10.00),
 	(14, 5, 2, 'Pajak Penjualan1', 10.00),
 	(27, 5, 1, 'Pajak Penjualan1', 10.00),
-	(35, 6, 1, 'Pajak Penjualan1', 10.00);
+	(35, 6, 1, 'Pajak Penjualan1', 10.00),
+	(37, 6, 1, 'Pajak Penjualan1', 10.00),
+	(38, 6, 1, 'Pajak Penjualan1', 10.00);
 /*!40000 ALTER TABLE `ospos_sales_items_taxes` ENABLE KEYS */;
 
 
@@ -1144,7 +1209,7 @@ CREATE TABLE IF NOT EXISTS `ospos_sales_payments` (
   CONSTRAINT `ospos_sales_payments_ibfk_1` FOREIGN KEY (`sale_id`) REFERENCES `ospos_sales` (`sale_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_sales_payments: ~37 rows (approximately)
+-- Dumping data for table giripalma.ospos_sales_payments: ~40 rows (approximately)
 /*!40000 ALTER TABLE `ospos_sales_payments` DISABLE KEYS */;
 INSERT INTO `ospos_sales_payments` (`sale_id`, `payment_type`, `payment_leasing`, `payment_amount`, `card_number`) VALUES
 	(1, 'Tunai', '', 30000.00, ''),
@@ -1183,7 +1248,10 @@ INSERT INTO `ospos_sales_payments` (`sale_id`, `payment_type`, `payment_leasing`
 	(32, 'Tunai', '', 300000.00, ''),
 	(33, 'Tunai', '', 300000.00, ''),
 	(34, 'Tunai', '', 600000.00, ''),
-	(35, 'Tunai', '', 4500000.00, '');
+	(35, 'Tunai', '', 4500000.00, ''),
+	(36, 'Tunai', '', 300000.00, ''),
+	(37, 'Tunai', '', 4500000.00, ''),
+	(38, 'Tunai', '', 4500000.00, '');
 /*!40000 ALTER TABLE `ospos_sales_payments` ENABLE KEYS */;
 
 
@@ -1275,21 +1343,26 @@ CREATE TABLE IF NOT EXISTS `ospos_sessions` (
   PRIMARY KEY (`session_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_sessions: ~49 rows (approximately)
+-- Dumping data for table giripalma.ospos_sessions: ~73 rows (approximately)
 /*!40000 ALTER TABLE `ospos_sessions` DISABLE KEYS */;
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 	('0148a39435b34ebc75678e1cf9007048', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455095550, 'a:8:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"3";}'),
 	('042334c18208ade07fe307fb06528ee5', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454402685, ''),
 	('079175abb61e763762df79b9c4827209', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455796472, ''),
+	('07c6c12c5f65b5d39563a501e2169588', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1458185669, 'a:3:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"item_location";s:1:"1";}'),
+	('13901bde54eee91b5c37f739fba8ba06', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1459230055, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}'),
 	('158ae1b70d57d7c9cc93831ef5c34e3d', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0', 1455077777, ''),
 	('19112963f16bec54180c9e6862d6531d', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454402471, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}'),
 	('1936b89fd4c6e58ca1236bab292ee2e4', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454402519, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}'),
 	('1a0f512b7f383c6dd52f66b70942f79e', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454402754, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}'),
-	('1e3d03b0db576231ac31ee2177396a30', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1457285807, 'a:9:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"item_location";s:1:"1";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:2:"14";}'),
 	('20374eff3972a47e6ab12613972bfa3b', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454418265, 'a:8:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"2";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"2";}'),
+	('21260af549dba98d5d4dd0bf6ed67f76', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36', 1458014881, 'a:9:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:8:"cartRecv";a:0:{}s:9:"recv_mode";s:7:"receive";s:17:"recv_stock_source";s:1:"1";s:22:"recv_stock_destination";s:1:"1";s:8:"supplier";i:-1;s:19:"recv_invoice_number";s:1:"1";s:13:"item_location";s:1:"1";}'),
 	('22c8e20ea4055fc8b013781bdb5d6dfe', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455116410, 'a:3:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"sale_location";s:1:"1";}'),
 	('2a976145064e7c01688d29cfe1f12df3', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455671545, ''),
+	('2de0a1fe24467124756a47bd118f111f', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1458620276, 'a:9:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"item_location";s:1:"1";s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:4:"cart";a:0:{}s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:2:"14";}'),
 	('316077144bd572eec734882f7f3e73cd', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455403415, ''),
+	('370864ce8805b473655dd8ec4bbdfeae', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1457594695, 'a:9:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"item_location";s:1:"1";s:8:"cartRecv";a:0:{}s:9:"recv_mode";s:7:"receive";s:17:"recv_stock_source";s:1:"1";s:22:"recv_stock_destination";s:1:"1";s:8:"supplier";i:-1;s:19:"recv_invoice_number";s:1:"1";}'),
+	('39c9a89d75941617da42dfc035332091', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1456994889, 'a:3:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"item_location";s:1:"1";}'),
 	('4134dd990883ef5b10f75a86cef04e86', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454402573, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}'),
 	('43d558b908656d17f7b9620ddf2827b9', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.57 Safari/537.36', 1453801341, 'a:9:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"sale_location";s:1:"1";s:13:"item_location";s:1:"1";s:4:"cart";a:1:{i:1;a:16:{s:7:"item_id";s:1:"1";s:13:"item_location";s:1:"1";s:10:"stock_name";s:5:"stock";s:4:"line";i:1;s:4:"name";s:8:"bWVqYQ==";s:11:"item_number";N;s:11:"description";s:0:"";s:12:"serialnumber";s:0:"";s:21:"allow_alt_description";s:1:"0";s:13:"is_serialized";s:1:"0";s:8:"quantity";s:1:"2";s:8:"discount";s:1:"0";s:8:"in_stock";s:2:"10";s:5:"price";s:8:"50000.00";s:5:"total";s:9:"100000.00";s:16:"discounted_total";s:12:"100000.00000";}}s:9:"sale_mode";s:4:"sale";s:8:"customer";i:-1;s:8:"payments";a:2:{s:4:"Cash";a:2:{s:12:"payment_type";s:4:"Cash";s:14:"payment_amount";s:8:"50000.00";}s:5:"Tunai";a:2:{s:12:"payment_type";s:5:"Tunai";s:14:"payment_amount";s:12:"150000.00000";}}s:20:"sales_invoice_number";s:1:"0";}'),
 	('515270df63a524dd29693fca40f51890', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455180365, ''),
@@ -1297,15 +1370,19 @@ INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_ac
 	('570d2cd2522e5e7d8d3e841a72dc7dec', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455528976, 'a:15:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"item_location";s:1:"1";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"5";s:8:"cartRecv";a:0:{}s:9:"recv_mode";s:6:"return";s:17:"recv_stock_source";s:1:"1";s:22:"recv_stock_destination";s:1:"1";s:8:"supplier";i:-1;s:19:"recv_invoice_number";s:1:"0";}'),
 	('5add28dabaae11de799d4bd7407f7ffa', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455180361, ''),
 	('5bd7c0d9cedd069dd1adfbd77fcd938f', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454484331, 'a:15:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"2";s:13:"item_location";s:1:"1";s:8:"cartRecv";a:0:{}s:9:"recv_mode";s:7:"receive";s:17:"recv_stock_source";s:1:"1";s:22:"recv_stock_destination";s:1:"1";s:8:"supplier";i:-1;s:19:"recv_invoice_number";s:1:"0";}'),
-	('5dd01646e007261db55e01c59726b246', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1457285941, 'a:2:{s:9:"person_id";s:1:"1";s:13:"item_location";s:1:"1";}'),
+	('642ef35137352f6800911dddd92ec59c', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1458546717, 'a:2:{s:9:"person_id";s:1:"1";s:13:"item_location";s:1:"1";}'),
+	('65ff5d3909139c11df5dfd6c5b49e0ad', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36', 1459143864, 'a:10:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"sale_location";s:1:"1";s:13:"item_location";s:1:"1";s:4:"cart";a:1:{i:1;a:16:{s:7:"item_id";s:1:"6";s:13:"item_location";s:1:"1";s:10:"stock_name";s:5:"stock";s:4:"line";i:1;s:4:"name";s:16:"S29tcHV0ZXIgUEM=";s:11:"item_number";s:9:"PC2837849";s:11:"description";s:0:"";s:12:"serialnumber";s:0:"";s:21:"allow_alt_description";s:1:"0";s:13:"is_serialized";s:1:"0";s:8:"quantity";i:1;s:8:"discount";s:1:"0";s:8:"in_stock";s:1:"0";s:5:"price";s:10:"4500000.00";s:5:"total";s:10:"4500000.00";s:16:"discounted_total";s:13:"4500000.00000";}}s:9:"sale_mode";s:4:"sale";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:2:"14";s:28:"sales_invoice_number_enabled";s:5:"false";}'),
 	('69eb7c0cdfef78ac5103a393ea0de3aa', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0', 1455085692, 'a:16:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"sale_location";s:1:"3";s:22:"sales_print_after_sale";s:4:"true";s:28:"sales_invoice_number_enabled";s:4:"true";s:9:"sale_mode";s:4:"sale";s:4:"cart";a:1:{i:1;a:16:{s:7:"item_id";s:1:"4";s:13:"item_location";s:1:"3";s:10:"stock_name";s:16:"GP2 - Toko Utama";s:4:"line";i:1;s:4:"name";s:20:"S3Vyc2kgU3lhaHJpbmk=";s:11:"item_number";s:4:"K002";s:11:"description";s:0:"";s:12:"serialnumber";s:0:"";s:21:"allow_alt_description";s:1:"0";s:13:"is_serialized";s:1:"0";s:8:"quantity";i:1;s:8:"discount";s:1:"0";s:8:"in_stock";s:2:"-1";s:5:"price";s:9:"300000.00";s:5:"total";s:9:"300000.00";s:16:"discounted_total";s:12:"300000.00000";}}s:8:"customer";i:-1;s:8:"payments";a:1:{s:4:"cash";a:2:{s:12:"payment_type";s:4:"cash";s:14:"payment_amount";s:6:"400000";}}s:20:"sales_invoice_number";s:1:"3";s:8:"cartRecv";a:0:{}s:9:"recv_mode";s:7:"receive";s:17:"recv_stock_source";s:1:"1";s:22:"recv_stock_destination";s:1:"1";s:8:"supplier";i:-1;s:19:"recv_invoice_number";s:1:"0";}'),
 	('6a8fdebce7133d9e2012242a253eef77', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454400230, ''),
 	('6c4a8c0b7cf444f441ba2e033f272168', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455529829, ''),
+	('6ec32fffc0ee7dd6d4d80db1ee36e08e', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1459228699, 'a:9:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"item_location";s:1:"1";s:13:"sale_location";s:1:"1";s:8:"payments";a:1:{s:5:"Tunai";a:4:{s:12:"payment_type";s:5:"Tunai";s:14:"payment_amount";s:14:"13500000.00000";s:11:"card_number";s:0:"";s:15:"payment_leasing";s:0:"";}}s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:8:"customer";i:-1;s:20:"sales_invoice_number";s:2:"14";}'),
 	('772cc1c8a29384fd5eaf277876b270e2', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454393251, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}'),
 	('7d42e268fac6cfb5c4497e7bb5e0a2a2', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455106938, 'a:8:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:4:"cart";a:1:{i:1;a:16:{s:7:"item_id";s:1:"4";s:13:"item_location";s:1:"1";s:10:"stock_name";s:5:"stock";s:4:"line";i:1;s:4:"name";s:20:"S3Vyc2kgU3lhaHJpbmk=";s:11:"item_number";s:4:"K002";s:11:"description";s:0:"";s:12:"serialnumber";s:0:"";s:21:"allow_alt_description";s:1:"0";s:13:"is_serialized";s:1:"0";s:8:"quantity";s:1:"2";s:8:"discount";s:1:"0";s:8:"in_stock";s:2:"17";s:5:"price";s:9:"300000.00";s:5:"total";s:9:"600000.00";s:16:"discounted_total";s:12:"600000.00000";}}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"3";}'),
+	('872f88c0e71242b5ad9c977e6ec0f86f', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36', 1458186565, 'a:9:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"item_location";s:1:"1";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:2:"14";}'),
 	('8a44c43d58092fd06d31573a15c157b9', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455615952, 'a:15:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:8:"cartRecv";a:0:{}s:9:"recv_mode";s:7:"receive";s:17:"recv_stock_source";s:1:"1";s:22:"recv_stock_destination";s:1:"1";s:8:"supplier";i:-1;s:19:"recv_invoice_number";s:1:"1";s:13:"item_location";s:1:"1";s:4:"cart";a:2:{i:1;a:16:{s:7:"item_id";s:1:"2";s:13:"item_location";s:1:"1";s:10:"stock_name";s:5:"stock";s:4:"line";i:1;s:4:"name";s:8:"TWVqYQ==";s:11:"item_number";s:4:"M001";s:11:"description";s:0:"";s:12:"serialnumber";s:0:"";s:21:"allow_alt_description";s:1:"0";s:13:"is_serialized";s:1:"0";s:8:"quantity";s:4:"1.00";s:8:"discount";i:0;s:8:"in_stock";s:2:"20";s:5:"price";s:8:"30000.00";s:5:"total";s:10:"30000.0000";s:16:"discounted_total";s:11:"30000.00000";}i:3;a:16:{s:7:"item_id";s:1:"5";s:13:"item_location";s:1:"1";s:10:"stock_name";s:5:"stock";s:4:"line";i:3;s:4:"name";s:16:"S3Vyc2kgVHVuZ2d1";s:11:"item_number";s:14:"56746774276356";s:11:"description";s:0:"";s:12:"serialnumber";s:0:"";s:21:"allow_alt_description";s:1:"0";s:13:"is_serialized";s:1:"0";s:8:"quantity";i:1;s:8:"discount";s:1:"0";s:8:"in_stock";s:2:"60";s:5:"price";s:9:"900000.00";s:5:"total";s:9:"900000.00";s:16:"discounted_total";s:12:"900000.00000";}}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";s:1:"2";s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"6";}'),
 	('9711dda4c869e57a303f97c1d37042cf', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0', 1454385518, 'a:11:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"sale_location";s:1:"6";s:13:"item_location";s:1:"1";s:22:"sales_print_after_sale";s:4:"true";s:28:"sales_invoice_number_enabled";s:4:"true";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"2";}'),
 	('99575385aa82b43afb6ded614f31dba6', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455671545, ''),
+	('a12adc74c253f5fe8fb105e1571f98dd', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1457347557, ''),
 	('a2540f93af62987415bdd9373cbfa1ce', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454400410, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}'),
 	('a7a2bedb993ad0e6fdb5fd7a432a18b1', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0', 1453950418, ''),
 	('ad2d710d47877d4f6bcbf99e579c3306', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0', 1454652702, 'a:10:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"sale_location";s:1:"4";s:13:"item_location";s:1:"1";s:4:"cart";a:0:{}s:8:"customer";i:-1;s:8:"payments";a:1:{s:4:"cash";a:2:{s:12:"payment_type";s:4:"cash";s:14:"payment_amount";s:12:"200000.00000";}}s:20:"sales_invoice_number";s:1:"2";s:9:"sale_mode";s:4:"sale";s:22:"sales_print_after_sale";s:4:"true";}'),
@@ -1322,6 +1399,7 @@ INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_ac
 	('e29c9f6b46e64a6f144ef5cc0177d3de', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455877122, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}'),
 	('e388567962d97856d795be2c9f8ddc84', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454407061, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}'),
 	('e6488f3672b9f31d257f6f3efd1e1f98', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455613084, 'a:14:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"sale_location";s:1:"8";s:28:"sales_invoice_number_enabled";s:4:"true";s:22:"sales_print_after_sale";s:5:"false";s:4:"cart";a:2:{i:1;a:16:{s:7:"item_id";s:1:"4";s:13:"item_location";s:1:"8";s:10:"stock_name";s:28:"MOG3 - Stand Depan Foodcourt";s:4:"line";i:1;s:4:"name";s:20:"S3Vyc2kgU3lhaHJpbmk=";s:11:"item_number";s:4:"K002";s:11:"description";s:0:"";s:12:"serialnumber";s:0:"";s:21:"allow_alt_description";s:1:"0";s:13:"is_serialized";s:1:"0";s:8:"quantity";i:1;s:8:"discount";s:1:"0";s:8:"in_stock";s:2:"-1";s:5:"price";s:9:"300000.00";s:5:"total";s:9:"300000.00";s:16:"discounted_total";s:12:"300000.00000";}i:2;a:16:{s:7:"item_id";s:1:"5";s:13:"item_location";s:1:"8";s:10:"stock_name";s:28:"MOG3 - Stand Depan Foodcourt";s:4:"line";i:2;s:4:"name";s:16:"S3Vyc2kgVHVuZ2d1";s:11:"item_number";s:14:"56746774276356";s:11:"description";s:0:"";s:12:"serialnumber";s:0:"";s:21:"allow_alt_description";s:1:"0";s:13:"is_serialized";s:1:"0";s:8:"quantity";i:1;s:8:"discount";s:1:"0";s:8:"in_stock";s:1:"4";s:5:"price";s:9:"900000.00";s:5:"total";s:9:"900000.00";s:16:"discounted_total";s:12:"900000.00000";}}s:9:"sale_mode";s:4:"sale";s:8:"customer";s:1:"2";s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"6";s:13:"item_location";s:1:"1";s:9:"recv_mode";s:11:"requisition";s:17:"recv_stock_source";s:1:"3";s:22:"recv_stock_destination";s:1:"5";}'),
+	('e77ca0ebaec55239550b63242b9d6a8a', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1458188272, 'a:3:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"item_location";s:1:"1";}'),
 	('e8001e21f48d6343c22ae47c560124ed', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455114852, ''),
 	('e83333c1ae5e8920932f3fc99fc35998', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455096636, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}'),
 	('ea3dc855afaec530e9e4feb5db92f20e', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454402695, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}'),

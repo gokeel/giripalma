@@ -521,6 +521,7 @@ function get_raw_materials_manage_table($raw_materials,$controller)
 	$CI->lang->line('items_tax_percents'),
 	'&nbsp;',
 	'&nbsp;',
+	'&nbsp;',
 	'&nbsp;'	
 	);
 	
