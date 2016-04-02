@@ -181,61 +181,65 @@ class Employee extends Person
 	*/
 	function get_search_suggestions($search,$limit=5)
 	{
-		$suggestions = array();
+		// $suggestions = array();
 		
+		// search by first_name or last_name
 		$this->db->from('employees');
 		$this->db->join('people','employees.person_id=people.person_id');	
 		$this->db->where("(first_name LIKE '%".$this->db->escape_like_str($search)."%' or 
 		last_name LIKE '%".$this->db->escape_like_str($search)."%' or 
-		CONCAT(`first_name`,' ',`last_name`) LIKE '%".$this->db->escape_like_str($search)."%') and deleted=0");
+		CONCAT(`first_name`,' ',`last_name`) LIKE '%".$this->db->escape_like_str($search)."%' or username LIKE '%".$this->db->escape_like_str($search)."%') and deleted=0");
 		$this->db->order_by("last_name", "asc");		
-		$by_name = $this->db->get();
-		foreach($by_name->result() as $row)
-		{
-			$suggestions[]=$row->first_name.' '.$row->last_name;		
-		}
+		$query = $this->db->get();
+		// foreach($by_name->result() as $row)
+		// {
+		// 	$suggestions[]=$row->first_name.' '.$row->last_name;		
+		// }
 		
-		$this->db->from('employees');
-		$this->db->join('people','employees.person_id=people.person_id');
-		$this->db->where('deleted', 0);
-		$this->db->like("email",$search);
-		$this->db->order_by("email", "asc");		
-		$by_email = $this->db->get();
-		foreach($by_email->result() as $row)
-		{
-			$suggestions[]=$row->email;		
-		}
+		// search by email like 
+		// $this->db->from('employees');
+		// $this->db->join('people','employees.person_id=people.person_id');
+		// $this->db->where('deleted', 0);
+		// $this->db->like("email",$search);
+		// $this->db->order_by("email", "asc");		
+		// $by_email = $this->db->get();
+		// foreach($by_email->result() as $row)
+		// {
+		// 	$suggestions[]=$row->email;		
+		// }
 		
-		$this->db->from('employees');
-		$this->db->join('people','employees.person_id=people.person_id');	
-		$this->db->where('deleted', 0);
-		$this->db->like("username",$search);
-		$this->db->order_by("username", "asc");		
-		$by_username = $this->db->get();
-		foreach($by_username->result() as $row)
-		{
-			$suggestions[]=$row->username;		
-		}
+		// search by username like %
+		// $this->db->from('employees');
+		// $this->db->join('people','employees.person_id=people.person_id');	
+		// $this->db->where('deleted', 0);
+		// $this->db->like("username",$search);
+		// $this->db->order_by("username", "asc");		
+		// $by_username = $this->db->get();
+		// foreach($by_username->result() as $row)
+		// {
+		// 	$suggestions[]=$row->username;		
+		// }
 
-
-		$this->db->from('employees');
-		$this->db->join('people','employees.person_id=people.person_id');	
-		$this->db->where('deleted', 0);
-		$this->db->like("phone_number",$search);
-		$this->db->order_by("phone_number", "asc");		
-		$by_phone = $this->db->get();
-		foreach($by_phone->result() as $row)
-		{
-			$suggestions[]=$row->phone_number;		
-		}
+		// search by phone like
+		// $this->db->from('employees');
+		// $this->db->join('people','employees.person_id=people.person_id');	
+		// $this->db->where('deleted', 0);
+		// $this->db->like("phone_number",$search);
+		// $this->db->order_by("phone_number", "asc");		
+		// $by_phone = $this->db->get();
+		// foreach($by_phone->result() as $row)
+		// {
+		// 	$suggestions[]=$row->phone_number;		
+		// }
 		
 		
 		//only return $limit suggestions
-		if(count($suggestions > $limit))
-		{
-			$suggestions = array_slice($suggestions, 0,$limit);
-		}
-		return $suggestions;
+		// if(count($suggestions > $limit))
+		// {
+		// 	$suggestions = array_slice($suggestions, 0,$limit);
+		// }
+
+		return $query;
 	
 	}
 	

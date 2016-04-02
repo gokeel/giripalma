@@ -135,17 +135,44 @@ class Sales extends Secure_area
 		{
 			$this->sale_lib->is_valid_receipt($this->input->post('q')) && $suggestions[] = $this->input->post('q');
 		}
-		$suggestions = array_merge($suggestions, $this->Item->get_item_search_suggestions($this->input->post('q'),$this->input->post('limit')));
-		$suggestions = array_merge($suggestions, $this->Item_kit->get_item_kit_search_suggestions($this->input->post('q'),$this->input->post('limit')));
+		// first, search item
+		$suggestions = $this->Item->get_item_search_suggestions($this->input->post('q'),$this->input->post('limit'));
 
-		echo implode("\n", $suggestions);
+		$response = array();
+		if($suggestions->num_rows() > 0)
+			foreach($suggestions->result() as $suggest){
+				$response[] = array(
+					'name' => $suggest->item_number.' | '.$suggest->name.' | '.$suggest->color.' | '.$suggest->dimension,
+					'id' => $suggest->item_id
+					);
+			}
+
+		// second, search item kits
+		$suggestions = $this->Item_kit->get_item_kit_search_suggestions($this->input->post('q'),$this->input->post('limit'));
+		if($suggestions->num_rows() > 0)
+			foreach($suggestions->result() as $suggest){
+				$response[] = array(
+					'name' => 'KIT '.$suggest->name,
+					'id' => 'KIT '.$suggest->item_kit_id
+					);
+			}
+
+		echo json_encode($response);
 	}
 
 	function customer_search()
 	{
 		$suggestions = $this->Customer->get_customer_search_suggestions($this->input->post('q'),$this->input->post('limit'));
 
-		echo implode("\n",$suggestions);
+		$response = array();
+		if($suggestions->num_rows() > 0)
+			foreach($suggestions->result() as $suggest){
+				$response[] = array(
+					'name' => $suggest->first_name.' '.$suggest->last_name,
+					'id' => $suggest->person_id
+					);
+			}
+		echo json_encode($response);
 	}
 
 	function suggest()
@@ -161,6 +188,13 @@ class Sales extends Secure_area
 	{
 		$customer_id = $this->input->post("customer");
 		$this->sale_lib->set_customer($customer_id);
+		$this->_reload();
+	}
+
+	function select_employee()
+	{
+		$person_id = $this->input->post("person_id");
+		$this->sale_lib->set_salesperson($person_id);
 		$this->_reload();
 	}
 
@@ -772,10 +806,20 @@ class Sales extends Secure_area
 			$data['customer'] = $cust_info->first_name.' '.$cust_info->last_name;
 			$data['customer_email'] = $cust_info->email;
 		}
+
 		$data['invoice_number'] = $this->_substitute_invoice_number($cust_info);
 		$data['invoice_number_enabled'] = $this->sale_lib->is_invoice_number_enabled();
 		$data['print_after_sale'] = $this->sale_lib->is_print_after_sale();
 		$data['payments_cover_total'] = $this->_payments_cover_total();
+
+		// get salesperson
+		$salesperson_id = $this->sale_lib->get_salesperson();
+		$salesperson_info = '';
+		if($salesperson_id!=-1){
+			$salesperson_info = $this->Employee->get_info($salesperson_id);
+			$data['salesperson_id'] = $salesperson_id;
+			$data['salesperson_name'] = $salesperson_info->first_name.' '.$salesperson_info->last_name;
+		}
 
 		$this->load->view("sales/register",$data);
 

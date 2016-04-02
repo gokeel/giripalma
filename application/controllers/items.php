@@ -10,7 +10,7 @@ class Items extends Secure_area implements iData_controller
 		$this->load->library('item_lib');
 	}
 	
-	function index($limit_from=0)
+	function index($limit_from=0) 
 	{
 		$stock_location = $this->item_lib->get_item_location();
 		$stock_locations = $this->Stock_location->get_allowed_locations();
@@ -77,15 +77,45 @@ class Items extends Secure_area implements iData_controller
 						'search_custom' => $this->input->post('search_custom'),
 						'is_deleted' => $this->input->post('is_deleted'));
 		
-		$items = $this->Item->search($search, $filters, $lines_per_page, $limit_from);
-		$data_rows = get_items_manage_table_data_rows($items, $this);
-		$total_rows = $this->Item->get_found_rows($search, $filters);
-		$links = $this->_initialize_pagination($this->Item, $lines_per_page, $limit_from, $total_rows, 'search');
-		$data_rows = get_items_manage_table_data_rows($items, $this);
+		$items = $this->Item->search($search, $filters);
+		// $items = $this->Item->search($search, $filters, $lines_per_page, $limit_from);
+		// $data_rows = get_items_manage_table_data_rows($items, $this);
+		// $total_rows = $this->Item->get_found_rows($search, $filters);
+		// $links = $this->_initialize_pagination($this->Item, $lines_per_page, $limit_from, $total_rows, 'search');
+		// $data_rows = get_items_manage_table_data_rows($items, $this);
+
 		// do not move this line to be after the json_encode otherwise the searhc function won't work!!
 		$this->_remove_duplicate_cookies();
 		
-		echo json_encode(array('total_rows' => $total_rows, 'rows' => $data_rows, 'pagination' => $links));
+		// echo json_encode(array('total_rows' => $total_rows, 'rows' => $data_rows, 'pagination' => $links));
+
+		$response = array();
+		foreach($items->result() as $item){
+			$item_tax_info=$this->Item_taxes->get_info($item->item_id);
+			$tax_percents = '';
+			if(!empty($item_tax_info)){
+				foreach($item_tax_info as $tax_info)
+				{
+					$tax_percents.=$tax_info['percent']. '%, ';
+				}
+				$tax_percents=substr($tax_percents, 0, -2);
+			}
+
+			$response[] = array(
+				'id' => $item->item_id,
+				'number' => $item->item_number,
+				'name' => $item->name,
+				'category' => $item->category,
+				'color' => $item->color,
+				'supplier' => $item->company_name,
+				'cost_price' => to_currency($item->cost_price),
+				'unit_price' => to_currency($item->unit_price),
+				'quantity' => $item->quantity,
+				'tax' => $tax_percents,
+				);
+		}
+
+		echo json_encode($response);
 	}
 	
 	function pic_thumb($pic_id)
@@ -141,7 +171,14 @@ class Items extends Secure_area implements iData_controller
 	{
 		$suggestions = $this->Item->get_category_suggestions($this->input->post('q'));
 
-		echo implode("\n",$suggestions);
+		$response = array();
+		if($suggestions->num_rows() > 0)
+			foreach($suggestions->result() as $suggest){
+				$response[] = array(
+					'category' => $suggest->category
+					);
+			}
+		echo json_encode($response);
 	}
 
 	/*
@@ -554,13 +591,13 @@ class Items extends Secure_area implements iData_controller
 
 		if($this->Item_quantity->save($item_quantity_data,$item_id,$location_id))
 		{			
-			echo json_encode(array('success'=>true,'message'=>$this->lang->line('items_successful_updating').' '.
-			$cur_item_info->name,'item_id'=>$item_id));
+			echo json_encode(array('success'=>true,'message'=>$this->lang->line('items_successful_updating')/*.' '.
+			$cur_item_info->name*/,'item_id'=>$item_id));
 		}
 		else//failure
 		{	
-			echo json_encode(array('success'=>false,'message'=>$this->lang->line('items_error_adding_updating').' '.
-			$cur_item_info->name,'item_id'=>-1));
+			echo json_encode(array('success'=>false,'message'=>$this->lang->line('items_error_adding_updating')/*.' '.
+			$cur_item_info->name*/,'item_id'=>-1));
 		}
 	}
 

@@ -201,6 +201,19 @@ class Sale_lib
 		$this->CI->session->set_userdata('customer',$customer_id);
 	}
 
+	function get_salesperson()
+	{
+		if(!$this->CI->session->userdata('salesperson'))
+			$this->set_customer(-1);
+
+		return $this->CI->session->userdata('salesperson');
+	}
+
+	function set_salesperson($person_id)
+	{
+		$this->CI->session->set_userdata('salesperson',$person_id);
+	}
+
 	function get_mode()
 	{
 		if(!$this->CI->session->userdata('sale_mode'))
@@ -432,7 +445,6 @@ class Sale_lib
 	{
 		//KIT #
 		$pieces = explode(' ',$item_kit_id);
-
 		if(count($pieces)==2)
 		{
 			return $this->CI->Item_kit->exists($pieces[1]);

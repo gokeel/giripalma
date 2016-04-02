@@ -40,7 +40,17 @@ class Employees extends Person_controller
 	function suggest()
 	{
 		$suggestions = $this->Employee->get_search_suggestions($this->input->post('q'),$this->input->post('limit'));
-		echo implode("\n",$suggestions);
+		$response = array();
+		if($suggestions->num_rows() > 0)
+			foreach($suggestions->result() as $suggest){
+				$response[] = array(
+					'username' => $suggest->username,
+					'name' => $suggest->first_name.' '.$suggest->last_name,
+					'id' => $suggest->person_id,
+					'email' => $suggest->email
+					);
+			}
+		echo json_encode($response);
 	}
 	
 	/*

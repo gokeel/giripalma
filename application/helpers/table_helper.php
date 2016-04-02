@@ -274,14 +274,15 @@ Gets the html table to manage items.
 function get_items_manage_table($items,$controller)
 {
 	$CI =& get_instance();
-	$table='<table class="tablesorter" id="sortable_table">';
+	$table='';
+	// $table='<table class="tablesorter" id="sortable_table">';
 	
 	$headers = array('<input type="checkbox" id="select_all" />', 
-	$CI->lang->line('items_item_number'),
-	$CI->lang->line('items_name'),
+	$CI->lang->line('items_item_number_and_name'),
+	// $CI->lang->line('items_name'),
 	$CI->lang->line('items_category'),
-	$CI->lang->line('items_color'),
-	$CI->lang->line('suppliers_company_name'),
+	// $CI->lang->line('items_color'),
+	$CI->lang->line('suppliers'),
 	$CI->lang->line('items_cost_price'),
 	$CI->lang->line('items_unit_price'),
 	$CI->lang->line('items_quantity'),
@@ -298,7 +299,8 @@ function get_items_manage_table($items,$controller)
 	}
 	$table.='</tr></thead><tbody>';
 	$table.=get_items_manage_table_data_rows($items,$controller);
-	$table.='</tbody></table>';
+	$table.='</tbody>';
+	// $table.='</tbody></table>';
 
 	return $table;
 }
@@ -341,29 +343,31 @@ function get_item_data_row($item,$controller)
     
 	$table_data_row='<tr>';
 	$table_data_row.="<td width='3%'><input type='checkbox' id='item_$item->item_id' value='".$item->item_id."'/></td>";
-	$table_data_row.='<td width="15%">'.$item->item_number.'</td>';
-	$table_data_row.='<td width="20%">'.$item->name.'</td>';
-	$table_data_row.='<td width="7%">'.$item->category.'</td>';
-	$table_data_row.='<td width="7%">'.$item->color.'</td>';
-	$table_data_row.='<td width="14%">'.$item->company_name.'</td>';
-	$table_data_row.='<td width="14%">'.to_currency($item->cost_price).'</td>';
-	$table_data_row.='<td width="14%">'.to_currency($item->unit_price).'</td>';
-    $table_data_row.='<td width="14%">'.$item->quantity.'</td>';
-	$table_data_row.='<td width="14%">'.$tax_percents.'</td>';
-	$image = '';
-	if (!empty($item->pic_id))
-	{
-		$images = glob ("uploads/item_pics/" . $item->pic_id . ".*");
-		if (sizeof($images) > 0)
-		{
-			$image.='<a class="rollover" href="'. base_url($images[0]) .'"><img src="'.site_url('items/pic_thumb/'.$item->pic_id).'"></a>';
-		}
-	}
-	$table_data_row.='<td align="center" width="55px">' . $image . '</td>';
-	$table_data_row.='<td width="5%">'.anchor($controller_name."/view/$item->item_id/width:$width", $CI->lang->line('common_edit'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_update'))).'</td>';		
+	// $table_data_row.='<td width="15%">'.$item->item_number.'</td>';
+	$table_data_row.='<td><strong>ID '.$item->item_number.'</strong><br>'.$item->name.'<br>Warna: '.($item->color<>"" ? $item->color : '-').'</td>';
+	$table_data_row.='<td>'.$item->category.'</td>';
+	// $table_data_row.='<td width="7%">'.$item->color.'</td>';
+	$table_data_row.='<td>'.$item->company_name.'</td>';
+	$table_data_row.='<td>'.to_currency($item->cost_price).'</td>';
+	$table_data_row.='<td>'.to_currency($item->unit_price).'</td>';
+    $table_data_row.='<td>'.$item->quantity.'</td>';
+	$table_data_row.='<td>'.$tax_percents.'</td>';
+	// $image = '';
+	// if (!empty($item->pic_id))
+	// {
+	// 	$images = glob ("uploads/item_pics/" . $item->pic_id . ".*");
+	// 	if (sizeof($images) > 0)
+	// 	{
+	// 		$image.='<a class="rollover" href="'. base_url($images[0]) .'"><img src="'.site_url('items/pic_thumb/'.$item->pic_id).'"></a>';
+	// 	}
+	// }
+	// $table_data_row.='<td align="center" width="55px">' . $image . '</td>';
+	$table_data_row.='<td><button class="btn btn-info btn-sm" onclick="modal_edit_item('.$item->item_id.')" title="'.$CI->lang->line($controller_name.'_update').'"><i class="fa fa-pencil-square"></i> '/*.anchor($controller_name."/view/$item->item_id", $CI->lang->line('common_edit'),array('data-toggle'=>'modal','data-target'=>'#item-modal','title'=>*/.$CI->lang->line('common_edit').'</button></td>';
 
-	$table_data_row.='<td width="10%">'.anchor($controller_name."/inventory/$item->item_id/width:$width", $CI->lang->line('common_inv'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_count')))./*'</td>';//inventory count	
-	$table_data_row.='<td width="5%">'*/'&nbsp;&nbsp;&nbsp;&nbsp;'.anchor($controller_name."/count_details/$item->item_id/width:$width", $CI->lang->line('common_det'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_details_count'))).'</td>';//inventory details	
+	$table_data_row.='<td><button class="btn btn-warning btn-sm" onclick="modal_inventory('.$item->item_id.')" title="'.$CI->lang->line($controller_name.'_count').'"><i class="fa fa-hdd-o"></i> '/*.anchor($controller_name."/inventory/$item->item_id", $CI->lang->line('common_inv'),array('data-toggle'=>'modal','data-target'=>'#item-modal','title'=>*/.$CI->lang->line('common_inv').'</button></td>';
+	//inventory count	
+	$table_data_row.='<td><button class="btn btn-info btn-sm" onclick="modal_detail_item('.$item->item_id.')" title="'.$CI->lang->line($controller_name.'_details_count').'"><i class="fa fa-search"></i> '/*.anchor($controller_name."/view/$item->item_id", $CI->lang->line('common_edit'),array('data-toggle'=>'modal','data-target'=>'#item-modal','title'=>*/.$CI->lang->line('common_det').'</button></td>';
+	// $table_data_row.='<td width="5%">&nbsp;&nbsp;&nbsp;&nbsp;'.anchor($controller_name."/count_details/$item->item_id", $CI->lang->line('common_det'),array('data-toggle'=>'modal','data-target'=>'#item-modal','title'=>$CI->lang->line($controller_name.'_details_count'))).'</td>';//inventory details	
 	
 	$table_data_row.='</tr>';
 

@@ -25,17 +25,21 @@
     <link href="themes/adminlte/plugins/colorpicker/bootstrap-colorpicker.min.css" rel="stylesheet"/>
     <!-- Bootstrap time Picker -->
     <link href="themes/adminlte/plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet"/>
+    <!-- DATA TABLES -->
+    <link href="themes/adminlte/plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
+    <!-- Typeahead autocomplete -->
+    <link rel="stylesheet" href="<?php echo ADMIN_LTE_DIR; ?>/plugins/typeahead-autocomplete/typeahead.css">
 
     <link rel="stylesheet" type="text/css" href="css/ospos.css"/>
 	<link rel="stylesheet" type="text/css" href="css/ospos_print.css" media="print" />
 	<?php //if ($this->input->cookie('debug') == "true" || $this->input->get("debug") == "true") : ?>
 	<!-- start js template tags -->
-	<script type="text/javascript" src="js/jquery-1.8.3.js" language="javascript"></script>
-  <!--<script src="<?php echo ADMIN_LTE_DIR;?>/plugins/jQuery/jQuery-2.1.3.min.js"></script>-->
+	<!-- <script type="text/javascript" src="js/jquery-1.8.3.js" language="javascript"></script>-->
+  <script src="<?php echo ADMIN_LTE_DIR;?>/plugins/jQuery/jQuery-2.1.3.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-1.11.4.js" language="javascript"></script>
 	<script type="text/javascript" src="js/jquery-ui-timepicker-addon.js" language="javascript"></script>
 	<script type="text/javascript" src="js/jquery.ajax_queue.js" language="javascript"></script>
-	<script type="text/javascript" src="js/jquery.autocomplete.js" language="javascript"></script>
+	<!-- <script type="text/javascript" src="js/jquery.autocomplete.js" language="javascript"></script> -->
 	<script type="text/javascript" src="js/jquery.bgiframe.min.js" language="javascript"></script>
 	<script type="text/javascript" src="js/jquery.color.js" language="javascript"></script>
 	<script type="text/javascript" src="js/jquery.form-3.51.js" language="javascript"></script>
@@ -52,10 +56,13 @@
 	<script type="text/javascript" src="js/swfobject.js" language="javascript"></script>
 	<script type="text/javascript" src="js/tabcontent.js" language="javascript"></script>
 	<script type="text/javascript" src="js/thickbox.js" language="javascript"></script>
+
+  <!-- typeahead autocomplete -->
+  <script src="<?php echo ADMIN_LTE_DIR; ?>/plugins/typeahead-autocomplete/typeahead.js" type="text/javascript"></script>
 	<!-- end js template tags -->
     <?php //else : ?>
     <!-- start minjs template tags -->
-    <!--<script type="text/javascript" src="dist/opensourcepos.js?rel=cb9e5b15ec" language="javascript"></script>
+    <!-- <script type="text/javascript" src="dist/opensourcepos.js?rel=cb9e5b15ec" language="javascript"></script> -->
     <!-- end minjs template tags -->       
     <!--<?php //endif; ?>-->
 	<script type="text/javascript">

@@ -169,21 +169,9 @@ class Item_kit extends CI_Model
 		$this->db->from('item_kits');
 		$this->db->like('name', $search);
 		$this->db->order_by('name', 'asc');
-		$by_name = $this->db->get();
+		$query = $this->db->get();
 
-		foreach($by_name->result() as $row)
-		{
-			// do not touch the '|' otherwise the sale search will not fetch the kit
-			$suggestions[] = 'KIT ' . $row->item_kit_id . '|' . $row->name;
-		}
-
-		//only return $limit suggestions
-		if(count($suggestions > $limit))
-		{
-			$suggestions = array_slice($suggestions, 0, $limit);
-		}
-
-		return $suggestions;
+		return $query;
 	}
 
 	/*

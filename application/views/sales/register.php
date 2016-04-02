@@ -40,27 +40,39 @@
 				?>
 				<div class="row">
 					<div class="col-md-12">
-						<?php echo form_open("sales/change_mode",array('id'=>'mode_form', 'class'=>'form-horizontal')); ?>
 							<div class="row">
+								<?php echo form_open("sales/change_mode",array('id'=>'mode_form')); ?>
 								<div class="col-md-2">
-									<span><?php echo $this->lang->line('sales_mode') ?></span>
-									<?php echo form_dropdown('mode',$modes,$mode,'onchange="$(\'#mode_form\').submit();" class="form-control"'); ?>
+									<div class="form-group">
+										<label><?php echo $this->lang->line('sales_mode') ?></label>
+										<?php echo form_dropdown('mode',$modes,$mode,'class="form-control"'); ?>
+									</div>
 								</div>
 								<div class="col-md-3">
 									<?php
 									if (count($stock_locations) > 1)
 									{
 									?>
-										<span><?php echo $this->lang->line('sales_stock_location') ?></span>
+									<div class="form-group">
+										<label><?php echo $this->lang->line('sales_stock_location') ?></label>
 										<?php echo form_dropdown('stock_location',$stock_locations,$stock_location,'onchange="$(\'#mode_form\').submit();" class="form-control"'); ?>
+									</div>
 									<?php
 									}
 									?>
 								</div>
+								</form>
+								<?php echo form_open("sales/select_employee",array('id'=>'select_employee_form')); ?>
+								<input type="hidden" name="person_id" id="selected_person_id" value="<?php if(isset($salesperson_id)) echo $salesperson_id;?>">
 								<div class="col-md-3">
-									<span><?php echo $this->lang->line('sales_mode') ?></span>
-									<?php echo form_dropdown('mode',$modes,$mode,'onchange="$(\'#mode_form\').submit();" class="form-control"'); ?>
+									<div class="form-group">
+										<label><?php echo $this->lang->line('sales_person') ?></label>
+										<div id="search-employee">
+										  <?php echo form_input(array('class'=>'form-control typeahead in-col-3','name'=>'employee','id'=>'employee','placeholder'=>$this->lang->line('sales_start_typing_employee_name'),'value'=>(isset($salesperson_name) ? $salesperson_name:'')));?>
+										</div>
+									</div>
 								</div>
+								</form>
 								<div class="col-md-2">
 									<?php
 									if ($this->Employee->has_grant('reports_sales', $this->session->userdata('person_id')))
@@ -82,7 +94,6 @@
 									</div>
 								</div>
 							</div>
-						</form>
 					</div> <!-- ./col-md-12 -->
 					<div class="col-md-12">
 						<div class="row">
@@ -96,12 +107,17 @@
 							<?php 
 							} 
 							else {
-								echo form_open("sales/select_customer",array('id'=>'select_customer_form', 'class'=>'form-horizontal'));
+								echo form_open("sales/select_customer",array('id'=>'select_customer_form'));
 							?>
+								<input type="hidden" name="customer" id="selected_customer_id" value="">
 								<div class="col-md-4">
-									<label id="customer_label" for="customer"><?php echo $this->lang->line('sales_select_customer'); ?></label>
-									<!-- <br> -->
-									<?php echo form_input(array('class'=>'form-control','name'=>'customer','id'=>'customer','value'=>$this->lang->line('sales_start_typing_customer_name')));?>
+									<div class="form-group">
+										<label><?php echo $this->lang->line('sales_select_customer'); ?></label>
+										<!-- <br> -->
+										<div id="search-customer">
+										  <?php echo form_input(array('class'=>'form-control typeahead in-col-4','name'=>'customer-name','id'=>'customer-name','placeholder'=>$this->lang->line('sales_start_typing_customer_name')));?>
+										</div>
+									</div>
 								</div>
 								<div class="col-md-1">
 									<h3 style="margin: 25px 0 5px 0"><?php echo $this->lang->line('common_or'); ?></h3>
@@ -119,12 +135,15 @@
 					</div> <!-- ./col-md-12 -->
 					<div class="col-md-12">
 						<?php echo form_open("sales/add",array('id'=>'add_item_form', 'class'=>'form-horizontal')); ?>
+							<input type="hidden" name="item" id="selected_item_id">
 							<div class="row">
 								<div class="col-md-3">
 									<span style="float:right; margin-top:10px"><strong><?php echo $this->lang->line('sales_find_or_scan_item_or_receipt'); ?></strong></span>
 								</div>
 								<div class="col-md-4">
-									<?php echo form_input(array('class'=>'form-control','name'=>'item','id'=>'item','tabindex'=>'1')); ?>
+									<div id="search-item">
+									  <?php echo form_input(array('class'=>'form-control typeahead in-col-4','name'=>'item_name','id'=>'item_id','tabindex'=>'1','placeholder'=>$this->lang->line('sales_start_typing_item_name')));?>
+									</div>
 								</div>
 								<div class="col-md-2">
 									<h3 style="margin-top: 0px"><?php echo $this->lang->line('common_or'); ?></h3>
@@ -527,61 +546,40 @@
 				<script type="text/javascript" language="javascript">
 				$(document).ready(function()
 				{
-				    $("#item").autocomplete('<?php echo site_url("sales/item_search"); ?>',
-				    {
-				    	minChars:0,
-				    	max:100,
-				    	selectFirst: false,
-				       	delay:10,
-				    	formatItem: function(row) {
-							return (row.length > 1 && row[1]) || row[0];
-						}
-				    });
+				  //   $("#item").autocomplete('<?php echo site_url("sales/item_search"); ?>',
+				  //   {
+				  //   	minChars:0,
+				  //   	max:100,
+				  //   	selectFirst: false,
+				  //      	delay:10,
+				  //   	formatItem: function(row) {
+						// 	return (row.length > 1 && row[1]) || row[0];
+						// }
+				  //   });
 
-				    $("#item").result(function(event, data, formatted)
-				    {
-						$("#add_item_form").submit();
-				    });
+				  //   $("#item").result(function(event, data, formatted)
+				  //   {
+						// $("#add_item_form").submit();
+				  //   });
 
 					$('#item').focus();
 
-				    $('#item').blur(function()
-				    {
-				        $(this).val("<?php echo $this->lang->line('sales_start_typing_item_name'); ?>");
-				    });
+				  //   $("#customer").autocomplete('<?php echo site_url("sales/customer_search"); ?>',
+				  //   {
+				  //   	minChars:0,
+				  //   	delay:10,
+				  //   	max:100,
+				  //   	formatItem: function(row) {
+						// 	return row[1];
+						// }
+				  //   });
 
-				    var clear_fields = function()
-				    {
-				        if ($(this).val().match("<?php echo $this->lang->line('sales_start_typing_item_name') . '|' . 
-				        	$this->lang->line('sales_start_typing_customer_name'); ?>"))
-				        {
-				            $(this).val('');
-				        }
-				    };
+				  //   $("#customer").result(function(event, data, formatted)
+				  //   {
+						// $("#select_customer_form").submit();
+				  //   });
 
-				    $('#item, #customer').click(clear_fields);
-
-				    $("#customer").autocomplete('<?php echo site_url("sales/customer_search"); ?>',
-				    {
-				    	minChars:0,
-				    	delay:10,
-				    	max:100,
-				    	formatItem: function(row) {
-							return row[1];
-						}
-				    });
-
-				    $("#customer").result(function(event, data, formatted)
-				    {
-						$("#select_customer_form").submit();
-				    });
-
-				    $('#customer').blur(function()
-				    {
-				    	$(this).val("<?php echo $this->lang->line('sales_start_typing_customer_name'); ?>");
-				    });
-					
-					$('#comment').keyup(function() 
+				    $('#comment').keyup(function() 
 					{
 						$.post('<?php echo site_url("sales/set_comment");?>', {comment: $('#comment').val()});
 					});
@@ -703,6 +701,82 @@
 						$("#amount_tendered").val('<?php echo $amount_due; ?>');
 					}
 				}
+
+				var employee_data = new Bloodhound({
+				  datumTokenizer: Bloodhound.tokenizers.whitespace,
+				  queryTokenizer: Bloodhound.tokenizers.whitespace,
+				  remote: {
+				    url: '<?php echo site_url("employees/suggest"); ?>',
+				    prepare: function (query, settings) {
+                      settings.type = "POST";
+                      //settings.contentType = "application/json; charset=UTF-8";
+                      settings.data = {q: query, limit: 100};
+
+                      return settings;
+                   }
+				  }
+				});
+
+				$('#search-employee .typeahead').typeahead(null, {
+				  name: 'employee-data',
+				  display: 'name',
+				  source: employee_data
+				});
+				$('#search-employee').find('.typeahead').bind('typeahead:select', function(ev, suggestion) {
+				  $('#selected_person_id').val(suggestion.id);
+				  $("#select_employee_form").submit();
+				});
+
+				var customer_data = new Bloodhound({
+				  datumTokenizer: Bloodhound.tokenizers.whitespace,
+				  queryTokenizer: Bloodhound.tokenizers.whitespace,
+				  remote: {
+				    url: '<?php echo site_url("sales/customer_search"); ?>',
+				    prepare: function (query, settings) {
+                      settings.type = "POST";
+                      //settings.contentType = "application/json; charset=UTF-8";
+                      settings.data = {q: query, limit: 100};
+
+                      return settings;
+                   }
+				  }
+				});
+
+				$('#search-customer .typeahead').typeahead(null, {
+				  name: 'customer-data',
+				  display: 'name',
+				  source: customer_data
+				});
+				$('#search-customer').find('.typeahead').bind('typeahead:select', function(ev, suggestion) {
+				  $('#selected_customer_id').val(suggestion.id);
+				  $("#select_customer_form").submit();
+				});
+
+				// Autocomplete for searching item
+				var item_data = new Bloodhound({
+				  datumTokenizer: Bloodhound.tokenizers.whitespace,
+				  queryTokenizer: Bloodhound.tokenizers.whitespace,
+				  remote: {
+				    url: '<?php echo site_url("sales/item_search"); ?>',
+				    prepare: function (query, settings) {
+                      settings.type = "POST";
+                      //settings.contentType = "application/json; charset=UTF-8";
+                      settings.data = {q: query, limit: 100};
+
+                      return settings;
+                   }
+				  }
+				});
+
+				$('#search-item .typeahead').typeahead(null, {
+				  name: 'customer-data',
+				  display: 'name',
+				  source: item_data
+				});
+				$('#search-item').find('.typeahead').bind('typeahead:select', function(ev, suggestion) {
+				  $('#selected_item_id').val(suggestion.id);
+				  $("#add_item_form").submit();
+				});
 
 				</script>
             </div><!-- /.box-body -->

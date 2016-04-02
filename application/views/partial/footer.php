@@ -29,6 +29,7 @@
     <script src="<?php echo ADMIN_LTE_DIR;?>/plugins/colorpicker/bootstrap-colorpicker.min.js" type="text/javascript"></script>
     <!-- bootstrap time picker -->
     <script src="<?php echo ADMIN_LTE_DIR;?>/plugins/timepicker/bootstrap-timepicker.min.js" type="text/javascript"></script>
+    
     <!-- AdminLTE App -->
     <script src="<?php echo ADMIN_LTE_DIR;?>/dist/js/app.min.js" type="text/javascript"></script>
     

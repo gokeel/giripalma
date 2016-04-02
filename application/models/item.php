@@ -111,12 +111,16 @@ class Item extends CI_Model
 		// order by name of item
 		$this->db->order_by('items.name', 'asc');
 
-		if ($rows > 0) 
-		{	
-			$this->db->limit($rows, $limit_from);
-		}
+		// if ($rows > 0) 
+		// {	
+		// 	$this->db->limit($rows, $limit_from);
+		// }
 
-		return $this->db->get();
+		// return $this->db->get();
+		$query = $this->db->get();
+		// print_r($this->db->last_query());
+		
+		return $query;
 	}
 	
 	/*
@@ -371,51 +375,13 @@ class Item extends CI_Model
 	{
 		$suggestions = array();
 
-		$this->db->select('item_id, name');
+		$this->db->select('*');
 		$this->db->from('items');
 		$this->db->where('deleted', $is_deleted);
 		$this->db->like('name', $search);
-		$this->db->order_by('name', 'asc');
-		$by_name = $this->db->get();
-		foreach($by_name->result() as $row)
-		{
-			$suggestions[] = $row->item_id.'|'.$row->name;
-		}
-
-
-		$this->db->select('item_id, item_number');
-		$this->db->from('items');
-		$this->db->where('deleted', $is_deleted);
-		$this->db->like('item_number', $search);
-		$this->db->order_by('item_number', 'asc');
-		$by_item_number = $this->db->get();
-		foreach($by_item_number->result() as $row)
-		{
-			$suggestions[] = $row->item_id.'|'.$row->item_number;
-		}
-
-		//Search by description
-		$this->db->select('item_id, name, description');
-		$this->db->from('items');
-		$this->db->where('deleted', $is_deleted);
-		$this->db->like('description', $search);
-		$this->db->order_by('description', 'asc');
-		$by_description = $this->db->get();
-		foreach($by_description->result() as $row)
-		{
-			$entry = $row->item_id.'|'.$row->name;
-			if (!in_array($entry, $suggestions))
-			{
-				$suggestions[] = $entry;
-			}
-		}
-
-		//Search by custom fields
-		if ($search_custom != 0)
-		{
-			$this->db->from('items');
-			$this->db->where('deleted', $is_deleted);
-			$this->db->like('custom1', $search);
+		$this->db->or_like('item_number', $search);
+		if ($search_custom != 0){
+			$this->db->or_like('custom1', $search);
 			$this->db->or_like('custom2', $search);
 			$this->db->or_like('custom3', $search);
 			$this->db->or_like('custom4', $search);
@@ -425,12 +391,47 @@ class Item extends CI_Model
 			$this->db->or_like('custom8', $search);
 			$this->db->or_like('custom9', $search);
 			$this->db->or_like('custom10', $search);
-			$by_description = $this->db->get();
-			foreach($by_description->result() as $row)
-			{
-				$suggestions[] = $row->item_id.'|'.$row->name;
-			}
 		}
+		$this->db->order_by('name', 'asc');
+		$query = $this->db->get();
+		
+		//Search by description
+		// $this->db->select('item_id, name, description');
+		// $this->db->from('items');
+		// $this->db->where('deleted', $is_deleted);
+		// $this->db->like('description', $search);
+		// $this->db->order_by('description', 'asc');
+		// $by_description = $this->db->get();
+		// foreach($by_description->result() as $row)
+		// {
+		// 	$entry = $row->item_id.'|'.$row->name;
+		// 	if (!in_array($entry, $suggestions))
+		// 	{
+		// 		$suggestions[] = $entry;
+		// 	}
+		// }
+
+		//Search by custom fields
+		// if ($search_custom != 0)
+		// {
+		// 	$this->db->from('items');
+		// 	$this->db->where('deleted', $is_deleted);
+		// 	$this->db->like('custom1', $search);
+		// 	$this->db->or_like('custom2', $search);
+		// 	$this->db->or_like('custom3', $search);
+		// 	$this->db->or_like('custom4', $search);
+		// 	$this->db->or_like('custom5', $search);
+		// 	$this->db->or_like('custom6', $search);
+		// 	$this->db->or_like('custom7', $search);
+		// 	$this->db->or_like('custom8', $search);
+		// 	$this->db->or_like('custom9', $search);
+		// 	$this->db->or_like('custom10', $search);
+		// 	$by_description = $this->db->get();
+		// 	foreach($by_description->result() as $row)
+		// 	{
+		// 		$suggestions[] = $row->item_id.'|'.$row->name;
+		// 	}
+		// }
 
 		//only return $limit suggestions
 		if(count($suggestions > $limit))
@@ -438,25 +439,20 @@ class Item extends CI_Model
 			$suggestions = array_slice($suggestions, 0,$limit);
 		}
 
-		return $suggestions;
+		return $query;
 	}
 
 	public function get_category_suggestions($search)
 	{
-		$suggestions = array();
 		$this->db->distinct();
 		$this->db->select('category');
 		$this->db->from('items');
 		$this->db->like('category', $search);
 		$this->db->where('deleted', 0);
 		$this->db->order_by('category', 'asc');
-		$by_category = $this->db->get();
-		foreach($by_category->result() as $row)
-		{
-			$suggestions[] = $row->category;
-		}
+		$query = $this->db->get();
 
-		return $suggestions;
+		return $query;
 	}
 	
 	public function get_location_suggestions($search)

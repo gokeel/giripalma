@@ -209,32 +209,11 @@ class Customer extends Person
 		$this->db->join('people','customers.person_id=people.person_id');	
 		$this->db->where("(first_name LIKE '%".$this->db->escape_like_str($search)."%' or 
 		last_name LIKE '%".$this->db->escape_like_str($search)."%' or 
-		CONCAT(`first_name`,' ',`last_name`) LIKE '%".$this->db->escape_like_str($search)."%') and deleted=0");
+		CONCAT(`first_name`,' ',`last_name`) LIKE '%".$this->db->escape_like_str($search)."%' or account_number LIKE '%".$this->db->escape_like_str($search)."%') and deleted=0");
 		$this->db->order_by("last_name", "asc");		
-		$by_name = $this->db->get();
-		foreach($by_name->result() as $row)
-		{
-			$suggestions[]=$row->person_id.'|'.$row->first_name.' '.$row->last_name;		
-		}
+		$query = $this->db->get();
 		
-		$this->db->from('customers');
-		$this->db->join('people','customers.person_id=people.person_id');	
-		$this->db->where('deleted',0);		
-		$this->db->like("account_number",$search);
-		$this->db->order_by("account_number", "asc");		
-		$by_account_number = $this->db->get();
-		foreach($by_account_number->result() as $row)
-		{
-			$suggestions[]=$row->person_id.'|'.$row->account_number;
-		}
-
-		//only return $limit suggestions
-		if(count($suggestions > $limit))
-		{
-			$suggestions = array_slice($suggestions, 0,$limit);
-		}
-		return $suggestions;
-
+		return $query;
 	}
 	
 	function get_found_rows($search)
