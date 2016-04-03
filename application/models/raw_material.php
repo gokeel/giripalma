@@ -45,45 +45,15 @@ class Raw_material extends CI_Model
 	/*
 	 Perform a search on raw_materials
 	*/
-	public function search($search, $filters, $rows=0, $limit_from=0)
+	public function search($filters, $rows=0, $limit_from=0)
 	{
 		$this->db->from('raw_materials');
 		$this->db->join('suppliers', 'suppliers.person_id = raw_materials.supplier_id', 'left');
-		$this->db->join('inventory', 'inventory.trans_items = raw_materials.item_id');
-
+		
 		if ($filters['stock_location_id'] > -1)
 		{
 			$this->db->join('ospos_raw_material_quantities', 'ospos_raw_material_quantities.item_id = raw_materials.item_id');
 			$this->db->where('location_id', $filters['stock_location_id']);
-		}
-
-		if (empty($search))
-		{
-			$this->db->where('DATE_FORMAT(trans_date, "%Y-%m-%d") BETWEEN ' . $this->db->escape($filters['start_date']) . ' AND ' . $this->db->escape($filters['end_date']));
-		}
-		else
-		{
-			if ($filters['search_custom'] == FALSE)
-			{
-				$this->db->where("(name LIKE '%" . $this->db->escape_like_str($search) . "%' OR " .
-								"item_number LIKE '" . $this->db->escape_like_str($search) . "%' OR " .
-								$this->db->dbprefix('raw_materials').".item_id LIKE '" . $this->db->escape_like_str($search) . "%' OR " .
-								"company_name LIKE '%" . $this->db->escape_like_str($search) . "%' OR " .
-								"category LIKE '%" . $this->db->escape_like_str($search) . "%')");
-			}
-			else
-			{
-				$this->db->where("(custom1 LIKE '%" . $this->db->escape_like_str($search) . "%' OR " .
-								"custom2 LIKE '%" . $this->db->escape_like_str($search) . "%' OR " .
-								"custom3 LIKE '%" . $this->db->escape_like_str($search) . "%' OR " .
-								"custom4 LIKE '%" . $this->db->escape_like_str($search) . "%' OR " .
-								"custom5 LIKE '%" . $this->db->escape_like_str($search) . "%' OR " .
-								"custom6 LIKE '%" . $this->db->escape_like_str($search) . "%' OR " .
-								"custom7 LIKE '%" . $this->db->escape_like_str($search) . "%' OR " .
-								"custom8 LIKE '%" . $this->db->escape_like_str($search) . "%' OR " .
-								"custom9 LIKE '%" . $this->db->escape_like_str($search) . "%' OR " .
-								"custom10 LIKE '%" . $this->db->escape_like_str($search) . "%')");
-			}
 		}
 
 		$this->db->where('raw_materials.deleted', $filters['is_deleted']);
@@ -111,10 +81,10 @@ class Raw_material extends CI_Model
 		// order by name of item
 		$this->db->order_by('raw_materials.name', 'asc');
 
-		if ($rows > 0) 
-		{	
-			$this->db->limit($rows, $limit_from);
-		}
+		// if ($rows > 0) 
+		// {	
+		// 	$this->db->limit($rows, $limit_from);
+		// }
 
 		return $this->db->get();
 	}
@@ -370,50 +340,13 @@ class Raw_material extends CI_Model
 	{
 		$suggestions = array();
 
-		$this->db->select('item_id, name');
+		$this->db->select('*');
 		$this->db->from('raw_materials');
 		$this->db->where('deleted', $is_deleted);
 		$this->db->like('name', $search);
-		$this->db->order_by('name', 'asc');
-		$by_name = $this->db->get();
-		foreach($by_name->result() as $row)
-		{
-			$suggestions[] = $row->item_id.'|'.$row->name;
-		}
-
-		$this->db->select('item_id, item_number');
-		$this->db->from('raw_materials');
-		$this->db->where('deleted', $is_deleted);
-		$this->db->like('item_number', $search);
-		$this->db->order_by('item_number', 'asc');
-		$by_item_number = $this->db->get();
-		foreach($by_item_number->result() as $row)
-		{
-			$suggestions[] = $row->item_id.'|'.$row->item_number;
-		}
-
-		//Search by description
-		$this->db->select('item_id, name, description');
-		$this->db->from('raw_materials');
-		$this->db->where('deleted', $is_deleted);
-		$this->db->like('description', $search);
-		$this->db->order_by('description', 'asc');
-		$by_description = $this->db->get();
-		foreach($by_description->result() as $row)
-		{
-			$entry = $row->item_id.'|'.$row->name;
-			if (!in_array($entry, $suggestions))
-			{
-				$suggestions[] = $entry;
-			}
-		}
-
-		//Search by custom fields
-		if ($search_custom != 0)
-		{
-			$this->db->from('raw_materials');
-			$this->db->where('deleted', $is_deleted);
-			$this->db->like('custom1', $search);
+		$this->db->or_like('item_number', $search);
+		if ($search_custom != 0){
+			$this->db->or_like('custom1', $search);
 			$this->db->or_like('custom2', $search);
 			$this->db->or_like('custom3', $search);
 			$this->db->or_like('custom4', $search);
@@ -423,20 +356,11 @@ class Raw_material extends CI_Model
 			$this->db->or_like('custom8', $search);
 			$this->db->or_like('custom9', $search);
 			$this->db->or_like('custom10', $search);
-			$by_description = $this->db->get();
-			foreach($by_description->result() as $row)
-			{
-				$suggestions[] = $row->item_id.'|'.$row->name;
-			}
 		}
+		$this->db->order_by('name', 'asc');
+		$query = $this->db->get();
 
-		//only return $limit suggestions
-		if(count($suggestions > $limit))
-		{
-			$suggestions = array_slice($suggestions, 0,$limit);
-		}
-
-		return $suggestions;
+		return $query;
 	}
 
 	public function get_category_suggestions($search)
@@ -448,13 +372,9 @@ class Raw_material extends CI_Model
 		$this->db->like('category', $search);
 		$this->db->where('deleted', 0);
 		$this->db->order_by('category', 'asc');
-		$by_category = $this->db->get();
-		foreach($by_category->result() as $row)
-		{
-			$suggestions[] = $row->category;
-		}
+		$query = $this->db->get();
 
-		return $suggestions;
+		return $query;
 	}
 	
 	public function get_location_suggestions($search)

@@ -1,3 +1,13 @@
+<style>
+	.ui-autocomplete {
+    z-index: 5000;
+	}
+	.ui-widget-content .ui-state-focus{
+		color:#000;
+		font-weight: bold;
+		background-color: #ffffff;
+	}
+</style>
 			<div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title"><?php echo $this->lang->line('items_new'); ?></h4>
@@ -34,9 +44,9 @@
 							<div class="form-group">
 								<?php echo form_label($this->lang->line('items_category').':', 'category',array('class'=>'col-sm-4 required')); ?>
 								<div class='col-sm-8'>
-									<div id="search-category">
-									  <?php echo form_input(array('class'=>'form-control typeahead','name'=>'category','id'=>'category','value'=>$item_info->category));?>
-									</div>
+									<!-- <div id="search-category"> -->
+									  <?php echo form_input(array('class'=>'form-control','name'=>'category','id'=>'category','value'=>$item_info->category));?>
+									<!-- </div> -->
 								</div>
 							</div>
 							<div class="form-group">
@@ -435,25 +445,9 @@ $(document).ready(function()
 	});
 });
 
-	// Autocomplete for searching category
-	var category_data = new Bloodhound({
-	  datumTokenizer: Bloodhound.tokenizers.whitespace,
-	  queryTokenizer: Bloodhound.tokenizers.whitespace,
-	  remote: {
-	    url: '<?php echo site_url("items/suggest_category"); ?>',
-	    prepare: function (query, settings) {
-                settings.type = "POST";
-                //settings.contentType = "application/json; charset=UTF-8";
-                settings.data = {q: query, limit: 100};
-
-                return settings;
-             }
-	  }
-	});
-
-	$('#search-category .typeahead').typeahead(null, {
-	  name: 'customer-data',
-	  display: 'category',
-	  source: category_data
-	});
+	//auto complete on field item
+	$('#category').autocomplete({
+		source: "<?php echo site_url('items/suggest_category');?>", // path to the lookup method
+		focus : function(){ return false; }
+	}); 
 </script>

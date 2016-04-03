@@ -77,15 +77,43 @@ class Raw_materials extends Secure_area implements iData_controller
 						'search_custom' => $this->input->post('search_custom'),
 						'is_deleted' => $this->input->post('is_deleted'));
 		
-		$raw_materials = $this->Raw_material->search($search, $filters, $lines_per_page, $limit_from);
-		$data_rows = get_items_manage_table_data_rows($raw_materials, $this);
-		$total_rows = $this->Raw_material->get_found_rows($search, $filters);
-		$links = $this->_initialize_pagination($this->Item, $lines_per_page, $limit_from, $total_rows, 'search');
-		$data_rows = get_items_manage_table_data_rows($raw_materials, $this);
+		$raw_materials = $this->Raw_material->search($filters, $lines_per_page, $limit_from);
+		// print_r($this->db->last_query());
+		// $data_rows = get_items_manage_table_data_rows($raw_materials, $this);
+		// $total_rows = $this->Raw_material->get_found_rows($search, $filters);
+		// $links = $this->_initialize_pagination($this->Item, $lines_per_page, $limit_from, $total_rows, 'search');
+		// $data_rows = get_items_manage_table_data_rows($raw_materials, $this);
 		// do not move this line to be after the json_encode otherwise the searhc function won't work!!
 		$this->_remove_duplicate_cookies();
 		
-		echo json_encode(array('total_rows' => $total_rows, 'rows' => $data_rows, 'pagination' => $links));
+		// echo json_encode(array('total_rows' => $total_rows, 'rows' => $data_rows, 'pagination' => $links));
+
+		$response = array();
+		foreach($raw_materials->result() as $item){
+			$item_tax_info=$this->Item_taxes->get_info($item->item_id);
+			$tax_percents = '';
+			if(!empty($item_tax_info)){
+				foreach($item_tax_info as $tax_info)
+				{
+					$tax_percents.=$tax_info['percent']. '%, ';
+				}
+				$tax_percents=substr($tax_percents, 0, -2);
+			}
+
+			$response[] = array(
+				'id' => $item->item_id,
+				'number' => $item->item_number,
+				'name' => $item->name,
+				'category' => $item->category,
+				'supplier' => $item->company_name,
+				'cost_price' => to_currency($item->cost_price),
+				'unit_price' => to_currency($item->unit_price),
+				'quantity' => $item->quantity,
+				'tax' => $tax_percents,
+				);
+		}
+
+		echo json_encode($response);
 	}
 	
 	function pic_thumb($pic_id)
@@ -139,9 +167,16 @@ class Raw_materials extends Secure_area implements iData_controller
 	*/
 	function suggest_category()
 	{
-		$suggestions = $this->Raw_material->get_category_suggestions($this->input->post('q'));
+		$suggestions = $this->Raw_material->get_category_suggestions($this->input->get('term'));
 
-		echo implode("\n",$suggestions);
+		$response = array();
+		if($suggestions->num_rows() > 0)
+			foreach($suggestions->result() as $suggest){
+				$response[] = array(
+					'value' => $suggest->category
+					);
+			}
+		echo json_encode($response);
 	}
 
 	/*
@@ -259,7 +294,7 @@ class Raw_materials extends Secure_area implements iData_controller
 		$item_id = $this->input->post('row_id');
 		$item_info = $this->Raw_material->get_info($item_id);
 		$stock_location = $this->item_lib->get_item_location();
-		$item_quantity = $this->Item_quantity->get_item_quantity($item_id,$stock_location);
+		$item_quantity = $this->Raw_material_quantities->get_item_quantity($item_id,$stock_location);
 		$item_info->quantity = $item_quantity->quantity; 
 		$data_row = get_item_data_row($item_info,$this);
 		
@@ -289,7 +324,7 @@ class Raw_materials extends Secure_area implements iData_controller
         $locations_data = $this->Stock_location->get_undeleted_all()->result_array();
         foreach($locations_data as $location)
         {
-           $quantity = $this->Item_quantity->get_item_quantity($item_id,$location['location_id'])->quantity;
+           $quantity = $this->Raw_material_quantities->get_item_quantity($item_id,$location['location_id'])->quantity;
            $quantity = ($item_id == -1) ? null: $quantity;
            $location_array[$location['location_id']] =  array('location_name'=>$location['location_name'], 'quantity'=>$quantity);
            $data['stock_locations'] = $location_array;
@@ -308,7 +343,7 @@ class Raw_materials extends Secure_area implements iData_controller
         foreach($stock_locations as $location_data)
         {            
             $data['stock_locations'][$location_data['location_id']] = $location_data['location_name'];
-            $data['item_quantities'][$location_data['location_id']] = $this->Item_quantity->get_item_quantity($item_id,$location_data['location_id'])->quantity;
+            $data['item_quantities'][$location_data['location_id']] = $this->Raw_material_quantities->get_item_quantity($item_id,$location_data['location_id'])->quantity;
         }     
         
 		$this->load->view("raw_materials/inventory", $data);
@@ -399,6 +434,7 @@ class Raw_materials extends Secure_area implements iData_controller
 			'category'=>$this->input->post('category'),
 			'color'=>$this->input->post('color'),
 			'dimension'=>$this->input->post('dimension'),
+			'unit_metric'=>$this->input->post('unit_metric'),
 			'supplier_id'=>$this->input->post('supplier_id')=='' ? null:$this->input->post('supplier_id'),
 			'type_item'=>$this->input->post('type_item'),
 			'item_number'=>$this->input->post('item_number')=='' ? null:$this->input->post('item_number'),
@@ -533,16 +569,16 @@ class Raw_materials extends Secure_area implements iData_controller
 		$employee_id=$this->Employee->get_logged_in_employee_info()->person_id;
 		$cur_item_info = $this->Raw_material->get_info($item_id);
         $location_id = $this->input->post('stock_location');
-		$inv_data = array(
-			'trans_date'=>date('Y-m-d H:i:s'),
-			'trans_items'=>$item_id,
-			'trans_user'=>$employee_id,
-			'trans_location'=>$location_id,
-			'trans_comment'=>$this->input->post('trans_comment'),
-			'trans_inventory'=>$this->input->post('newquantity')
-		);
+		// $inv_data = array(
+		// 	'trans_date'=>date('Y-m-d H:i:s'),
+		// 	'trans_items'=>$item_id,
+		// 	'trans_user'=>$employee_id,
+		// 	'trans_location'=>$location_id,
+		// 	'trans_comment'=>$this->input->post('trans_comment'),
+		// 	'trans_inventory'=>$this->input->post('newquantity')
+		// );
 		
-		$this->Inventory->insert($inv_data);
+		// $this->Inventory->insert($inv_data);
 		
 		//Update stock quantity
 		$raw_material_quantities= $this->Raw_material_quantities->get_item_quantity($item_id,$location_id);
@@ -552,7 +588,7 @@ class Raw_materials extends Secure_area implements iData_controller
 			'quantity'=>$raw_material_quantities->quantity + $this->input->post('newquantity')
 		);
 
-		if($this->Raw_material_quantities->save($item_quantity_data,$item_id,$location_id))
+		if($this->Raw_material_quantities->save($raw_material_quantities,$item_id,$location_id))
 		{			
 			echo json_encode(array('success'=>true,'message'=>$this->lang->line('items_successful_updating').' '.
 			$cur_item_info->name,'item_id'=>$item_id));
@@ -727,7 +763,7 @@ class Raw_materials extends Secure_area implements iData_controller
                                     'location_id' => $location_id,
                                     'quantity' => $data[$col + 1],
                                 );
-                                $this->Item_quantity->save($item_quantity_data, $item_data['item_id'], $location_id);
+                                $this->Raw_material_quantities->save($item_quantity_data, $item_data['item_id'], $location_id);
 
                                 $excel_data = array(
                                     'trans_items'=>$item_data['item_id'],
@@ -754,7 +790,7 @@ class Raw_materials extends Secure_area implements iData_controller
                                 'location_id' => $location_id,
                                 'quantity' => 0,
                             );
-                            $this->Item_quantity->save($item_quantity_data, $item_data['item_id'], $data[$col]);
+                            $this->Raw_material_quantities->save($item_quantity_data, $item_data['item_id'], $data[$col]);
 
                             $excel_data = array
                                 (

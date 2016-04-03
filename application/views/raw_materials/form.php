@@ -1,308 +1,330 @@
-<div id="required_fields_message"><?php echo $this->lang->line('common_fields_required_message'); ?></div>
-<ul id="error_message_box" class="error_message_box"></ul>
-<?php
-echo form_open('Raw_materials/save/'.$item_info->item_id,array('id'=>'item_form', 'enctype'=>'multipart/form-data'));
-?>
-<fieldset id="item_basic_info">
-	<legend><?php echo $this->lang->line("items_basic_information"); ?></legend>
-
-	<div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_item_number').':', 'item_number',array('class'=>'wide')); ?>
-	<div class='form_field'>
-	<?php echo form_input(array(
-		'name'=>'item_number',
-		'class'=>'item_number',
-		'id'=>'item_number',
-		'value'=>$item_info->item_number)
-	);?>
-	</div>
-	</div>
-
-	<div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_name').':', 'name',array('class'=>'required wide')); ?>
-	<div class='form_field'>
-	<?php echo form_input(array(
-		'name'=>'name',
-		'id'=>'name',
-		'value'=>$item_info->name)
-	);?>
-	</div>
-</div>
-
-<div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_category').':', 'category',array('class'=>'required wide')); ?>
-	<div class='form_field'>
-	<?php 
-	echo form_input(array(
-		'name'=>'category',
-		'id'=>'category',
-		'value'=>$item_info->category)
-	);?>
-	</div>
-</div>
-
-<div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_color').':', 'color',array('class'=>'wide')); ?>
-	<div class='form_field'>
-	<?php 
-	echo form_input(array(
-		'name'=>'color',
-		'id'=>'color',
-		'value'=>$item_info->color)
-	);?>
-	</div>
-</div>
-
-<div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_dimension').':', 'dimension',array('class'=>'wide')); ?>
-	<div class='form_field'>
-	<?php 
-	echo form_input(array(
-		'name'=>'dimension',
-		'id'=>'dimension',
-		'value'=>$item_info->dimension)
-	);?>
-	</div>
-</div>
-
-<div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_satuan').':', 'satuan',array('class'=>'wide')); ?>
-	<div class='form_field'>
-	<?php 
-	echo form_input(array(
-		'name'=>'satuan',
-		'id'=>'satuan',
-		'value'=>$item_info->satuan)
-	);?>
-	</div>
-</div>
-
-<div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_supplier').':', 'supplier',array('class'=>'required wide')); ?>
-	<div class='form_field'>
-	<?php echo form_dropdown('supplier_id', $suppliers, $selected_supplier);?>
-	</div>
-</div>
-
-<!--<div class="field_row clearfix">
-<?php echo form_label($this->lang->line('type_item').':', 'type_item',array('class'=>'required wide')); ?>
-	<div class='form_field'>
-	<?php echo form_dropdown('type_item', $type_item);?>
-	</div>
-</div>-->
-
-
-
-<div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_cost_price').':', 'cost_price',array('class'=>'required wide')); ?>
-	<div class='form_field'>
-	<?php echo form_input(array(
-		'name'=>'cost_price',
-		'size'=>'8',
-		'id'=>'cost_price',
-		'value'=>$item_info->cost_price)
-	);?>
-	</div>
-</div>
-
-<div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_unit_price').':', 'unit_price',array('class'=>'required wide')); ?>
-	<div class='form_field'>
-	<?php echo form_input(array(
-		'name'=>'unit_price',
-		'size'=>'8',
-		'id'=>'unit_price',
-		'value'=>$item_info->unit_price)
-	);?>
-	</div>
-</div>
-
-<div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_tax_1').':', 'tax_percent_1',array('class'=>'wide')); ?>
-	<div class='form_field'>
-	<?php echo form_input(array(
-		'name'=>'tax_names[]',
-		'id'=>'tax_name_1',
-		'size'=>'8',
-		'value'=> isset($item_tax_info[0]['name']) ? $item_tax_info[0]['name'] : $this->config->item('default_tax_1_name'))
-	);?>
-	</div>
-	<div class='form_field'>
-	<?php echo form_input(array(
-		'name'=>'tax_percents[]',
-		'id'=>'tax_percent_name_1',
-		'size'=>'3',
-		'value'=> isset($item_tax_info[0]['percent']) ? $item_tax_info[0]['percent'] : $default_tax_1_rate)
-	);?>
-	%
-	</div>
-</div>
-
-<div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_tax_2').':', 'tax_percent_2',array('class'=>'wide')); ?>
-	<div class='form_field'>
-	<?php echo form_input(array(
-		'name'=>'tax_names[]',
-		'id'=>'tax_name_2',
-		'size'=>'8',
-		'value'=> isset($item_tax_info[1]['name']) ? $item_tax_info[1]['name'] : $this->config->item('default_tax_2_name'))
-	);?>
-	</div>
-	<div class='form_field'>
-	<?php echo form_input(array(
-		'name'=>'tax_percents[]',
-		'id'=>'tax_percent_name_2',
-		'size'=>'3',
-		'value'=> isset($item_tax_info[1]['percent']) ? $item_tax_info[1]['percent'] : $default_tax_2_rate)
-	);?>
-	%
-	</div>
-</div>
-
-<?php
-foreach($stock_locations as $key=>$location_detail)
-{
-?>
-    <div class="field_row clearfix">
-    <?php echo form_label($this->lang->line('items_quantity').' '.$location_detail['location_name'] .':', 
-                            $key.'_quantity',
-                            array('class'=>'required wide')); ?>
-    	<div class='form_field'>
-    	<?php echo form_input(array(
-    		'name'=>$key.'_quantity',
-    		'id'=>$key.'_quantity',
-    		'class'=>'quantity',
-    		'size'=>'8',
-    		'value'=>isset($item_info->item_id)?$location_detail['quantity']:0)
-    	);?>
-    	</div>
-	</div>
-<?php
-}
-?>
-
-<div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_receiving_quantity').':', 'receiving_quantity',array('class'=>'wide')); ?>
-	<div class='form_field'>
-	<?php echo form_input(array(
-		'name'=>'receiving_quantity',
-		'id'=>'receiving_quantity',
-		'size'=>'8',
-		'value'=>$item_info->receiving_quantity)
-	);?>
-	</div>
-	</div>
-
-	<div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_reorder_level').':', 'reorder_level',array('class'=>'required wide')); ?>
-	<div class='form_field'>
-	<?php echo form_input(array(
-		'name'=>'reorder_level',
-		'id'=>'reorder_level',
-		'size'=>'8',
-		'value'=>!isset($item_info->item_id)?0:$item_info->reorder_level)
-	);?>
-	</div>
-	</div>
-
-	<div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_description').':', 'description',array('class'=>'wide')); ?>
-	<div class='form_field'>
-	<?php echo form_textarea(array(
-		'name'=>'description',
-		'id'=>'description',
-		'value'=>$item_info->description,
-		'rows'=>'5',
-		'cols'=>'17')
-	);?>
-	</div>
-</div>
-
-<div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_image').':', 'item_image',array('class'=>'wide')); ?>
-    <div class='form_field'>
-        <?php echo form_upload('item_image');?>
-    </div>
-</div>
-
-<div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_allow_alt_description').':', 'allow_alt_description',array('class'=>'wide')); ?>
-	<div class='form_field'>
-	<?php echo form_checkbox(array(
-		'name'=>'allow_alt_description',
-		'id'=>'allow_alt_description',
-		'value'=>1,
-		'checked'=>($item_info->allow_alt_description)? 1  :0)
-	);?>
-	</div>
-</div>
-
-<div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_is_serialized').':', 'is_serialized',array('class'=>'wide')); ?>
-	<div class='form_field'>
-	<?php echo form_checkbox(array(
-		'name'=>'is_serialized',
-		'id'=>'is_serialized',
-		'value'=>1,
-		'checked'=>($item_info->is_serialized)? 1 : 0)
-	);?>
-	</div>
-</div>
-
-<div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_is_deleted').':', 'is_deleted',array('class'=>'wide')); ?>
-	<div class='form_field'>
-	<?php echo form_checkbox(array(
-		'name'=>'is_deleted',
-		'id'=>'is_deleted',
-		'value'=>1,
-		'checked'=>($item_info->deleted)? 1 : 0)
-	);?>
-	</div>
-</div>
-
-<?php for ($i = 0; $i < 11; $i++) 
-{ 
-?>
-	<?php
-	if($this->config->item('custom'.$i.'_name') != NULL)
-	{
-		$item_arr = (array)$item_info;
-		?>
-		<div class="field_row clearfix">
-			<?php 	
-			echo form_label($this->config->item('custom'.$i.'_name').':', 'custom'.$i,array('class'=>'wide')); ?>
-			<div class='form_field'>
-				<?php echo form_input(array(
-					'name'=>'custom'.$i,
-					'id'=>'custom'.$i,
-					'value'=>$item_arr['custom'.$i])
-				);?>
-			</div>
-		</div>
-		<?php 
+<style>
+	.ui-autocomplete {
+    z-index: 5000;
 	}
-}
-?>
-
-<?php
-echo form_submit(array(
-	'name'=>'submit',
-	'id'=>'submit',
-	'value'=>$this->lang->line('raw_submit'),
-	'class'=>'submit_button float_right')
-);
-echo form_submit(array(
-		'name'=>'continue',
-		'id'=>'continue',
-		'value'=>$this->lang->line('common_new'),
-		'class'=>'submit_button float_right')
-);
-?>
-</fieldset>
-<?php
-echo form_close();
-?>
+	.ui-widget-content .ui-state-focus{
+		color:#000;
+		font-weight: bold;
+		background-color: #ffffff;
+	}
+</style>
+			<div class="modal-header">
+      	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"><?php echo $this->lang->line('items_new'); ?></h4>
+      </div>
+      <?php echo form_open('Raw_materials/save/'.$item_info->item_id,array('id'=>'item_form', 'enctype'=>'multipart/form-data', 'class'=>'form-horizontal')); ?>
+      <div class="modal-body">
+		<!-- <div id="required_fields_message"><?php echo $this->lang->line('common_fields_required_message'); ?></div>
+		<ul id="error_message_box" class="error_message_box"></ul> -->
+				<fieldset id="item_basic_info">
+					<legend><?php echo $this->lang->line("items_basic_information"); ?></legend>
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_item_number').':', 'item_number',array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-8'>
+									<?php echo form_input(array(
+										'name'=>'item_number',
+										'class'=>'form-control',
+										'id'=>'item_number',
+										'value'=>$item_info->item_number)
+									);?>
+								</div>
+							</div>
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_name').':', 'name',array('class'=>'col-sm-4 required')); ?>
+								<div class='col-sm-8'>
+									<?php echo form_input(array(
+										'name'=>'name',
+										'id'=>'name',
+										'value'=>$item_info->name,
+										'class' => 'form-control'
+										)
+									);?>
+								</div>
+							</div>
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_category').':', 'category',array('class'=>'col-sm-4 required')); ?>
+								<div class='col-sm-8'>
+									<!-- <div id="search-category"> -->
+									  <?php echo form_input(array('class'=>'form-control','name'=>'category','id'=>'category','value'=>$item_info->category));?>
+									<!-- </div> -->
+								</div>
+							</div>
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_color').':', 'color',array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-8'>
+									<?php echo form_input(array(
+										'name'=>'color',
+										'id'=>'color',
+										'value'=>$item_info->color,
+										'class' => 'form-control'
+										)
+									);?>
+								</div>
+							</div>
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_dimension').':', 'color',array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-8'>
+									<?php echo form_input(array(
+										'name'=>'dimension',
+										'id'=>'dimension',
+										'value'=>$item_info->dimension,
+										'class' => 'form-control'
+										)
+									);?>
+								</div>
+							</div>
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('raw_materials_unit_metric').':', 'unit_metric',array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-8'>
+									<?php echo form_input(array(
+										'name'=>'unit_metric',
+										'id'=>'unit_metric',
+										'value'=>$item_info->unit_metric,
+										'class' => 'form-control'
+										)
+									);?>
+								</div>
+							</div>
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_supplier').':', 'supplier',array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-8'>
+									<?php echo form_dropdown('supplier_id', $suppliers, $selected_supplier, 'class="form-control"');?>
+								</div>
+							</div>
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('type_item').':', 'type_item',array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-8'>
+									<?php echo form_dropdown('type_item', $type_item, '', 'class="form-control"');?>
+								</div>
+							</div>
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_cost_price').':', 'cost_price',array('class'=>'col-sm-4 required')); ?>
+								<div class='col-sm-8'>
+									<?php echo form_input(array(
+										'name'=>'cost_price',
+										'size'=>'8',
+										'id'=>'cost_price',
+										'value'=>$item_info->cost_price,
+										'class' => 'form-control'
+										)
+									);?>
+								</div>
+							</div>
+							<!-- <div class="form-group">
+								<?php // echo form_label($this->lang->line('items_unit_price').':', 'unit_price',array('class'=>'col-sm-4 required')); ?>
+								<div class='col-sm-8'>
+									<?php // echo form_input(array(
+										// 'name'=>'unit_price',
+										// 'size'=>'8',
+										// 'id'=>'unit_price',
+										// 'value'=>$item_info->unit_price,
+										// 'class' => 'form-control'
+										// )
+									//);?>
+								</div>
+							</div> -->
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_tax_1').':', 'tax_percent_1',array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-4'>
+									<?php echo form_input(array(
+										'name'=>'tax_names[]',
+										'id'=>'tax_name_1',
+										'size'=>'8',
+										'value'=> isset($item_tax_info[0]['name']) ? $item_tax_info[0]['name'] : $this->config->item('default_tax_1_name'),
+										'class' => 'form-control'
+										)
+									);?>
+								</div>
+								<div class='col-sm-4'>
+									<?php echo form_input(array(
+										'name'=>'tax_percents[]',
+										'id'=>'tax_percent_name_1',
+										'size'=>'3',
+										'value'=> isset($item_tax_info[0]['percent']) ? $item_tax_info[0]['percent'] : $default_tax_1_rate,
+										'class' => 'form-control'
+										)
+									);?>
+								</div>
+							</div>
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_tax_2').':', 'tax_percent_2',array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-4'>
+									<?php echo form_input(array(
+										'name'=>'tax_names[]',
+										'id'=>'tax_name_2',
+										'size'=>'8',
+										'value'=> isset($item_tax_info[1]['name']) ? $item_tax_info[1]['name'] : $this->config->item('default_tax_2_name'),
+										'class' => 'form-control'
+										)
+									);?>
+								</div>
+								<div class='col-sm-4'>
+									<?php echo form_input(array(
+										'name'=>'tax_percents[]',
+							'id'=>'tax_percent_name_2',
+							'size'=>'3',
+							'value'=> isset($item_tax_info[1]['percent']) ? $item_tax_info[1]['percent'] : $default_tax_2_rate,
+										'class' => 'form-control'
+										)
+									);?>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<?php foreach($stock_locations as $key=>$location_detail) { ?>
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_quantity').' '.$location_detail['location_name'] .':', 
+					                            $key.'_quantity',array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-8'>
+									<?php echo form_input(array(
+										'name'=>$key.'_quantity',
+						    		'id'=>$key.'_quantity',
+						    		'class'=>'quantity',
+						    		'size'=>'8',
+						    		'value'=>isset($item_info->item_id)?$location_detail['quantity']:0,
+										'class' => 'form-control'
+										)
+									);?>
+								</div>
+							</div>
+							<?php } ?>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_receiving_quantity').':', 'receiving_quantity',array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-8'>
+									<?php echo form_input(array(
+										'name'=>'receiving_quantity',
+										'id'=>'receiving_quantity',
+										'size'=>'8',
+										'value'=>$item_info->receiving_quantity,
+										'class' => 'form-control'
+										)
+									);?>
+								</div>
+							</div>
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_reorder_level').':', 'reorder_level',array('class'=>'col-sm-4 required')); ?>
+								<div class='col-sm-8'>
+									<?php echo form_input(array(
+										'name'=>'reorder_level',
+										'id'=>'reorder_level',
+										'size'=>'8',
+										'value'=>!isset($item_info->item_id)?0:$item_info->reorder_level,
+										'class' => 'form-control'
+										)
+									);?>
+								</div>
+							</div>
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_description').':', 'description',array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-8'>
+									<?php echo form_textarea(array(
+									'name'=>'description',
+									'id'=>'description',
+									'value'=>$item_info->description,
+									'rows'=>'5',
+									'cols'=>'17',
+									'class'=>'form-control'
+									));?>
+								</div>
+							</div>
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_image').':', 'item_image',array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-8'>
+									<?php echo form_upload('item_image');?>
+								</div>
+							</div>
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_allow_alt_description').':', 'allow_alt_description',array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-2'>
+									<div class="input-group">
+	                  <span class="input-group-addon">
+	                	<?php echo form_checkbox(array(
+											'name'=>'allow_alt_description',
+											'id'=>'allow_alt_description',
+											'value'=>1,
+											'checked'=>($item_info->allow_alt_description)? 1  :0
+											));?>
+	                  </span>
+	                  <?php // echo $this->lang->line('sales_print_after_sale'); ?>
+	              	</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_is_serialized').':', 'is_serialized',array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-2'>
+									<div class="input-group">
+	                  <span class="input-group-addon">
+	                	<?php echo form_checkbox(array(
+											'name'=>'is_serialized',
+											'id'=>'is_serialized',
+											'value'=>1,
+											'checked'=>($item_info->is_serialized)? 1 : 0
+											));?>
+	                  </span>
+	                  <?php // echo $this->lang->line('sales_print_after_sale'); ?>
+	              	</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_is_deleted').':', 'is_deleted',array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-2'>
+									<div class="input-group">
+	                  <span class="input-group-addon">
+	                	<?php echo form_checkbox(array(
+											'name'=>'is_deleted',
+											'id'=>'is_deleted',
+											'value'=>1,
+											'checked'=>($item_info->deleted)? 1 : 0
+											));?>
+	                  </span>
+	                  <?php // echo $this->lang->line('sales_print_after_sale'); ?>
+	              	</div>
+								</div>
+							</div>
+							<?php for ($i = 0; $i < 11; $i++) {
+								if($this->config->item('custom'.$i.'_name') != NULL) {
+									$item_arr = (array)$item_info;
+									?>
+							<div class="form-group">
+								<?php echo form_label($this->config->item('custom'.$i.'_name').':', 'custom'.$i, array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-8'>
+									<?php echo form_input(array(
+										'name'=>'custom'.$i,
+										'id'=>'custom'.$i,
+										'value'=>$item_arr['custom'.$i],
+										'class' => 'form-control'
+										)
+									);?>
+								</div>
+							</div>
+							<?php } } ?>
+						</div>
+					</div> <!-- ./row -->
+				</fieldset>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning pull-left" data-dismiss="modal">Close</button>
+        <?php
+        echo form_submit(array(
+						'name'=>'continue',
+						'id'=>'continue',
+						'value'=>$this->lang->line('common_new'),
+						'class'=>'btn btn-info')
+				);
+				echo form_submit(array(
+					'name'=>'submit',
+					'id'=>'submit',
+					'value'=>$this->lang->line('common_submit'),
+					'class'=>'btn btn-success')
+				);
+				?>
+        <!-- <a href="" id="link-delete"><button type="button" class="btn btn-outline">Save changes</button></a> -->
+      </div>
+      <?php echo form_close(); ?>
 <script type='text/javascript'>
 
 //validation and submit handling
@@ -319,12 +341,12 @@ $(document).ready(function()
     });
 	
 	var no_op = function(event, data, formatted){};
-	$("#category").autocomplete("<?php echo site_url('raw_materials/suggest_category');?>",{max:100,minChars:0,delay:10}).result(no_op).search();
+	// $("#category").autocomplete("<?php echo site_url('items/suggest_category');?>",{max:100,minChars:0,delay:10}).result(no_op).search();
 
 	<?php for ($i = 0; $i < 11; $i++) 
 	{ 
 	?>
-	$("#custom"+<?php echo $i; ?>).autocomplete("<?php echo site_url('raw_materials/suggest_custom'.$i);?>",{max:100,minChars:0,delay:10}).result(no_op).search();
+	// $("#custom"+<?php echo $i; ?>).autocomplete("<?php echo site_url('items/suggest_custom'.$i);?>",{max:100,minChars:0,delay:10}).result(no_op).search();
 	<?php 
 	}
 	?>
@@ -355,7 +377,7 @@ $(document).ready(function()
 					if (stay_open) 
 					{
 						// set action of item_form to url without item id, so a new one can be created
-				        $("#item_form").attr("action", "<?php echo site_url("raw_materials/save/")?>");
+				        $("#item_form").attr("action", "<?php echo site_url("items/save/")?>");
 						// use a whitelist of fields to minimize unintended side effects
 						$(':text, :password, :file, #description, #item_form').not('.quantity, #reorder_level, #tax_name_1,' + 
 								'#tax_percent_name_1, #reference_number, #name, #cost_price, #unit_price, #taxed_cost_price, #taxed_unit_price').val('');  
@@ -366,7 +388,7 @@ $(document).ready(function()
 					{
 						tb_remove();
 					}
-					window.location.href = "<?php echo site_url('raw_materials');?>";
+					post_item_form_submit(response, stay_open);	
 				},
 				dataType:'json'
 			});
@@ -430,4 +452,10 @@ $(document).ready(function()
 		}
 	});
 });
+
+	//auto complete on field item
+	$('#category').autocomplete({
+		source: "<?php echo site_url('raw_materials/suggest_category');?>", // path to the lookup method
+		focus : function(){ return false; }
+	}); 
 </script>

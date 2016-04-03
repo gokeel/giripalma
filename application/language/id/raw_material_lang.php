@@ -49,7 +49,6 @@ $lang["items_manually_editing_of_quantity"] = "Perubahan jumlah Stok secara manu
 $lang["items_must_select_item_for_barcode"] = "Anda harus memilih minimal 1 item untuk membuat barcode";
 $lang["items_name"] = "Nama Barang";
 $lang["items_name_required"] = "Nama item wajib diisi";
-$lang["items_new"] = "Buat Item Baru";
 $lang["items_no_description_items"] = "Produk/Item tidak ada deskripsi";
 $lang["items_no_items_to_display"] = "Tidak ada item untuk ditampilkan";
 $lang["items_none"] = "Tidak Ada";
@@ -90,6 +89,7 @@ $lang["items_import_items_excel"] = "Import items from Excel sheet";
 $lang["item_fine"] = "Baik";
 $lang["type_item"] = "Kondisi Barang";
 $lang["item_service"] = "service";
-$lang["items_satuan"] = "satuan";
-$lang["raw_submit"] = "submit";
 
+$lang["raw_materials_submit"] = "Submit";
+$lang["raw_materials_new"] = "Buat Item Baru";
+$lang["raw_materials_unit_metric"] = "Satuan";

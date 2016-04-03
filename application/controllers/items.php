@@ -159,9 +159,19 @@ class Items extends Secure_area implements iData_controller
 	
 	function item_search()
 	{
-		$suggestions = $this->Item->get_item_search_suggestions($this->input->post('q'), $this->input->post('limit'));
+		$suggestions = $this->Item->get_item_search_suggestions($this->input->get('term'), $this->input->get('limit'));
 
-		echo implode("\n",$suggestions);
+		$response = array();
+		if($suggestions->num_rows() > 0)
+			foreach($suggestions->result() as $suggest){
+				$response[] = array(
+					'value' => $suggest->item_number.' | '.$suggest->name.' | '.$suggest->color.' | '.$suggest->dimension,
+					'id' => $suggest->item_id,
+					'item_name' => $suggest->name
+					);
+			}
+
+		echo json_encode($response);
 	}
 
 	/*
@@ -169,13 +179,13 @@ class Items extends Secure_area implements iData_controller
 	*/
 	function suggest_category()
 	{
-		$suggestions = $this->Item->get_category_suggestions($this->input->post('q'));
+		$suggestions = $this->Item->get_category_suggestions($this->input->get('term'));
 
 		$response = array();
 		if($suggestions->num_rows() > 0)
 			foreach($suggestions->result() as $suggest){
 				$response[] = array(
-					'category' => $suggest->category
+					'value' => $suggest->category
 					);
 			}
 		echo json_encode($response);
@@ -839,6 +849,33 @@ class Items extends Secure_area implements iData_controller
 	function get_form_width()
 	{
 		return 450;
+	}
+
+	function snapshot(){
+		$items = $this->Item->get_all();
+
+		$response = array();
+		if($items->num_rows() > 0)
+			foreach($items->result() as $item){
+				$response[] = array(
+					'name' => $item->item_number.' | '.$item->name.' | '.$item->color.' | '.$item->dimension,
+					'id' => $item->item_id,
+					'item_name' => $item->name
+					);
+			}
+
+		$json = json_encode($response);
+
+		$this->load->helper('file');
+
+		if ( ! write_file('item.json', $json))
+		{
+		     echo 'Unable to write the file';
+		}
+		else
+		{
+		     echo 'File written!';
+		}
 	}
 }
 ?>

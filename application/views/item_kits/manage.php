@@ -1,7 +1,35 @@
 <?php $this->load->view("partial/header"); ?>
 <?php $this->load->view("partial/menu_left_sidebar"); ?>
+<style>
+  .dataTables_wrapper{
+    margin-top: 10px
+  }
+  .bungkus-btn{
+    margin: 10px;
+  }
+</style>
 <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
+      	<!-- Modal -->
+        <div class="modal fade" id="itemkits-modal" tabindex="-1" role="dialog" aria-labelledby="itemkits-modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                         <h4 class="modal-title"></h4>
+
+                    </div>
+                    <div class="modal-body"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
@@ -22,117 +50,102 @@
               <h3 class="box-title">Penjualan Baru</h3>
             </div> -->
             <div class="box-body">
+				<script type="text/javascript">
+				$(document).ready(function()
+				{
+				    // init_table_sorting();
+				    enable_select_all();
+				    enable_checkboxes();
+				    // enable_row_selection();
+				    enable_search({suggest_url : '<?php echo site_url("$controller_name/suggest")?>',
+									confirm_message : '<?php echo $this->lang->line("common_confirm_search")?>'});
+				    enable_delete('<?php echo $this->lang->line($controller_name."_confirm_delete")?>','<?php echo $this->lang->line($controller_name."_none_selected")?>');
 
-							<script type="text/javascript">
-							$(document).ready(function()
-							{
-							    init_table_sorting();
-							    enable_select_all();
-							    enable_checkboxes();
-							    enable_row_selection();
-							    enable_search({suggest_url : '<?php echo site_url("$controller_name/suggest")?>',
-												confirm_message : '<?php echo $this->lang->line("common_confirm_search")?>'});
-							    enable_delete('<?php echo $this->lang->line($controller_name."_confirm_delete")?>','<?php echo $this->lang->line($controller_name."_none_selected")?>');
+				    $('#generate_barcodes').click(function()
+				    {
+				    	var selected = get_selected_values();
+				    	if (selected.length == 0)
+				    	{
+				    		alert('<?php echo $this->lang->line('items_must_select_item_for_barcode'); ?>');
+				    		return false;
+				    	}
 
-							    $('#generate_barcodes').click(function()
-							    {
-							    	var selected = get_selected_values();
-							    	if (selected.length == 0)
-							    	{
-							    		alert('<?php echo $this->lang->line('items_must_select_item_for_barcode'); ?>');
-							    		return false;
-							    	}
+				    	$(this).attr('href','index.php/item_kits/generate_barcodes/'+selected.join(':'));
+				    });
+				});
 
-							    	$(this).attr('href','index.php/item_kits/generate_barcodes/'+selected.join(':'));
-							    });
-							});
+				// function init_table_sorting()
+				// {
+				// 	//Only init if there is more than one row
+				// 	if($('.tablesorter tbody tr').length >1)
+				// 	{
+				// 		$("#sortable_table").tablesorter(
+				// 		{
+				// 			sortList: [[1,0]],
+				// 			headers:
+				// 			{
+				// 				0: { sorter: false},
+				// 				6: { sorter: false}
+				// 			}
+				// 		});
+				// 	}
+				// }
 
-							function init_table_sorting()
-							{
-								//Only init if there is more than one row
-								if($('.tablesorter tbody tr').length >1)
-								{
-									$("#sortable_table").tablesorter(
-									{
-										sortList: [[1,0]],
-										headers:
-										{
-											0: { sorter: false},
-											6: { sorter: false}
-										}
-									});
-								}
-							}
+				function post_item_kit_form_submit(response)
+				{
+					if(!response.success)
+					{
+						alert(response.message);
+					}
+					else
+					{
+						// langsung refresh page aja
+            window.location.href = '<?php echo site_url($controller_name)?>';
+					}
+				}
+				</script>
+				<div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-4"></div>
 
-							function post_item_kit_form_submit(response)
-							{
-								if(!response.success)
-								{
-									set_feedback(response.message,'error_message',true);
-								}
-								else
-								{
-									//This is an update, just update one row
-									if(jQuery.inArray(response.item_kit_id,get_visible_checkbox_ids()) != -1)
-									{
-										update_row(response.item_kit_id,'<?php echo site_url("$controller_name/get_row")?>');
-										set_feedback(response.message,'success_message',false);
+          <div class="col-md-2"></div>
+          <div class="col-md-2">
+	        	<div class="bungkus-btn">
+            	<button class="btn btn-block btn-success btn-sm" id="btn-new-item"><?php echo $this->lang->line($controller_name.'_new') ?></button>
+            </div>
+          </div>
+	      </div>
+				<table id="data-table" class="table table-bordered table-striped" style="margin-top: 10px;">
+	      	<?php echo $manage_table; ?>
+        </table>
+			</div><!-- /.box-body -->
+			<div class="box-footer">
+        <?php echo anchor("$controller_name/delete",$this->lang->line("common_delete"),array('id'=>'delete','class'=>'btn btn-danger')); ?>
+        <?php echo anchor("$controller_name/generate_barcodes",$this->lang->line("items_generate_barcodes"),array('id'=>'generate_barcodes', 'target' =>'_blank','title'=>$this->lang->line('items_generate_barcodes'),'class'=>'btn btn-warning')); ?>
+      </div>
+    <div><!-- /.box -->
+	</section><!-- /.content -->
+</div><!-- /.content-wrapper -->
 
-									}
-									else //refresh entire table
-									{
-										do_search(true,function()
-										{
-											//highlight new row
-											hightlight_row(response.item_kit_id);
-											set_feedback(response.message,'success_message',false);
-										});
-									}
-								}
-							}
-							</script>
-							<div class="row">
-				               <div class="col-md-4">
-				               </div>
-				               <div class="col-md-4">
-				               </div>
+<script>
+  $(function () {
+    $("#data-table").dataTable({
+      "bSort": false,
+      "iDisplayLength": 25,
+      "bLengthChange": true
+    });
+  });
 
-				               <div class="col-md-2">
-				               </div>
-				               <div class="col-md-2">
-				                   <?php echo anchor("$controller_name/view/-1/width:$form_width",
-									"<div class='btn btn-block btn-success btn-sm' style='float: left;'><span>".$this->lang->line($controller_name.'_new')."</span></div>",
-									array('class'=>'thickbox none','title'=>$this->lang->line($controller_name.'_new')));
-									?>
-				                </div>
-				             </div>
-							
+  $("#btn-new-item").on('click', function () {
+    $('#itemkits-modal').removeData('bs.modal');
+    $('#itemkits-modal').modal({remote: '<?php echo site_url("$controller_name/view/-1"); ?>'});
+    $('#itemkits-modal').modal('show');
+  });
 
-							<div id="pagination"><?= $links ?></div>
-							<?php echo form_open("$controller_name/search",array('id'=>'search_form')); ?>
-							<div id="table_action_header">
-								<ul>
-									<li class="float_left"><span><?php echo anchor("$controller_name/delete",$this->lang->line("common_delete"),array('id'=>'delete')); ?></span></li>
-									<li class="float_left"><span><?php echo anchor("$controller_name/generate_barcodes",$this->lang->line("items_generate_barcodes"),array('id'=>'generate_barcodes', 'target' =>'_blank','title'=>$this->lang->line('items_generate_barcodes'))); ?></span></li>
-									<li class="float_right">
-										<img src='<?php echo base_url()?>images/spinner_small.gif' alt='spinner' id='spinner' />
-										<input type="text" name ='search' id='search'/>
-										<input type="hidden" name ='limit_from' id='limit_from'/>
-									</li>
-								</ul>
-							</div>
-
-							<?php echo form_close(); ?>
-
-							<div id="table_holder">
-								<?php echo $manage_table; ?>
-							</div>
-
-							<div id="feedback_bar"></div>
-
-						</div><!-- /.box-body -->
-          </div><!-- /.box -->
-        </section><!-- /.content -->
-      </div><!-- /.content-wrapper -->
-
+  function modal_edit_item(id){
+    $('#itemkits-modal').removeData('bs.modal');
+    $('#itemkits-modal').modal({remote: '<?php echo site_url("$controller_name/view/"); ?>/'+id});
+    $('#itemkits-modal').modal('show');
+  }
+</script>
 <?php $this->load->view("partial/footer"); ?>

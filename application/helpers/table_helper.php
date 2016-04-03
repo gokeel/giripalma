@@ -362,11 +362,11 @@ function get_item_data_row($item,$controller)
 	// 	}
 	// }
 	// $table_data_row.='<td align="center" width="55px">' . $image . '</td>';
-	$table_data_row.='<td><button class="btn btn-info btn-sm" onclick="modal_edit_item('.$item->item_id.')" title="'.$CI->lang->line($controller_name.'_update').'"><i class="fa fa-pencil-square"></i> '/*.anchor($controller_name."/view/$item->item_id", $CI->lang->line('common_edit'),array('data-toggle'=>'modal','data-target'=>'#item-modal','title'=>*/.$CI->lang->line('common_edit').'</button></td>';
+	$table_data_row.='<td><button class="btn btn-info btn-sm" onclick="modal_edit_item('.$item->item_id.')" title="'.$CI->lang->line($controller_name.'_update').'"><i class="fa fa-pencil-square"></i> '.$CI->lang->line('common_edit').'</button></td>';
 
-	$table_data_row.='<td><button class="btn btn-warning btn-sm" onclick="modal_inventory('.$item->item_id.')" title="'.$CI->lang->line($controller_name.'_count').'"><i class="fa fa-hdd-o"></i> '/*.anchor($controller_name."/inventory/$item->item_id", $CI->lang->line('common_inv'),array('data-toggle'=>'modal','data-target'=>'#item-modal','title'=>*/.$CI->lang->line('common_inv').'</button></td>';
+	$table_data_row.='<td><button class="btn btn-warning btn-sm" onclick="modal_inventory('.$item->item_id.')" title="'.$CI->lang->line($controller_name.'_count').'"><i class="fa fa-hdd-o"></i> '.$CI->lang->line('common_inv').'</button></td>';
 	//inventory count	
-	$table_data_row.='<td><button class="btn btn-info btn-sm" onclick="modal_detail_item('.$item->item_id.')" title="'.$CI->lang->line($controller_name.'_details_count').'"><i class="fa fa-search"></i> '/*.anchor($controller_name."/view/$item->item_id", $CI->lang->line('common_edit'),array('data-toggle'=>'modal','data-target'=>'#item-modal','title'=>*/.$CI->lang->line('common_det').'</button></td>';
+	$table_data_row.='<td><button class="btn btn-info btn-sm" onclick="modal_detail_item('.$item->item_id.')" title="'.$CI->lang->line($controller_name.'_details_count').'"><i class="fa fa-search"></i> '.$CI->lang->line('common_det').'</button></td>';
 	// $table_data_row.='<td width="5%">&nbsp;&nbsp;&nbsp;&nbsp;'.anchor($controller_name."/count_details/$item->item_id", $CI->lang->line('common_det'),array('data-toggle'=>'modal','data-target'=>'#item-modal','title'=>$CI->lang->line($controller_name.'_details_count'))).'</td>';//inventory details	
 	
 	$table_data_row.='</tr>';
@@ -447,7 +447,8 @@ Gets the html table to manage item kits.
 function get_item_kits_manage_table( $item_kits, $controller )
 {
 	$CI =& get_instance();
-	$table='<table class="tablesorter" id="sortable_table">';
+	$table='';
+	// $table='<table class="tablesorter" id="sortable_table">';
 	
 	$headers = array('<input type="checkbox" id="select_all" />', 
 	$CI->lang->line('item_kits_kit'),
@@ -465,7 +466,8 @@ function get_item_kits_manage_table( $item_kits, $controller )
 	}
 	$table.='</tr></thead><tbody>';
 	$table.=get_item_kits_manage_table_data_rows( $item_kits, $controller );
-	$table.='</tbody></table>';
+	$table.='</tbody>';
+	// $table.='</tbody></table>';
 
 	return $table;
 }
@@ -499,12 +501,13 @@ function get_item_kit_data_row($item_kit, $controller)
 
 	$table_data_row='<tr>';
 	$table_data_row.="<td width='3%'><input type='checkbox' id='item_kit_$item_kit->item_kit_id' value='".$item_kit->item_kit_id."'/></td>";
-	$table_data_row.='<td width="15%">'.'KIT '.$item_kit->item_kit_id.'</td>';
-	$table_data_row.='<td width="15%">'.$item_kit->name.'</td>';
-	$table_data_row.='<td width="20%">'.character_limiter($item_kit->description, 25).'</td>';
-	$table_data_row.='<td width="15%">'.to_currency($item_kit->total_cost_price).'</td>';
-	$table_data_row.='<td width="15%">'.to_currency($item_kit->total_unit_price).'</td>';
-	$table_data_row.='<td width="5%">'.anchor($controller_name."/view/$item_kit->item_kit_id/width:$width", $CI->lang->line('common_edit'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_update'))).'</td>';
+	$table_data_row.='<td>'.'KIT '.$item_kit->item_kit_id.'</td>';
+	$table_data_row.='<td>'.$item_kit->name.'</td>';
+	$table_data_row.='<td>'.character_limiter($item_kit->description, 25).'</td>';
+	$table_data_row.='<td>'.to_currency($item_kit->total_cost_price).'</td>';
+	$table_data_row.='<td>'.to_currency($item_kit->total_unit_price).'</td>';
+	$table_data_row.='<td><button class="btn btn-info btn-sm" onclick="modal_edit_item('.$item_kit->item_kit_id.')" title="'.$CI->lang->line($controller_name.'_update').'"><i class="fa fa-pencil-square"></i> '.$CI->lang->line('common_edit').'</button></td>';
+	// $table_data_row.='<td width="5%">'.anchor($controller_name."/view/$item_kit->item_kit_id/width:$width", $CI->lang->line('common_edit'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_update'))).'</td>';
 	$table_data_row.='</tr>';
 
 	return $table_data_row;
@@ -512,18 +515,17 @@ function get_item_kit_data_row($item_kit, $controller)
 function get_raw_materials_manage_table($raw_materials,$controller)
 {
 	$CI =& get_instance();
-	$table='<table class="tablesorter" id="sortable_table">';
+	$table='';
+	// $table='<table class="tablesorter" id="sortable_table">';
 	
 	$headers = array('<input type="checkbox" id="select_all" />', 
-	$CI->lang->line('items_item_number'),
-	$CI->lang->line('items_name'),
+	$CI->lang->line('items_item_number_and_name'),
 	$CI->lang->line('items_category'),
-	$CI->lang->line('suppliers_company_name'),
+	$CI->lang->line('suppliers'),
 	$CI->lang->line('items_cost_price'),
 	$CI->lang->line('items_unit_price'),
 	$CI->lang->line('items_quantity'),
 	$CI->lang->line('items_tax_percents'),
-	'&nbsp;',
 	'&nbsp;',
 	'&nbsp;',
 	'&nbsp;'	
@@ -535,8 +537,9 @@ function get_raw_materials_manage_table($raw_materials,$controller)
 		$table.="<th>$header</th>";
 	}
 	$table.='</tr></thead><tbody>';
-	$table.=get_items_manage_table_data_rows($raw_materials,$controller);
-	$table.='</tbody></table>';
+	$table.=get_raw_materials_manage_table_data_rows($raw_materials,$controller);
+	$table.='</tbody>';
+	// $table.='</tbody></table>';
 
 	return $table;
 }
@@ -551,7 +554,7 @@ function get_raw_materials_manage_table_data_rows($raw_materials,$controller)
 	
 	foreach($raw_materials->result() as $item)
 	{
-		$table_data_rows.=get_item_data_row($item,$controller);
+		$table_data_rows.=get_raw_materials_data_row($item,$controller);
 	}
 	
 	if($raw_materials->num_rows()==0)
@@ -562,10 +565,10 @@ function get_raw_materials_manage_table_data_rows($raw_materials,$controller)
 	return $table_data_rows;
 }
 
-function get_raw_materials_data_row($raw_materials,$controller)
+function get_raw_materials_data_row($raw_material,$controller)
 {
 	$CI =& get_instance();
-	$item_tax_info=$CI->Item_taxes->get_info($item->item_id);
+	$item_tax_info=$CI->Item_taxes->get_info($raw_material->item_id);
 	$tax_percents = '';
 	foreach($item_tax_info as $tax_info)
 	{
@@ -578,29 +581,20 @@ function get_raw_materials_data_row($raw_materials,$controller)
     $item_quantity='';
     
 	$table_data_row='<tr>';
-	$table_data_row.="<td width='3%'><input type='checkbox' id='item_$item->item_id' value='".$item->item_id."'/></td>";
-	$table_data_row.='<td width="15%">'.$item->item_number.'</td>';
-	$table_data_row.='<td width="20%">'.$item->name.'</td>';
-	$table_data_row.='<td width="14%">'.$item->category.'</td>';
-	$table_data_row.='<td width="14%">'.$item->company_name.'</td>';
-	$table_data_row.='<td width="14%">'.to_currency($item->cost_price).'</td>';
-	$table_data_row.='<td width="14%">'.to_currency($item->unit_price).'</td>';
-    $table_data_row.='<td width="14%">'.$item->quantity.'</td>';
-	$table_data_row.='<td width="14%">'.$tax_percents.'</td>';
-	$image = '';
-	if (!empty($item->pic_id))
-	{
-		$images = glob ("uploads/item_pics/" . $item->pic_id . ".*");
-		if (sizeof($images) > 0)
-		{
-			$image.='<a class="rollover" href="'. base_url($images[0]) .'"><img src="'.site_url('items/pic_thumb/'.$item->pic_id).'"></a>';
-		}
-	}
-	$table_data_row.='<td align="center" width="55px">' . $image . '</td>';
-	$table_data_row.='<td width="5%">'.anchor($controller_name."/view/$raw_materials->item_id/width:$width", $CI->lang->line('common_edit'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_update'))).'</td>';		
+	$table_data_row.="<td width='3%'><input type='checkbox' id='item_$raw_material->item_id' value='".$raw_material->item_id."'/></td>";
+	$table_data_row.='<td><strong>ID '.$raw_material->item_number.'</strong><br>'.$raw_material->name.'</td>';
+	$table_data_row.='<td>'.$raw_material->category.'</td>';
+	$table_data_row.='<td>'.$raw_material->company_name.'</td>';
+	$table_data_row.='<td>'.to_currency($raw_material->cost_price).'</td>';
+	$table_data_row.='<td>'.to_currency($raw_material->unit_price).'</td>';
+    $table_data_row.='<td>'.$raw_material->quantity.'</td>';
+	$table_data_row.='<td>'.$tax_percents.'</td>';
+	
+	$table_data_row.='<td><button class="btn btn-info btn-sm" onclick="modal_edit_item('.$raw_material->item_id.')" title="'.$CI->lang->line($controller_name.'_update').'"><i class="fa fa-pencil-square"></i> '.$CI->lang->line('common_edit').'</button></td>';
 
-	$table_data_row.='<td width="10%">'.anchor($controller_name."/inventory/$item->item_id/width:$width", $CI->lang->line('common_inv'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_count')))./*'</td>';//inventory count	
-	$table_data_row.='<td width="5%">'*/'&nbsp;&nbsp;&nbsp;&nbsp;'.anchor($controller_name."/count_details/$item->item_id/width:$width", $CI->lang->line('common_det'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_details_count'))).'</td>';//inventory details	
+	$table_data_row.='<td><button class="btn btn-warning btn-sm" onclick="modal_inventory('.$raw_material->item_id.')" title="'.$CI->lang->line($controller_name.'_count').'"><i class="fa fa-hdd-o"></i> '.$CI->lang->line('common_inv').'</button></td>';
+	//inventory count	
+	$table_data_row.='<td><button class="btn btn-info btn-sm" onclick="modal_detail_item('.$raw_material->item_id.')" title="'.$CI->lang->line($controller_name.'_details_count').'"><i class="fa fa-search"></i> '.$CI->lang->line('common_det').'</button></td>';
 	
 	$table_data_row.='</tr>';
 

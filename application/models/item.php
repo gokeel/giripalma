@@ -394,6 +394,7 @@ class Item extends CI_Model
 		}
 		$this->db->order_by('name', 'asc');
 		$query = $this->db->get();
+		// print_r($this->db->last_query());
 		
 		//Search by description
 		// $this->db->select('item_id, name, description');
@@ -434,10 +435,10 @@ class Item extends CI_Model
 		// }
 
 		//only return $limit suggestions
-		if(count($suggestions > $limit))
-		{
-			$suggestions = array_slice($suggestions, 0,$limit);
-		}
+		// if(count($suggestions > $limit))
+		// {
+		// 	$suggestions = array_slice($suggestions, 0,$limit);
+		// }
 
 		return $query;
 	}

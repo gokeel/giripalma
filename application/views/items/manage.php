@@ -17,10 +17,10 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                         <h4 class="modal-title"><?php echo $this->lang->line('items_new'); ?></h4>
+                         <h4 class="modal-title"></h4>
 
                     </div>
-                    <div class="modal-body"><div class="te"></div></div>
+                    <div class="modal-body"></div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary">Save changes</button>
@@ -132,13 +132,13 @@
                   enable_select_all();
                   enable_checkboxes();
                   // enable_row_selection();
-                  var widget = enable_search({suggest_url : '<?php echo site_url("$controller_name/suggest")?>',
-                      confirm_message : '<?php echo $this->lang->line("common_confirm_search")?>',
-                      extra_params : {
-                          'is_deleted' : function () {
-                              return $("#is_deleted").is(":checked") ? 1 : 0;
-                      }
-                  }});
+                  // var widget = enable_search({suggest_url : '<?php echo site_url("$controller_name/suggest")?>',
+                  //     confirm_message : '<?php echo $this->lang->line("common_confirm_search")?>',
+                  //     extra_params : {
+                  //         'is_deleted' : function () {
+                  //             return $("#is_deleted").is(":checked") ? 1 : 0;
+                  //     }
+                  // }});
                   // clear suggestion cache when toggling filter
                   // $("#is_deleted").change(function() {
                   //     widget.flushCache();
@@ -165,11 +165,11 @@
                   //     do_search(true);
                   // });
 
-                  $('#search').keypress(function (e) {
-                      if (e.which == 13) {
-                          $('#search_form').submit();
-                      }
-                  });
+                  // $('#search').keypress(function (e) {
+                  //     if (e.which == 13) {
+                  //         $('#search_form').submit();
+                  //     }
+                  // });
 
                   $(".date_filter").datepicker({onSelect: function(d,i){
                       if(d !== i.lastVal){
@@ -192,7 +192,7 @@
               {
                   if(!response.success)
                   {
-                      set_feedback(response.message,'error_message',true);
+                      alert(response.message);
                   }
                   else
                   {
@@ -235,20 +235,9 @@
               </script>
               
               <div class="row">
-                <div class="col-md-4">
-                  
-                </div>
-                <div class="col-md-4">
-                  <?php // echo form_open("$controller_name/search",array('id'=>'filter_by_stock')); ?>
-                  
-                  <!-- </form> -->
-                </div>
-
+                <div class="col-md-4"></div>
+                <div class="col-md-4"></div>
                 <div class="col-md-2">
-                 <?php // echo anchor("$controller_name/view/-1",
-                 //      "<div class='btn btn-block btn-success btn-sm' style='float: left;'><span>".$this->lang->line($controller_name.'_new')."</span></div>",
-                 //      array('data-toggle'=>'modal','data-target'=>'#item-modal','title'=>$this->lang->line($controller_name.'_new')));
-                      ?>
                   <div class="bungkus-btn">
                     <button class="btn btn-block btn-success btn-sm" id="btn-new-item"><?php echo $this->lang->line($controller_name.'_new') ?></button>
                   </div>
@@ -262,45 +251,17 @@
                     </div>
                 </div>
               </div>
-              
 
-              <!-- <div id="pagination"><?= $links ?></div> -->
-              <!-- <div id="titleTextImg" style="background-color:#EEEEEE;height:30px;position:relative;">
-                  <div style="float:left;vertical-align:text-top;"><?php echo $this->lang->line('common_search_options'); ?> :</div>
-                  <a id="imageDivLink" href="javascript:show_hide_search_filter('search_filter_section', 'imageDivLink');" style="outline:none;">
-                  <img src="
-                  <?php echo isset($search_section_state)? ( ($search_section_state)? base_url().'images/minus.png' : base_url().'images/plus.png') : base_url().'images/plus.png';?>" style="border:0;outline:none;padding:0px;margin:0px;position:relative;top:-5px;"></a>
-              </div> -->
-              <?php // echo form_open("$controller_name/search",array('id'=>'search_form')); ?>
-              
-              <!-- <div id="table_action_header">
-                  <ul>
-                      <li class="float_left"><span><?php echo anchor("$controller_name/bulk_edit/width:$form_width",$this->lang->line("items_bulk_edit"),array('id'=>'bulk_edit','title'=>$this->lang->line('items_edit_multiple_items'))); ?></span></li>
-                      <li class="float_right">
-                          <img src='<?php echo base_url()?>images/spinner_small.gif' alt='spinner' id='spinner' />
-                          <input type="text" name ='search' id='search'/>
-                          <input type="hidden" name ='limit_from' id='limit_from'/>
-                      </li>
-                  </ul>
-              </div> -->
-
-              <?php // echo form_close(); ?>
-
-              <!-- <div id="table_holder"> -->
-                  <?php // echo $manage_table; ?>
-              <!-- </div> -->
               <table id="data-table" class="table table-bordered table-striped" style="margin-top: 10px;">
                 <?php echo $manage_table; ?>
               </table>
-
-              <!-- <div id="feedback_bar"></div> -->
 
             </div><!-- /.box-body -->
             <div class="box-footer">
                 <?php echo anchor("$controller_name/delete",$this->lang->line("common_delete"),array('id'=>'delete','class'=>'btn btn-danger')); ?>
                 <?php echo anchor("$controller_name/bulk_edit/width:$form_width",$this->lang->line("items_bulk_edit"),array('id'=>'bulk_edit','title'=>$this->lang->line('items_edit_multiple_items'),'class'=>'btn btn-info')); ?>
                 <?php echo anchor("$controller_name/generate_barcodes",$this->lang->line("items_generate_barcodes"),array('id'=>'generate_barcodes', 'target' =>'_blank','title'=>$this->lang->line('items_generate_barcodes'),'class'=>'btn btn-warning')); ?>
-              </div>
+            </div>
           </div><!-- /.box -->
         </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
@@ -309,12 +270,7 @@
   $(function () {
     $("#data-table").dataTable({
       "bSort": false,
-      "iDisplayLength": 10,
-      "bLengthChange": true
-    });
-    $("#table-10rows").dataTable({
-      "bSort": false,
-      "iDisplayLength": 10,
+      "iDisplayLength": 25,
       "bLengthChange": true
     });
   });
@@ -357,7 +313,7 @@
         for(var i=0; i<data.length; i++){
           oTable.fnAddData([
             '<input type="checkbox" id="item_'+data[i].id+'" value="'+data[i].id+'"/>',
-            '<strong>ID '+data[i].number+'</strong><br>'+data[i].name,
+            '<strong>ID '+data[i].number+'</strong><br>'+data[i].name+'<br>Warna: '+data[i].color,
             data[i].category,
             data[i].supplier,
             data[i].cost_price,

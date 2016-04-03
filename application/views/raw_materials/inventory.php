@@ -1,174 +1,138 @@
-<div id="required_fields_message"><?php echo $this->lang->line('common_fields_required_message'); ?></div>
-<ul id="error_message_box" class="error_message_box"></ul>
-<?php
-echo form_close();
-echo form_open('items/save_inventory/'.$item_info->item_id,array('id'=>'item_form'));
-?>
-<fieldset id="item_basic_info">
-<legend><?php echo $this->lang->line("items_basic_information"); ?></legend>
+			<div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title"><?php echo $this->lang->line('items_basic_information'); ?></h4>
+      </div>
+      <form id="item_form">
+      <div class="modal-body">
+ 			<div id="required_fields_message"><?php echo $this->lang->line('common_fields_required_message'); ?>
+ 			</div>
+			<ul id="error_message_box" class="error_message_box"></ul> 
+				<fieldset id="item_basic_info">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_item_number').':', 'name',array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-8'>
+									<?php echo form_input(array(
+										'name'=>'item_number',
+										'id'=>'item_number',
+										'value'=>$item_info->item_number,
+										'style'       => 'border:none',
+										'readonly' => 'readonly',
+										'class'=>'form-control'
+										)
+									);?>
+								</div>
+							</div>
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_name').':', 'name',array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-8'>
+									<?php echo form_input(array(
+										'name'=>'name',
+										'id'=>'name',
+										'value'=>$item_info->name,
+										'style'       => 'border:none',
+										'readonly' => 'readonly',
+										'class'=>'form-control'
+										)
+									);?>
+								</div>
+							</div>
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_category').':', 'category',array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-8'>
+									<?php echo form_input(array(
+										'name'=>'category',
+										'id'=>'category',
+										'value'=>$item_info->category,
+										'style'       => 'border:none',
+										'readonly' => 'readonly',
+										'class'=>'form-control'
+										)
+									);?>
+								</div>
+							</div>
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_stock_location').':', 'stock_location',array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-8'>
+									<?php echo form_dropdown('stock_location',$stock_locations,current($stock_locations),'onchange="fill_quantity(this.value)" class="form-control"');?>
+								</div>
+							</div>
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_current_quantity').':', 'quantity',array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-8'>
+									<?php echo form_input(array(
+										'name'=>'quantity',
+										'id'=>'quantity',
+										'value'=>current($item_quantities),
+										'style'       => 'border:none',
+										'readonly' => 'readonly',
+										'class'=>'form-control'
+										)
+									);?>
+								</div>
+							</div>
+						</div> <!-- ./col-md-6 -->
+						<div class="col-md-6">
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_add_minus').':', 'quantity',array('class'=>'col-sm-4 required')); ?>
+								<div class='col-sm-8'>
+									<?php echo form_input(array(
+										'name'=>'newquantity',
+										'id'=>'newquantity',
+										'class'=>'form-control'
+										)
+									);?>
+								</div>
+							</div>
+							<div class="form-group">
+								<?php echo form_label($this->lang->line('items_inventory_comments').':', 'description',array('class'=>'col-sm-4')); ?>
+								<div class='col-sm-8'>
+									<?php echo form_textarea(array(
+									'name'=>'trans_comment',
+									'id'=>'trans_comment',
+									'rows'=>'3',
+									'cols'=>'17',
+									'class'=>'form-control'
+									));?>
+								</div>
+							</div>
+						</div> <!-- ./col-md-6 -->
+					</div>
+				</fieldset>
+			</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning pull-left" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" id="btn-update-inventory"><?php echo $this->lang->line('common_submit') ?></button>
+      </div>
+      <?php echo form_close(); ?>
+		<script type='text/javascript'>
 
-<table align="center" border="0" bgcolor="#CCCCCC">
-<div class="field_row clearfix">
-<tr>
-<td>	
-<?php echo form_label($this->lang->line('items_item_number').':', 'name',array('class'=>'wide')); ?>
-</td>
-<td>
-	<?php $inumber = array (
-		'name'=>'item_number',
-		'id'=>'item_number',
-		'value'=>$item_info->item_number,
-		'style'       => 'border:none',
-		'readonly' => 'readonly'
-	);
-	
-		echo form_input($inumber)
-	?>
-</td>
-</tr>
-<tr>
-<td>	
-<?php echo form_label($this->lang->line('items_name').':', 'name',array('class'=>'wide')); ?>
-</td>
-<td>	
-	<?php $iname = array (
-		'name'=>'name',
-		'id'=>'name',
-		'value'=>$item_info->name,
-		'style'       => 'border:none',
-		'readonly' => 'readonly'
-	);
-		echo form_input($iname);
-		?>
-</td>
-</tr>
-<tr>
-<td>	
-<?php echo form_label($this->lang->line('items_category').':', 'category',array('class'=>'wide')); ?>
-</td>
-<td>	
-	<?php $cat = array (
-		
-		'name'=>'category',
-		'id'=>'category',
-		'value'=>$item_info->category,
-		'style'       => 'border:none',
-		'readonly' => 'readonly'
-		);
-	
-		echo form_input($cat);
-		?>
-</td>
-</tr>
-<!--<tr>
-<td>
-<?php echo form_label($this->lang->line('items_stock_location').':', 'stock_location',array('class'=>'wide')); ?>
-</td>
-<td>
-    <?php 
-            echo form_dropdown('stock_location',$stock_locations,current($stock_locations),'onchange="fill_quantity(this.value)"'); 
-    ?> 
-</td>
-</tr>-->
-<tr>
-<td>
-<?php echo form_label($this->lang->line('items_current_quantity').':', 'quantity',array('class'=>'wide')); ?>
-</td>
-<td>
-	<?php $qty = array (
-	
-		'name'=>'quantity',
-		'id'=>'quantity',
-		'value'=>current($item_quantities),
-		'style'       => 'border:none',
-		'readonly' => 'readonly'
-		);
-	
-		echo form_input($qty);
-	?>
-</td>
-</tr>
-</div>	
-</table>
-
-<div class="field_row clearfix">	
-<?php echo form_label($this->lang->line('items_add_minus').':', 'quantity',array('class'=>'required wide')); ?>
-	<div class='form_field'>
-	<?php echo form_input(array(
-		'name'=>'newquantity',
-		'id'=>'newquantity'
-		)
-	);?>
-	</div>
-</div>
-
-<div class="field_row clearfix">	
-<?php echo form_label($this->lang->line('items_inventory_comments').':', 'description',array('class'=>'wide')); ?>
-	<div class='form_field'>
-	<?php echo form_textarea(array(
-		'name'=>'trans_comment',
-		'id'=>'trans_comment',
-		'rows'=>'3',
-		'cols'=>'17')		
-	);?>
-	</div>
-</div>
-<?php
-echo form_submit(array(
-	'name'=>'submit',
-	'id'=>'submit',
-	'value'=>$this->lang->line('common_submit'),
-	'class'=>'submit_button float_right')
-);
-?>
-</fieldset>
-<?php 
-echo form_close();
-?>
-<script type='text/javascript'>
-
-//validation and submit handling
-$(document).ready(function()
-{		
-	$('#item_form').validate({
-		submitHandler:function(form)
+		//validation and submit handling
+		$(document).ready(function()
 		{
-			$(form).ajaxSubmit({
-			success:function(response)
-			{
-				tb_remove();
-				post_item_form_submit(response);
-			},
-			dataType:'json'
+			$('#btn-update-inventory').click(function() {
+				$('#error_message_box').empty();
+		    $.ajax({
+		      type : "POST",
+		      url: "<?php echo site_url('raw_materials/save_inventory/'.$item_info->item_id)?>",
+		      // async: false,
+		      data: $("#item_form").serialize(),
+		      dataType: "json",
+		      success: function(data) {
+		        	$('#error_message_box').append('<li>'+data.message+'</li>');
+		      },
+		      error: function(e){
+		        alert('Error processing your request: '+e.responseText);
+		      }
+		     });
+		  });
 		});
 
-		},
-		errorLabelContainer: "#error_message_box",
- 		wrapper: "li",
-		rules: 
-		{
-			newquantity:
-			{
-				required:true,
-				number:true
-			}
-   		},
-		messages: 
-		{
-			
-			newquantity:
-			{
-				required:"<?php echo $this->lang->line('items_quantity_required'); ?>",
-				number:"<?php echo $this->lang->line('items_quantity_number'); ?>"
-			}
+
+		function fill_quantity(val) 
+		{   
+		    var item_quantities= <?php echo json_encode($item_quantities ); ?>;
+		    document.getElementById("quantity").value = item_quantities[val];
 		}
-	});
-});
-
-
-function fill_quantity(val) 
-{   
-    var item_quantities= <?php echo json_encode($item_quantities ); ?>;
-    document.getElementById("quantity").value = item_quantities[val];
-}
-</script>
+		</script>
