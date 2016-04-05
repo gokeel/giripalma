@@ -121,7 +121,8 @@ Gets the html table to manage people.
 function get_people_manage_table($people,$controller)
 {
 	$CI =& get_instance();
-	$table='<table class="tablesorter" id="sortable_table">';
+	$table='';
+	// $table='<table class="tablesorter" id="sortable_table">';
 	
 	$headers = array('<input type="checkbox" id="select_all" />', 
 	$CI->lang->line('common_last_name'),
@@ -137,7 +138,8 @@ function get_people_manage_table($people,$controller)
 	}
 	$table.='</tr></thead><tbody>';
 	$table.=get_people_manage_table_data_rows($people,$controller);
-	$table.='</tbody></table>';
+	$table.='</tbody>';
+	// $table.='</tbody></table>';
 
 	return $table;
 }
@@ -174,8 +176,9 @@ function get_person_data_row($person,$controller)
 	$table_data_row.='<td width="20%">'.character_limiter($person->last_name,13).'</td>';
 	$table_data_row.='<td width="20%">'.character_limiter($person->first_name,13).'</td>';
 	$table_data_row.='<td width="30%">'.mailto($person->email,character_limiter($person->email,22)).'</td>';
-	$table_data_row.='<td width="20%">'.character_limiter($person->phone_number,13).'</td>';		
-	$table_data_row.='<td width="5%">'.anchor($controller_name."/view/$person->person_id/width:$width", $CI->lang->line('common_edit'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_update'))).'</td>';		
+	$table_data_row.='<td width="20%">'.character_limiter($person->phone_number,13).'</td>';
+	$table_data_row.='<td><button class="btn btn-info btn-sm" onclick="modal_edit_item('.$person->person_id.')" title="'.$CI->lang->line($controller_name.'_update').'"><i class="fa fa-pencil-square"></i> '.$CI->lang->line('common_edit').'</button></td>';
+	// $table_data_row.='<td width="5%">'.anchor($controller_name."/view/$person->person_id/width:$width", $CI->lang->line('common_edit'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_update'))).'</td>';		
 	$table_data_row.='</tr>';
 	
 	return $table_data_row;

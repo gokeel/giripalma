@@ -39,7 +39,7 @@ class Employees extends Person_controller
 	*/
 	function suggest()
 	{
-		$suggestions = $this->Employee->get_search_suggestions($this->input->post('q'),$this->input->post('limit'));
+		$suggestions = $this->Employee->get_search_suggestions($this->input->get('term'),$this->input->get('limit'));
 		$response = array();
 		if($suggestions->num_rows() > 0)
 			foreach($suggestions->result() as $suggest){
@@ -47,7 +47,8 @@ class Employees extends Person_controller
 					'username' => $suggest->username,
 					'name' => $suggest->first_name.' '.$suggest->last_name,
 					'id' => $suggest->person_id,
-					'email' => $suggest->email
+					'email' => $suggest->email,
+					'value' => 'ID: '.$suggest->id_number.' | '.$suggest->first_name.' '.$suggest->last_name
 					);
 			}
 		echo json_encode($response);

@@ -133,27 +133,29 @@ class Sales extends Secure_area
 
 		if ($this->sale_lib->get_mode() == 'return') 
 		{
-			$this->sale_lib->is_valid_receipt($this->input->post('q')) && $suggestions[] = $this->input->post('q');
+			$this->sale_lib->is_valid_receipt($this->input->get('term')) && $suggestions[] = $this->input->get('term');
 		}
 		// first, search item
-		$suggestions = $this->Item->get_item_search_suggestions($this->input->post('q'),$this->input->post('limit'));
+		$suggestions = $this->Item->get_item_search_suggestions($this->input->get('term'),$this->input->get('limit'));
 
 		$response = array();
 		if($suggestions->num_rows() > 0)
 			foreach($suggestions->result() as $suggest){
 				$response[] = array(
-					'name' => $suggest->item_number.' | '.$suggest->name.' | '.$suggest->color.' | '.$suggest->dimension,
-					'id' => $suggest->item_id
+					'value' => $suggest->item_number.' | '.$suggest->name.' | '.$suggest->color.' | '.$suggest->dimension,
+					'id' => $suggest->item_id,
+					'name' => $suggest->name
 					);
 			}
 
 		// second, search item kits
-		$suggestions = $this->Item_kit->get_item_kit_search_suggestions($this->input->post('q'),$this->input->post('limit'));
+		$suggestions = $this->Item_kit->get_item_kit_search_suggestions($this->input->get('term'),$this->input->get('limit'));
 		if($suggestions->num_rows() > 0)
 			foreach($suggestions->result() as $suggest){
 				$response[] = array(
-					'name' => 'KIT '.$suggest->name,
-					'id' => 'KIT '.$suggest->item_kit_id
+					'value' => 'KIT '.$suggest->name,
+					'id' => 'KIT '.$suggest->item_kit_id,
+					'name' => $suggest->name
 					);
 			}
 
@@ -162,14 +164,15 @@ class Sales extends Secure_area
 
 	function customer_search()
 	{
-		$suggestions = $this->Customer->get_customer_search_suggestions($this->input->post('q'),$this->input->post('limit'));
+		$suggestions = $this->Customer->get_customer_search_suggestions($this->input->get('term'),$this->input->post('limit'));
 
 		$response = array();
 		if($suggestions->num_rows() > 0)
 			foreach($suggestions->result() as $suggest){
 				$response[] = array(
 					'name' => $suggest->first_name.' '.$suggest->last_name,
-					'id' => $suggest->person_id
+					'id' => $suggest->person_id,
+					'value' => $suggest->first_name.' '.$suggest->last_name
 					);
 			}
 		echo json_encode($response);
@@ -814,8 +817,9 @@ class Sales extends Secure_area
 
 		// get salesperson
 		$salesperson_id = $this->sale_lib->get_salesperson();
-		$salesperson_info = '';
-		if($salesperson_id!=-1){
+		// print_r($salesperson_id);
+		// $salesperson_info = '';
+		if($salesperson_id!=-1 or $salesperson_id<>""){
 			$salesperson_info = $this->Employee->get_info($salesperson_id);
 			$data['salesperson_id'] = $salesperson_id;
 			$data['salesperson_name'] = $salesperson_info->first_name.' '.$salesperson_info->last_name;

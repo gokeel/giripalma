@@ -11,26 +11,7 @@
 </style>
 <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
-        <!-- Modal -->
-        <div class="modal fade" id="item-modal" tabindex="-1" role="dialog" aria-labelledby="item-modalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                         <h4 class="modal-title"></h4>
-
-                    </div>
-                    <div class="modal-body"></div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
+        <?php $this->load->view('partial/modal_large') ?>
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h3><?php echo $this->lang->line('common_list_of').' '.$this->lang->line('module_'.$controller_name); ?></h3>
@@ -313,27 +294,27 @@
   });
 
   $("#btn-new-item").on('click', function () {
-    $('#item-modal').removeData('bs.modal');
-    $('#item-modal').modal({remote: '<?php echo site_url("$controller_name/view/-1"); ?>'});
-    $('#item-modal').modal('show');
+    $('#my-modal').removeData('bs.modal');
+    $('#my-modal').modal({remote: '<?php echo site_url("$controller_name/view/-1"); ?>'});
+    $('#my-modal').modal('show');
   });
 
   function modal_edit_item(id){
-    $('#item-modal').removeData('bs.modal');
-    $('#item-modal').modal({remote: '<?php echo site_url("$controller_name/view/"); ?>/'+id});
-    $('#item-modal').modal('show');
+    $('#my-modal').removeData('bs.modal');
+    $('#my-modal').modal({remote: '<?php echo site_url("$controller_name/view/"); ?>/'+id});
+    $('#my-modal').modal('show');
   }
 
   function modal_inventory(id){
-    $('#item-modal').removeData('bs.modal');
-    $('#item-modal').modal({remote: '<?php echo site_url("$controller_name/inventory/"); ?>/'+id});
-    $('#item-modal').modal('show');
+    $('#my-modal').removeData('bs.modal');
+    $('#my-modal').modal({remote: '<?php echo site_url("$controller_name/inventory/"); ?>/'+id});
+    $('#my-modal').modal('show');
   }
 
   function modal_detail_item(id){
-    $('#item-modal').removeData('bs.modal');
-    $('#item-modal').modal({remote: '<?php echo site_url("$controller_name/count_details/"); ?>/'+id});
-    $('#item-modal').modal('show');
+    $('#my-modal').removeData('bs.modal');
+    $('#my-modal').modal({remote: '<?php echo site_url("$controller_name/count_details/"); ?>/'+id});
+    $('#my-modal').modal('show');
   }
 
 // reference: http://www.sitepoint.com/working-jquery-datatables/

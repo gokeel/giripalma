@@ -1,7 +1,18 @@
 <?php $this->load->view("partial/header"); ?>
 <?php $this->load->view("partial/menu_left_sidebar"); ?>
+<style>
+	.ui-autocomplete {
+    z-index: 5000;
+	}
+	.ui-widget-content .ui-state-focus{
+		color:#000;
+		font-weight: bold;
+		background-color: #ffffff;
+	}
+</style>
 <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
+      	<?php $this->load->view('partial/modal_large') ?>
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
@@ -67,9 +78,7 @@
 								<div class="col-md-3">
 									<div class="form-group">
 										<label><?php echo $this->lang->line('sales_person') ?></label>
-										<div id="search-employee">
-										  <?php echo form_input(array('class'=>'form-control typeahead in-col-3','name'=>'employee','id'=>'employee','placeholder'=>$this->lang->line('sales_start_typing_employee_name'),'value'=>(isset($salesperson_name) ? $salesperson_name:'')));?>
-										</div>
+										<?php echo form_input(array('class'=>'form-control','name'=>'employee','id'=>'employee','value'=>(isset($salesperson_name) ? $salesperson_name : ''),'placeholder'=>$this->lang->line('sales_start_typing_employee_name')));?>
 									</div>
 								</div>
 								</form>
@@ -114,50 +123,48 @@
 									<div class="form-group">
 										<label><?php echo $this->lang->line('sales_select_customer'); ?></label>
 										<!-- <br> -->
-										<div id="search-customer">
-										  <?php echo form_input(array('class'=>'form-control typeahead in-col-4','name'=>'customer-name','id'=>'customer-name','placeholder'=>$this->lang->line('sales_start_typing_customer_name')));?>
-										</div>
+										<!-- <div id="search-customer"> -->
+										  <?php echo form_input(array('class'=>'form-control','name'=>'customer-name','id'=>'customer-name','placeholder'=>$this->lang->line('sales_start_typing_customer_name')));?>
+										<!-- </div> -->
 									</div>
 								</div>
+								</form>
 								<div class="col-md-1">
 									<h3 style="margin: 25px 0 5px 0"><?php echo $this->lang->line('common_or'); ?></h3>
 								</div>
 								<div class="col-md-2">
-									<?php echo anchor("customers/view/-1/width:400",
-									"<div style='margin-top:25px'><button class='btn btn-block btn-success btn-sm'>".$this->lang->line('sales_new_customer')."</button></div>",
-									array('class'=>'thickbox none','title'=>$this->lang->line('sales_new_customer')));
-									?>
+									<button class="btn btn-block btn-success btn-sm" id="btn-new-customer" style="margin-top: 25px;"><?php echo $this->lang->line('sales_new_customer') ?></button>
 								</div>
-							</form>
+							
 							<?php } ?>
 						</div>
-						<div class="clearfix">&nbsp;</div>
+						<!-- <div class="clearfix">&nbsp;</div> -->
 					</div> <!-- ./col-md-12 -->
 					<div class="col-md-12">
-						<?php echo form_open("sales/add",array('id'=>'add_item_form', 'class'=>'form-horizontal')); ?>
-							<input type="hidden" name="item" id="selected_item_id">
+						
 							<div class="row">
 								<div class="col-md-3">
 									<span style="float:right; margin-top:10px"><strong><?php echo $this->lang->line('sales_find_or_scan_item_or_receipt'); ?></strong></span>
 								</div>
 								<div class="col-md-4">
-									<div id="search-item">
-									  <?php echo form_input(array('class'=>'form-control typeahead in-col-4','name'=>'item_name','id'=>'item_id','tabindex'=>'1','placeholder'=>$this->lang->line('sales_start_typing_item_name')));?>
-									</div>
+									<?php echo form_open("sales/add",array('id'=>'add_item_form', 'class'=>'form-horizontal')); ?>
+									<input type="hidden" name="item" id="selected_item_id">
+									<?php echo form_input(array('class'=>'form-control','name'=>'item_name','id'=>'item_id','tabindex'=>'1','placeholder'=>$this->lang->line('sales_start_typing_item_name')));?>
+									</form>
 								</div>
 								<div class="col-md-2">
-									<h3 style="margin-top: 0px"><?php echo $this->lang->line('common_or'); ?></h3>
+									<h3 style="margin-top: 12px"><?php echo $this->lang->line('common_or'); ?></h3>
 								</div>
 								<div class="col-md-2">
-									<div id="new_item_button_register" >
-										<?php echo anchor("items/view/-1/width:450",
-										"<div><button class='btn btn-block btn-success btn-sm'>".$this->lang->line('sales_new_item')."</button></div>",
-										array('class'=>'thickbox none','title'=>$this->lang->line('sales_new_item')));
+									<div id="new_item_button_register" style="margin-top: 12px;">
+										<button class="btn btn-block btn-success btn-sm" id="btn-new-item"><?php echo $this->lang->line('sales_new_item') ?></button>
+										<?php //echo anchor("items/view/-1/width:450",
+										// "<div><button class='btn btn-block btn-success btn-sm'>".$this->lang->line('sales_new_item')."</button></div>",
+										// array('class'=>'thickbox none','title'=>$this->lang->line('sales_new_item')));
 										?>
 									</div>
 								</div>
 							</div>
-						</form>
 					</div> <!-- ./col-md-12 -->
 					<div class="col-md-12">
 						<table id="register">
@@ -667,7 +674,7 @@
 					{
 				        var $stock_location = $("select[name='stock_location']").val();
 				        $("#item_location").val($stock_location);
-						$("#item").val(response.item_id);
+						$("#selected_item_id").val(response.item_id);
 						if (stay_open)
 						{
 							$("#add_item_form").ajaxSubmit();
@@ -683,7 +690,7 @@
 				{
 					if(response.success)
 					{
-						$("#customer").val(response.person_id);
+						$("#selected_customer_id").val(response.person_id);
 						$("#select_customer_form").submit();
 					}
 				}
@@ -702,87 +709,55 @@
 					}
 				}
 
-				var employee_data = new Bloodhound({
-				  datumTokenizer: Bloodhound.tokenizers.whitespace,
-				  queryTokenizer: Bloodhound.tokenizers.whitespace,
-				  remote: {
-				    url: '<?php echo site_url("employees/suggest"); ?>',
-				    prepare: function (query, settings) {
-                      settings.type = "POST";
-                      //settings.contentType = "application/json; charset=UTF-8";
-                      settings.data = {q: query, limit: 100};
-
-                      return settings;
-                   }
-				  }
-				});
-
-				$('#search-employee .typeahead').typeahead(null, {
-				  name: 'employee-data',
-				  display: 'name',
-				  source: employee_data
-				});
-				$('#search-employee').find('.typeahead').bind('typeahead:select', function(ev, suggestion) {
-				  $('#selected_person_id').val(suggestion.id);
-				  $("#select_employee_form").submit();
-				});
-
-				var customer_data = new Bloodhound({
-				  datumTokenizer: Bloodhound.tokenizers.whitespace,
-				  queryTokenizer: Bloodhound.tokenizers.whitespace,
-				  remote: {
-				    url: '<?php echo site_url("sales/customer_search"); ?>',
-				    prepare: function (query, settings) {
-                      settings.type = "POST";
-                      //settings.contentType = "application/json; charset=UTF-8";
-                      settings.data = {q: query, limit: 100};
-
-                      return settings;
-                   }
-				  }
-				});
-
-				$('#search-customer .typeahead').typeahead(null, {
-				  name: 'customer-data',
-				  display: 'name',
-				  source: customer_data
-				});
-				$('#search-customer').find('.typeahead').bind('typeahead:select', function(ev, suggestion) {
-				  $('#selected_customer_id').val(suggestion.id);
-				  $("#select_customer_form").submit();
-				});
-
-				// Autocomplete for searching item
-				var item_data = new Bloodhound({
-				  datumTokenizer: Bloodhound.tokenizers.whitespace,
-				  queryTokenizer: Bloodhound.tokenizers.whitespace,
-				  remote: {
-				    url: '<?php echo site_url("sales/item_search"); ?>',
-				    prepare: function (query, settings) {
-                      settings.type = "POST";
-                      //settings.contentType = "application/json; charset=UTF-8";
-                      settings.data = {q: query, limit: 100};
-
-                      return settings;
-                   }
-				  }
-				});
-
-				$('#search-item .typeahead').typeahead(null, {
-				  name: 'customer-data',
-				  display: 'name',
-				  source: item_data
-				});
-				$('#search-item').find('.typeahead').bind('typeahead:select', function(ev, suggestion) {
-				  $('#selected_item_id').val(suggestion.id);
-				  $("#add_item_form").submit();
-				});
-
 				</script>
             </div><!-- /.box-body -->
           </div><!-- /.box -->
 
         </section><!-- /.content -->
     </div><!-- /.content-wrapper -->
+
+<script>
+//auto complete on field employee
+	$('#employee').autocomplete({
+		source: "<?php echo site_url('employees/suggest');?>", // path to the lookup method
+		focus : function(){ return false; },
+		select: function(event, ui){
+			$('#selected_person_id').val(ui.item.id);
+			$("#select_employee_form").submit();
+		}
+	});
+
+	//auto complete on field customer
+	$('#customer-name').autocomplete({
+		source: "<?php echo site_url('sales/customer_search');?>", // path to the lookup method
+		focus : function(){ return false; },
+		select: function(event, ui){
+			$('#selected_customer_id').val(ui.item.id);
+	  	$("#select_customer_form").submit();
+		}
+	});
+
+	//auto complete on field item
+	$('#item_id').autocomplete({
+		source: "<?php echo site_url('sales/item_search');?>", // path to the lookup method
+		focus : function(){ return false; },
+		select: function(event, ui){
+			$('#selected_item_id').val(ui.item.id);
+	  	$("#add_item_form").submit();
+		}
+	});
+
+	$("#btn-new-item").on('click', function () {
+		$('#my-modal').removeData('bs.modal');
+    $('#my-modal').modal({remote: '<?php echo site_url("items/view/-1"); ?>'});
+    $('#my-modal').modal('show');
+  });
+
+  $("#btn-new-customer").on('click', function () {
+    $('#my-modal').removeData('bs.modal');
+    $('#my-modal').modal({remote: '<?php echo site_url("customers/view/-1"); ?>'});
+    $('#my-modal').modal('show');
+  });
+</script>
 
 <?php $this->load->view("partial/footer"); ?>
