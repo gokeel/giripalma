@@ -2,32 +2,75 @@
 <?php $this->load->view("partial/menu_left_sidebar"); ?>
 <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
+      	<?php $this->load->view('partial/modal_default') ?>
         <!-- Content Header (Page header) -->
         <section class="content-header">
-          <h1>
-            <h3><?php echo $this->lang->line('sales_register'); ?></h3>
-          </h1>
-          <ol class="breadcrumb">
+            <h3>Rekap Penjualan</h3>
+          <ol class="breadcrumb"> 
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li><a href="active"><?php echo $this->lang->line('sales_register'); ?></a></li>
+            <li><a href="active">Rekap Penjualan</a></li>
           </ol>
         </section>
+		<section id="filtering">
+          <div class="box box-danger">
+            <div class="box-header with-border">
+              <h3 class="box-title"><i class="fa fa-filter"></i> <?php echo $this->lang->line('common_search_options'); ?> :</h3>
+              <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              </div><!-- /.box-tools -->
+            </div><!-- /.box-header -->
+            <div class="box-body">
+              <form id="search_form">
+                <div class="row">
+                  <div class="col-md-2">
+                  	<div class="form-group">
+                      <div class="checkbox">
+                        <label>
+                          <?php echo form_checkbox(array('name'=>'only_invoices','id'=>'only_invoices','value'=>1,'checked'=> isset($only_invoices)?  ( ($only_invoices)? 1 : 0) : 0));?>
+                          <?php echo form_label($this->lang->line('sales_invoice_filter'), 'invoices_filter');?>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label>
+                          <?php echo form_checkbox(array('name'=>'only_cash','id'=>'only_cash','value'=>1,'checked'=> isset($only_cash)?  ( ($only_cash)? 1 : 0) : 0));?>
+                          <?php echo form_label($this->lang->line('sales_cash_filter'), 'cash_filter');?>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <?php echo form_label($this->lang->line('sales_date_range').' :', 'start_date');?><br>
+                    <?php echo form_input(array('name'=>'start_date','value'=>$start_date, 'class'=>'date_filter', 'size' => '15'));?>
+                    <?php echo form_label(' - ', 'end_date');?>
+                    <?php echo form_input(array('name'=>'end_date','value'=>$end_date, 'class'=>'date_filter', 'size' => '15'));?>
 
+                    <!-- <input type="hidden" name="search_section_state" id="search_section_state" value="<?php echo isset($search_section_state)?  ( ($search_section_state)? 'block' : 'none') : 'none';?>" /> -->
+                  </div>
+                  <div class="col-md-2">
+                  	<div class="form-group">
+                      
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+              <button id="filter-now" type="button" class="btn btn-danger">Filter</button>
+            </div>
+          </div><!-- /.box -->
+        </section>
         <!-- Main content -->
-        <section class="content">
+        <section>
 
           <!-- Default box -->
           <div class="box">
-            <div class="box-header with-border">
-              <h3 class="box-title">Rekap Penjualan</h3>
-            </div>
             <div class="box-body">
 
 			<script type="text/javascript">
 			$(document).ready(function()
 			{
 				$.datepicker.regional[ '<?php echo $this->config->item('language'); ?>' ];
-			    init_table_sorting();
+			    // init_table_sorting();
 			    enable_checkboxes();
 			    enable_row_selection();
 
@@ -39,25 +82,6 @@
 					confirm_search_message : '<?php echo $this->lang->line("common_confirm_search")?>',
 					on_complete : on_complete});
 			    enable_delete('<?php echo $this->lang->line($controller_name."_confirm_delete")?>','<?php echo $this->lang->line($controller_name."_none_selected")?>');
-
-				$("#search_filter_section #only_invoices").change(function() {
-					do_search(true, on_complete);
-					return false;
-				});
-				
-				$("#search_filter_section #only_cash").change(function() {
-					do_search(true, on_complete);
-					return false;
-				});
-
-				var show_renumber = function() {
-					var value = $("#only_invoices").val();
-					var $button = $("#update_invoice_numbers").parents("li");
-					$button.toggle(value === "1");
-				};
-				
-				$("#only_invoices").change(show_renumber);
-				show_renumber();
 
 				$(".date_filter").datepicker({onSelect: function(d,i){
 					if(d !== i.lastVal){
@@ -76,18 +100,20 @@
 				});
 			});
 
-			function post_form_submit(response)
-			{
-				if(!response.success)
-				{
-					set_feedback(response.message,'error_message',true);
-				}
-				else
-				{
-					update_row(response.id,'<?php echo site_url("$controller_name/get_row")?>');
-					set_feedback(response.message,'success_message',false);
-				}
-			}
+			// function post_form_submit(response)
+			// {
+			// 	if(!response.success)
+			// 	{
+			// 		set_feedback(response.message,'error_message',true);
+			// 	}
+			// 	else
+			// 	{
+			// 		// langsung refresh page aja
+   //                  window.location.href = '<?php echo site_url("sales/manage")?>';
+			// 		// update_row(response.id,'<?php echo site_url("$controller_name/get_row")?>');
+			// 		// set_feedback(response.message,'success_message',false);
+			// 	}
+			// }
 
 			function post_bulk_form_submit(response)
 			{
@@ -97,148 +123,83 @@
 				}
 				else
 				{
-					for(id in response.ids)
-					{
-						update_row(response.ids[id],'<?php echo site_url("$controller_name/get_row")?>');
-					}
-					set_feedback(response.message,'success_message',false);
+					// langsung refresh page aja
+                    window.location.href = '<?php echo site_url("sales/manage")?>';
+					// for(id in response.ids)
+					// {
+					// 	update_row(response.ids[id],'<?php echo site_url("$controller_name/get_row")?>');
+					// }
+					// set_feedback(response.message,'success_message',false);
 				}
 			}
 
-			function show_hide_search_filter(search_filter_section, switchImgTag)
-			{
-			    var ele = document.getElementById(search_filter_section);
-			    var imageEle = document.getElementById(switchImgTag);
-			    if(ele.style.display == "block")
-			    {
-					ele.style.display = "none";
-					imageEle.innerHTML = '<img src=" <?php echo base_url()?>images/plus.png" style="border:0;outline:none;padding:0px;margin:0px;position:relative;top:-5px;" >';
-			    }
-			    else
-			    {
-					ele.style.display = "block";
-					imageEle.innerHTML = '<img src=" <?php echo base_url()?>images/minus.png" style="border:0;outline:none;padding:0px;margin:0px;position:relative;top:-5px;" >';
-			    }
-			}
-			    
-			function init_table_sorting()
-			{
-				$.tablesorter.addParser({
-				    id: "datetime",
-				    is: function(s) {
-				        return false; 
-				    },
-				    format: function(s,table) {
-				        s = s.replace(/\-/g,"/");
-				        s = s.replace(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})\s(\d{1,2})\:(\d{2})/, "$3/$2/$1 $4:$5");
-				        return $.tablesorter.formatFloat(new Date(s).getTime());
-				    },
-				    type: "numeric"
-				});
-
-				$.tablesorter.addParser({
-					id: "invoice_number",
-					is: function(s) {
-						return false;
-					},
-					format: function(s,table) {
-						s = s.split(/[\/\-]/);
-						if (s.length == 2 && s[0].match(/[12]\d{3}/g))
-						{
-							return $.tablesorter.formatFloat(new Date(s[0]).getTime() + s[1]);
-						}
-						return $.tablesorter.formatFloat(s);
-					},
-					type: "numeric"
-				});
-
-				$.tablesorter.addParser({
-					id: "receipt_number",
-					is: function(s) {
-						return false;
-					},
-					format: function(s,table) {
-						s = s.split(/[\s]/);
-						if (s.length == 2 && s[1].match(/\d+/g))
-						{
-							return $.tablesorter.formatFloat(s[1]);
-						}
-						return s;
-					},
-					type: "numeric"
-				});
-					
-				//Only init if there is more than one row
-				if($('.tablesorter tbody tr').length > 1)
-				{
-					$("#sortable_table").tablesorter(
-					{
-						sortList: [[1,0]],
-						dateFormat: '<?php echo dateformat_jquery($this->config->item('dateformat')); ?>',
-						headers:
-						{
-						    0: { sorter: false},
-							7: { sorter: 'false'},
-							8: { sorter: 'invoice_number'},
-							9: { sorter: 'false'}
-						},
-						widgets: ['staticRow']
-					});
-				}
-			}
 			</script>
 
-			<div id="title_bar">
-				<div id="title" class="float_left"><?php echo $this->lang->line('common_list_of').' '.$this->lang->line('sales_receipt_number'); ?></div>
-				<div id="new_button">
-					<a href="javascript:window.print()"><div class='big_button' style='float: left;'><span><?php echo $this->lang->line('common_print'); ?></span></div></a>
-				</div>
-			</div>
-			<div id="pagination"><?= $links ?></div>
-			<div id="titleTextImg" style="background-color:#EEEEEE;height:30px;position:relative;">
-				<div style="float:left;vertical-align:text-top;"><?php echo $this->lang->line('common_search_options'). ': '; ?></div>
-				<a id="imageDivLink" href="javascript:show_hide_search_filter('search_filter_section', 'imageDivLink');" style="outline:none;">
-				<img src="<?php echo base_url().'images/plus.png'; ?>" style="border:0;outline:none;padding:0px;margin:0px;position:relative;top:-5px;"></a>
-			</div>
-			<?php echo form_open("$controller_name/search",array('id'=>'search_form')); ?>
-			<div id="search_filter_section" style="display: <?php echo isset($search_section_state)?  ( ($search_section_state)? 'block' : 'none') : 'none';?>;background-color:#EEEEEE;">
-				<?php echo form_label($this->lang->line('sales_invoice_filter').' '.':', 'invoices_filter');?>
-				<?php echo form_checkbox(array('name'=>'only_invoices','id'=>'only_invoices','value'=>1,'checked'=> isset($only_invoices)?  ( ($only_invoices)? 1 : 0) : 0)) . ' | ';?>
-				<?php echo form_label($this->lang->line('sales_date_range').' :', 'start_date');?>
-				<?php echo form_input(array('name'=>'start_date','value'=>$start_date, 'class'=>'date_filter', 'size' => '15'));?>
-				<?php echo form_label(' - ', 'end_date');?>
-				<?php echo form_input(array('name'=>'end_date','value'=>$end_date, 'class'=>'date_filter', 'size' => '15')) . ' | ';?>
-				<?php echo form_label($this->lang->line('sales_cash_filter').' '.':', 'cash_filter');?>
-				<?php echo form_checkbox(array('name'=>'only_cash','id'=>'only_cash','value'=>1,'checked'=> isset($only_cash)?  ( ($only_cash)? 1 : 0) : 0));?>
-				<input type="hidden" name="search_section_state" id="search_section_state" value="<?php echo isset($search_section_state)?  ( ($search_section_state)? 'block' : 'none') : 'none';?>" />
-			</div>
-			<div id="table_action_header">
-				<ul>
-					<li class="float_left"><span><?php echo anchor($controller_name . "/delete",$this->lang->line("common_delete"),array('id'=>'delete')); ?></span></li>
-					<!-- li class="float_left"><span><?php echo anchor($controller_name . "/update_invoice_numbers", $this->lang->line('sales_invoice_update'),array('id'=>'update_invoice_numbers')); ?></span></li-->
-					<li class="float_right">
-					<img src='<?php echo base_url()?>images/spinner_small.gif' alt='spinner' id='spinner' />
-					<input type="text" name ='search' id='search'/>
-					<input type="hidden" name ='limit_from' id='limit_from'/>
-					</li>
-				</ul>
-			</div>
-			<?php echo form_close(); ?>
+      			<table id="data-table" class="table table-bordered table-striped" style="margin-top: 10px;">
+                      <?php echo $manage_table; ?>
+                    </table>
 
-			<div id="table_holder" class="totals">
-			<?php echo $manage_table; ?>
-			</div>
+      			<div id="payment_summary">
+      			<?php echo $payments_summary; ?>
+      			</div>
 
-			<div id="payment_summary">
-			<?php echo $payments_summary; ?>
-			</div>
+      			<!-- <div id="feedback_bar"></div> -->
 
-			<div id="feedback_bar"></div>
-
-			</div><!-- /.box-body -->
+      			</div><!-- /.box-body -->
+      			<div class="box-footer">
+              <?php echo anchor("$controller_name/delete",$this->lang->line("common_delete"),array('id'=>'delete','class'=>'btn btn-danger')); ?>
+              <a href="javascript:window.print()" class="btn btn-info"><?php echo $this->lang->line('common_print'); ?></a>
+            </div>
           </div><!-- /.box -->
 
         </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
+<script>
+$(function () {
+    $("#data-table").dataTable({
+      "bSort": false,
+      "iDisplayLength": 25,
+      "bLengthChange": true
+    });
+  });
 
+$('#filter-now').click(function() {
+    var oTable = $('#data-table').DataTable();
+    oTable.fnClearTable();
+    $.ajax({
+      type : "POST",
+      url: '<?php echo site_url("$controller_name/search")?>',
+      // async: false,
+      data: $("#search_form").serialize(),
+      dataType: "json",
+      success: function(data) {
+        for(var i=0; i<data.length; i++){
+          oTable.fnAddData([
+            '<input type="checkbox" id="sale_'+data[i].sale_id+'" value="'+data[i].sale_id+'"/>',
+            'POS '+data[i].sale_id,
+            data[i].sale_time,
+            data[i].customer,
+            data[i].amount_tendered,
+            data[i].amount_due,
+            data[i].change_due,
+            data[i].payment_type,
+            data[i].invoice_number,
+            '<button class="btn btn-info btn-sm" onclick="modal_edit_sales('+data[i].sale_id+')" title="<?php echo $this->lang->line($controller_name.'_update')?>"><i class="fa fa-pencil-square"></i> <?php echo $this->lang->line('common_edit')?></button>',
+            '<a class="btn btn-success btn-sm" href="<?php echo site_url();?>/sales/receipt/'+data[i].sale_id+'"><?php echo $this->lang->line('sales_show_receipt'); ?></a>',
+            '<a class="btn btn-success btn-sm" href="<?php echo site_url();?>/sales/invoice/'+data[i].sale_id+'"><?php echo $this->lang->line('sales_show_invoice'); ?></a>'
+            ]);
+        }
+      },
+      error: function(e){
+        alert('Error processing your request: '+e.responseText);
+      }
+     });
+});
+
+function modal_edit_sales(id){
+    $('#my-modal').removeData('bs.modal');
+    $('#my-modal').modal({remote: '<?php echo site_url("$controller_name/edit/"); ?>/'+id});
+    $('#my-modal').modal('show');
+  }
+</script>
 <?php $this->load->view("partial/footer"); ?>

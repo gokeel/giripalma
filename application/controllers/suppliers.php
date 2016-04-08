@@ -40,8 +40,17 @@ class Suppliers extends Person_controller
 	*/
 	function suggest()
 	{
-		$suggestions = $this->Supplier->get_search_suggestions($this->input->post('q'),$this->input->post('limit'));
-		echo implode("\n",$suggestions);
+		$suggestions = $this->Supplier->get_search_suggestions($this->input->get('term'),$this->input->get('limit'));
+		
+		$response = array();
+		if($suggestions->num_rows() > 0)
+			foreach($suggestions->result() as $suggest){
+				$response[] = array(
+					'value' => 'AccNo. '.$suggest->account_number.' | Comp. '.$suggest->company_name.' | Agen '.$suggest->agency_name.' | Nama '.$suggest->first_name.' '.$suggest->last_name,
+					'id' => $suggest->person_id
+					);
+			}
+		echo json_encode($response);
 	}
 	
 	/*

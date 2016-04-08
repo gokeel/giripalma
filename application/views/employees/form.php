@@ -1,104 +1,117 @@
-<?php
-echo form_open('employees/save/'.$person_info->person_id,array('id'=>'employee_form'));
-?>
-<div id="required_fields_message"><?php echo $this->lang->line('common_fields_required_message'); ?></div>
-<ul id="error_message_box" class="error_message_box"></ul>
-<fieldset id="employee_basic_info">
-<legend><?php echo $this->lang->line("employees_basic_information"); ?></legend>
-<?php $this->load->view("people/form_basic_info"); ?>
-</fieldset>
-
-<fieldset id="employee_login_info">
-<legend><?php echo $this->lang->line("employees_login_info"); ?></legend>
-<div class="field_row clearfix">	
-<?php echo form_label($this->lang->line('employees_username').':', 'username',array('class'=>'required')); ?>
-	<div class='form_field'>
-	<?php echo form_input(array(
-		'name'=>'username',
-		'id'=>'username',
-		'value'=>$person_info->username));?>
-	</div>
-</div>
-
-<?php
-$password_label_attributes = $person_info->person_id == "" ? array('class'=>'required'):array();
-?>
-
-<div class="field_row clearfix">	
-<?php echo form_label($this->lang->line('employees_password').':', 'password',$password_label_attributes); ?>
-	<div class='form_field'>
-	<?php echo form_password(array(
-		'name'=>'password',
-		'id'=>'password'
-	));?>
-	</div>
-</div>
-
-
-<div class="field_row clearfix">	
-<?php echo form_label($this->lang->line('employees_repeat_password').':', 'repeat_password',$password_label_attributes); ?>
-	<div class='form_field'>
-	<?php echo form_password(array(
-		'name'=>'repeat_password',
-		'id'=>'repeat_password'
-	));?>
-	</div>
-</div>
-</fieldset>
-
-<fieldset id="employee_permission_info">
-<legend><?php echo $this->lang->line("employees_permission_info"); ?></legend>
-<p><?php echo $this->lang->line("employees_permission_desc"); ?></p>
-
-<ul id="permission_list">
-<?php
-foreach($all_modules->result() as $module)
-{
-?>
-<li>	
-<?php echo form_checkbox("grants[]",$module->module_id,$this->Employee->has_grant($module->module_id,$person_info->person_id),"class='module'"); ?>
-<span class="medium"><?php echo $this->lang->line('module_'.$module->module_id);?>:</span>
-<span class="small"><?php echo $this->lang->line('module_'.$module->module_id.'_desc');?></span>
-<?php
-	foreach($all_subpermissions->result() as $permission) 
-	{
-		$exploded_permission = explode('_', $permission->permission_id);
-		if ($permission->module_id == $module->module_id)
-		{
-			$lang_key = $module->module_id.'_'.$exploded_permission[1];
-			$lang_line = $this->lang->line($lang_key);
-			$lang_line = ($this->lang->line_tbd($lang_key) == $lang_line) ? $exploded_permission[1] : $lang_line;
-			if (empty($lang_line))
-			{
-				continue;
-			} 
-			?>
-		<ul>
-			<li>
-			<?php echo form_checkbox("grants[]",$permission->permission_id,$this->Employee->has_grant($permission->permission_id,$person_info->person_id)); ?>
-			<span class="medium"><?php echo $lang_line ?></span>
-			</li>
-		</ul>
-			<?php 
-		}
+<style>
+	.ui-autocomplete {
+    z-index: 5000;
 	}
-}
-?>
-</li>
-</ul>
-<?php
-echo form_submit(array(
-	'name'=>'submit',
-	'id'=>'submit',
-	'value'=>$this->lang->line('common_submit'),
-	'class'=>'submit_button float_right')
-);
-
-?>
-</fieldset>
-<?php 
-echo form_close();
-?>
+	.ui-widget-content .ui-state-focus{
+		color:#000;
+		font-weight: bold;
+		background-color: #ffffff;
+	}
+</style>
+			<div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"><?php echo $this->lang->line('employees_basic_information'); ?></h4>
+      </div>
+			<?php echo form_open('employees/save/'.$person_info->person_id,array('id'=>'employee_form', 'class'=>'form-horizontal'));?>
+			<div class="modal-body">
+				<!-- <div id="required_fields_message"><?php echo $this->lang->line('common_fields_required_message'); ?></div> -->
+				<ul id="error_message_box" class="error_message_box"></ul>
+				<div class="col-md-4">
+					<!-- <fieldset id="employee_basic_info"> -->
+						<legend><?php echo $this->lang->line('employees_basic_information'); ?></legend>
+						<?php $this->load->view("people/form_basic_info"); ?>
+					<!-- </fieldset> -->
+				</div>
+				<div class="col-md-4">
+					<!-- <fieldset id="employee_login_info"> -->
+						<legend><?php echo $this->lang->line("employees_login_info"); ?></legend>
+						<div class="form-group">
+							<?php echo form_label($this->lang->line('employees_username').':', 'username',array('class'=>'col-sm-4 required')); ?>
+							<div class='col-sm-8'>
+								<?php echo form_input(array(
+									'name'=>'username',
+									'id'=>'username',
+									'value'=>$person_info->username,
+									'class'=>'form-control')
+								);?>
+							</div>
+						</div>
+						<?php $password_label_attributes = $person_info->person_id == "" ? array('class'=>'col-sm-4 required'):array('class'=>'col-sm-4'); ?>
+						<div class="form-group">
+							<?php echo form_label($this->lang->line('employees_password').':', 'password', $password_label_attributes); ?>
+							<div class='col-sm-8'>
+								<?php echo form_password(array(
+									'name'=>'password',
+									'id'=>'password',
+									'class'=>'form-control')
+								);?>
+							</div>
+						</div>
+						<div class="form-group">
+							<?php echo form_label($this->lang->line('employees_repeat_password').':', 'repeat_password', $password_label_attributes); ?>
+							<div class='col-sm-8'>
+								<?php echo form_password(array(
+									'name'=>'repeat_password',
+									'id'=>'repeat_password',
+									'class'=>'form-control')
+								);?>
+							</div>
+						</div>
+					<!-- </fieldset> -->
+				</div>
+				<div class="col-md-4">
+					<!-- <fieldset id="employee_permission_info"> -->
+						<legend><?php echo $this->lang->line("employees_permission_info"); ?></legend>
+						<p><?php echo $this->lang->line("employees_permission_desc"); ?></p>
+						<ul id="permission_list">
+						<?php foreach($all_modules->result() as $module){ ?>
+							<li>
+							<?php echo form_checkbox("grants[]",$module->module_id,$this->Employee->has_grant($module->module_id,$person_info->person_id),"class='module'"); ?>
+								<span class="medium"><?php echo $this->lang->line('module_'.$module->module_id);?>:</span>
+								<span class="small"><?php echo $this->lang->line('module_'.$module->module_id.'_desc');?></span>
+							<?php
+								foreach($all_subpermissions->result() as $permission) 
+								{
+									$exploded_permission = explode('_', $permission->permission_id);
+									if ($permission->module_id == $module->module_id)
+									{
+										$lang_key = $module->module_id.'_'.$exploded_permission[1];
+										$lang_line = $this->lang->line($lang_key);
+										$lang_line = ($this->lang->line_tbd($lang_key) == $lang_line) ? $exploded_permission[1] : $lang_line;
+										if (empty($lang_line))
+										{
+											continue;
+										} 
+										?>
+									<ul>
+										<li>
+										<?php echo form_checkbox("grants[]",$permission->permission_id,$this->Employee->has_grant($permission->permission_id,$person_info->person_id)); ?>
+										<span class="medium"><?php echo $lang_line ?></span>
+										</li>
+									</ul>
+										<?php 
+									}
+								}
+							}
+						?>
+							</li>
+						</ul>
+					<!-- </fieldset> -->
+				</div>
+			</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning pull-left" data-dismiss="modal">Close</button>
+        <?php
+        echo form_submit(array(
+					'name'=>'submit',
+					'id'=>'submit',
+					'value'=>$this->lang->line('common_submit'),
+					'class'=>'btn btn-success')
+				);
+				?>
+        <!-- <a href="" id="link-delete"><button type="button" class="btn btn-outline">Save changes</button></a> -->
+      </div>
+      <?php echo form_close(); ?>
 <script type='text/javascript'>
 
 //validation and submit handling

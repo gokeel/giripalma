@@ -150,39 +150,3 @@
 		));?>
 	</div>
 </div>
-
-<script type='text/javascript' language="javascript">
-//validation and submit handling
-$(document).ready(function()
-{
-	nominatim.init({
-		fields : {
-			postcode : {  
-				dependencies :  ["postcode", "city", "state", "country"], 
-				response : {  
-					field : 'postalcode', 
-					format: ["postcode", "village|town|hamlet|city_district|city", "state", "country"] 
-				}
-			},
-	
-			city : {
-				dependencies :  ["postcode", "city", "state", "country"], 
-				response : {  
-					format: ["postcode", "village|town|hamlet|city_district|city", "state", "country"] 
-				}
-			},
-	
-			state : {
-				dependencies :  ["state", "country"]
-			},
-	
-			country : {
-				dependencies :  ["state", "country"] 
-			}
-			
-		},
-		language : '<?php echo $this->config->item('language');?>'
-	});
-
-});
-</script>

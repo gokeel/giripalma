@@ -492,7 +492,7 @@ class Sale_lib
 		}
 		foreach($this->CI->Sale->get_sale_payments($sale_id)->result() as $row)
 		{
-			$this->add_payment($row->payment_type,$row->payment_amount);
+			$this->add_payment($row->payment_type,$row->payment_amount, $row->card_number, $row->payment_leasing);
 		}
 		$this->set_customer($this->CI->Sale->get_customer($sale_id)->person_id);
 	}
@@ -508,7 +508,7 @@ class Sale_lib
 		}
 		foreach($this->CI->Sale_suspended->get_sale_payments($sale_id)->result() as $row)
 		{
-			$this->add_payment($row->payment_type,$row->payment_amount);
+			$this->add_payment($row->payment_type,$row->payment_amount, $row->card_number, $row->payment_leasing);
 		}
 		$suspended_sale_info=$this->CI->Sale_suspended->get_info($sale_id)->row();
 		$this->set_customer($suspended_sale_info->person_id);

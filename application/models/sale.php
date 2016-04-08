@@ -86,10 +86,10 @@ class Sale extends CI_Model
 		$this->db->group_by('sale_id');
 		$this->db->order_by('sale_date', 'asc');
 		
-		if ($rows > 0)
-		{
-			$this->db->limit($rows, $limit_from);
-		}
+		// if ($rows > 0)
+		// {
+		// 	$this->db->limit($rows, $limit_from);
+		// }
 
 		return $this->db->get();
 	}
@@ -499,6 +499,7 @@ class Sale extends CI_Model
 		.$this->db->dbprefix('sales_items').'.item_id='.$this->db->dbprefix('sales_items_taxes').'.item_id'." and "
 		.$this->db->dbprefix('sales_items').'.line='.$this->db->dbprefix('sales_items_taxes').'.line'."
 		GROUP BY sale_id, item_id, line)");
+// print_r($this->db->last_query());
 
 		//Update null item_tax_percents to be 0 instead of null
 		$this->db->where('item_tax_percent IS NULL');

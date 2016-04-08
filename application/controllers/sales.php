@@ -103,7 +103,8 @@ class Sales extends Secure_area
 		$end_date = $this->input->post('end_date') != NULL ? $this->input->post('end_date', TRUE) : $today;
 		$end_date_formatter = date_create_from_format($this->config->item('dateformat'), $end_date);
 
-		$is_valid_receipt = isset($search) ? $this->sale_lib->is_valid_receipt($search) : FALSE;
+		$is_valid_receipt = $search<>"" ? $this->sale_lib->is_valid_receipt($search) : FALSE;
+		// $is_valid_receipt = isset($search) ? $this->sale_lib->is_valid_receipt($search) : FALSE;
 
 		$sale_type = 'all';
 		$location_id = 'all';
@@ -115,16 +116,42 @@ class Sales extends Secure_area
 						'only_invoices' => $only_invoices,
 						'only_cash' => $only_cash,
 						'is_valid_receipt' => $is_valid_receipt);
+		// print_r($filters);
 
 		$sales = $this->Sale->search($search, $filters, $lines_per_page, $limit_from)->result_array();
+		// print_r($this->db->last_query());
 		$payments = $this->Sale->get_payments_summary($search, $filters);
-		$total_rows = $this->Sale->get_found_rows($search, $filters);
-		$links = $this->_initialize_pagination($this->Sale, $lines_per_page, $limit_from, $total_rows, 'search', $only_invoices);
-		$sale_rows = get_sales_manage_table_data_rows($sales, $this);
+		// $total_rows = $this->Sale->get_found_rows($search, $filters);
+		// $links = $this->_initialize_pagination($this->Sale, $lines_per_page, $limit_from, $total_rows, 'search', $only_invoices);
+		// $sale_rows = get_sales_manage_table_data_rows($sales, $this);
 		$payment_summary = get_sales_manage_payments_summary($payments, $sales, $this);
 		$this->_remove_duplicate_cookies();
 		
-		echo json_encode(array('total_rows' => $total_rows, 'rows' => $sale_rows, 'pagination' => $links, 'payment_summary' => $payment_summary));
+		// echo json_encode(array('total_rows' => $total_rows, 'rows' => $sale_rows, 'pagination' => $links, 'payment_summary' => $payment_summary));
+
+		// print_r($sales);
+		$response = array();
+		foreach($sales as $row){
+			$response[] = array(
+				'sale_id' => $row['sale_id'],
+				'sale_date' => $row['sale_date'],
+				'sale_time' => date( $this->config->item('dateformat') . ' ' . $this->config->item('timeformat'), strtotime($row['sale_time']) ),
+				'items_purchased' => $row['items_purchased'],
+				'customer' => character_limiter( $row['customer_name'], 25),
+				'subtotal' => $row['subtotal'],
+				'total' => $row['total'],
+				'tax' => to_currency($row['tax']),
+				'cost' => to_currency($row['cost']),
+				'profit' => $row['profit'],
+				'amount_tendered' => to_currency($row['amount_tendered']),
+				'amount_due' => to_currency($row['amount_due']),
+				'change_due' => to_currency($row['change_due']),
+				'payment_type' => $row['payment_type'],
+				'invoice_number' => $row['invoice_number']
+				);
+		}
+
+		echo json_encode($response);
 	}
 
 	function item_search()
@@ -691,7 +718,8 @@ class Sales extends Secure_area
 
 		$sale_info = $this->Sale->get_info($sale_id)->row_array();
 		$person_name = $sale_info['first_name'] . " " . $sale_info['last_name'];
-		$data['selected_customer'] = !empty($sale_info['customer_id']) ? $sale_info['customer_id'] . "|" . $person_name : "";
+		$data['customer_id'] = !empty($sale_info['customer_id']) ? $sale_info['customer_id'] : "";
+		$data['selected_customer'] = !empty($sale_info['customer_id']) ? $person_name : "";
 		$data['sale_info'] = $sale_info;
 		
 		$this->load->view('sales/form', $data);

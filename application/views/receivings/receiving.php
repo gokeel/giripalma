@@ -1,7 +1,18 @@
 <?php $this->load->view("partial/header"); ?>
 <?php $this->load->view("partial/menu_left_sidebar"); ?>
+<style>
+	.ui-autocomplete {
+    z-index: 5000;
+	}
+	.ui-widget-content .ui-state-focus{
+		color:#000;
+		font-weight: bold;
+		background-color: #ffffff;
+	}
+</style>
 <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
+    	<?php $this->load->view('partial/modal_large') ?>
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
@@ -22,8 +33,6 @@
               <h3 class="box-title"><?php echo $this->lang->line('recvs_register'); ?></h3>
             </div>
             <div class="box-body">
-
-				<!-- <div id="page_title" style="margin-bottom:8px;"><?php echo $this->lang->line('recvs_register'); ?></div> -->
 
 				<?php
 				if(isset($error))
@@ -72,22 +81,25 @@
 							else
 							{ ?>
 								<?php echo form_open("receivings/select_supplier",array('id'=>'select_supplier_form','class'=>'form-horizontal')); ?>
-								<div class="col-md-4">
-									<label id="supplier_label" for="supplier"><?php echo $this->lang->line('recvs_select_supplier'); ?></label>
-									<?php echo form_input(array('name'=>'supplier','id'=>'supplier','value'=>$this->lang->line('recvs_start_typing_supplier_name'), 'class'=>'form-control'));?>
-									
-								</div>
+									<input type="hidden" name="supplier" id="selected_supplier_id" value="">
+									<div class="col-md-4">
+										<label id="supplier_label" for="supplier"><?php echo $this->lang->line('recvs_select_supplier'); ?></label>
+										<?php echo form_input(array('name'=>'supplier-name','id'=>'supplier-name','placeholder'=>$this->lang->line('recvs_start_typing_supplier_name'), 'class'=>'form-control'));?>
+										
+									</div>
+								</form>
 								<div class="col-md-1">
 									<!-- <div style="margin-top:5px;text-align:center;"> -->
 									<h3 style="margin: 25px 0 5px 0"><?php echo $this->lang->line('common_or'); ?></h3>
 								</div>
 								<div class="col-md-2">
-									<?php echo anchor("suppliers/view/-1/width:400",
-									"<div style='margin-top:25px'><button class='btn btn-block btn-success btn-sm'>".$this->lang->line('recvs_new_supplier')."</button></div>",
-									array('class'=>'thickbox none','title'=>$this->lang->line('recvs_new_supplier')));
+									<button class="btn btn-block btn-success btn-sm" id="btn-new-supplier" style="margin-top: 25px;"><?php echo $this->lang->line('recvs_new_supplier') ?></button>
+									<?php //echo anchor("suppliers/view/-1/width:400",
+									// "<div style='margin-top:25px'><button class='btn btn-block btn-success btn-sm'>".$this->lang->line('recvs_new_supplier')."</button></div>",
+									// array('class'=>'thickbox none','title'=>$this->lang->line('recvs_new_supplier')));
 									?>
 								</div>
-								</form>
+								
 								<!-- <div class="clearfix">&nbsp;</div> -->
 								<?php
 							}
@@ -96,38 +108,40 @@
 						<div class="clearfix">&nbsp;</div>
 					</div> <!-- ./col-md-5 -->
 					<div class="col-md-12">
-						<?php echo form_open("receivings/add",array('id'=>'add_item_form', 'class'=>'form-horizontal')); ?>
-							<div class="row">
-								<div class="col-md-3">
-									<span style="float:right; margin-top:10px">
-									<?php
-									if($mode=='receive' or $mode=='requisition')
-									{
-										echo $this->lang->line('recvs_find_or_scan_item');
-									}
-									else
-									{
-										echo $this->lang->line('recvs_find_or_scan_item_or_receipt');
-									}
-									?>
-									</span>
-								</div>
-								<div class="col-md-4">
-									<?php echo form_input(array('name'=>'item','id'=>'item','class'=>'form-control'));?>
-								</div>
-								<div class="col-md-2">
-									<h3 style="margin-top: 0px"><?php echo $this->lang->line('common_or'); ?></h3>
-								</div>
-								<div class="col-md-2">							
-									<div id="new_item_button_register" >
-										<?php echo anchor("items/view/-1/width:450",
-										"<div><button class='btn btn-block btn-success btn-sm'>".$this->lang->line('sales_new_item')."</button></div>",
-										array('class'=>'thickbox none','title'=>$this->lang->line('sales_new_item')));
+						<div class="row">
+							<div class="col-md-3">
+								<span style="float:right; margin-top:10px">
+								<?php
+								if($mode=='receive' or $mode=='requisition')
+								{
+									echo $this->lang->line('recvs_find_or_scan_item');
+								}
+								else
+								{
+									echo $this->lang->line('recvs_find_or_scan_item_or_receipt');
+								}
+								?>
+								</span>
+							</div>
+							<div class="col-md-4">
+								<?php echo form_open("receivings/add",array('id'=>'add_item_form', 'class'=>'form-horizontal')); ?>
+								<input type="hidden" name="item" id="selected_item_id">
+								<?php echo form_input(array('name'=>'item_name','id'=>'item_id','class'=>'form-control'));?>
+								</form>
+							</div>
+							<div class="col-md-2">
+								<h3 style="margin-top: 12px"><?php echo $this->lang->line('common_or'); ?></h3>
+							</div>
+							<div class="col-md-2">							
+								<div id="new_item_button_register" style="margin-top: 12px;">
+										<button class="btn btn-block btn-success btn-sm" id="btn-new-item"><?php echo $this->lang->line('sales_new_item') ?></button>
+										<?php //echo anchor("items/view/-1/width:450",
+										// "<div><button class='btn btn-block btn-success btn-sm'>".$this->lang->line('sales_new_item')."</button></div>",
+										// array('class'=>'thickbox none','title'=>$this->lang->line('sales_new_item')));
 										?>
 									</div>
-								</div>
 							</div>
-						</form>
+						</div>
 					</div>
 					<div class="col-md-12">
 						<!-- Receiving Items List -->
@@ -378,28 +392,28 @@
 				<script type="text/javascript" language="javascript">
 				$(document).ready(function()
 				{
-				    $("#item").autocomplete('<?php echo site_url("receivings/item_search"); ?>',
-				    {
-				    	minChars:0,
-				    	max:100,
-				       	delay:10,
-				       	selectFirst: false,
-				    	formatItem: function(row) {
-							return row[1];
-						}
-				    });
+				 //    $("#item").autocomplete('<?php echo site_url("receivings/item_search"); ?>',
+				 //    {
+				 //    	minChars:0,
+				 //    	max:100,
+				 //       	delay:10,
+				 //       	selectFirst: false,
+				 //    	formatItem: function(row) {
+					// 		return row[1];
+					// 	}
+				 //    });
 
-				    $("#item").result(function(event, data, formatted)
-				    {
-						$("#add_item_form").submit();
-				    });
+				 //    $("#item").result(function(event, data, formatted)
+				 //    {
+					// 	$("#add_item_form").submit();
+				 //    });
 
-				    $('#item').focus();
+				 //    $('#item').focus();
 
-					$('#item').blur(function()
-				    {
-				    	$(this).attr('value',"<?php echo $this->lang->line('sales_start_typing_item_name'); ?>");
-				    });
+					// $('#item').blur(function()
+				 //    {
+				 //    	$(this).prop('value',"<?php echo $this->lang->line('sales_start_typing_item_name'); ?>");
+				 //    });
 
 					$('#comment').keyup(function() 
 					{
@@ -433,28 +447,28 @@
 
 					$('#item,#supplier').click(function()
 				    {
-				    	$(this).attr('value','');
+				    	$(this).prop('value','');
 				    });
 
-				    $("#supplier").autocomplete('<?php echo site_url("receivings/supplier_search"); ?>',
-				    {
-				    	minChars:0,
-				    	delay:10,
-				    	max:100,
-				    	formatItem: function(row) {
-							return row[1];
-						}
-				    });
+				  //   $("#supplier").autocomplete('<?php echo site_url("receivings/supplier_search"); ?>',
+				  //   {
+				  //   	minChars:0,
+				  //   	delay:10,
+				  //   	max:100,
+				  //   	formatItem: function(row) {
+						// 	return row[1];
+						// }
+				  //   });
 
-				    $("#supplier").result(function(event, data, formatted)
-				    {
-						$("#select_supplier_form").submit();
-				    });
+				  //   $("#supplier").result(function(event, data, formatted)
+				  //   {
+						// $("#select_supplier_form").submit();
+				  //   });
 
-				    $('#supplier').blur(function()
-				    {
-				    	$(this).attr('value',"<?php echo $this->lang->line('recvs_start_typing_supplier_name'); ?>");
-				    });
+				  //   $('#supplier').blur(function()
+				  //   {
+				  //   	$(this).prop('value',"<?php echo $this->lang->line('recvs_start_typing_supplier_name'); ?>");
+				  //   });
 
 				    $("#finish_receiving_button").click(function()
 				    {
@@ -479,7 +493,7 @@
 				{
 					if(response.success)
 					{
-						$("#item").attr("value",response.item_id);
+						$("#item").prop("value",response.item_id);
 						if (stay_open)
 						{
 							$("#add_item_form").ajaxSubmit();
@@ -495,7 +509,7 @@
 				{
 					if(response.success)
 					{
-						$("#supplier").attr("value",response.person_id);
+						$("#selected_supplier_id").prop("value",response.person_id);
 						$("#select_supplier_form").submit();
 					}
 				}
@@ -505,5 +519,37 @@
           	</div><!-- /.box -->
         </section><!-- /.content -->
     </div><!-- /.content-wrapper -->
+<script>
+	//auto complete on field supplier
+	$('#supplier-name').autocomplete({
+		source: "<?php echo site_url('suppliers/suggest');?>", // path to the lookup method
+		focus : function(){ return false; },
+		select: function(event, ui){
+			$('#selected_supplier_id').val(ui.item.id);
+	  	$("#select_supplier_form").submit();
+		}
+	});
 
+	//auto complete on field item
+	$('#item_id').autocomplete({
+		source: "<?php echo site_url('sales/item_search');?>", // path to the lookup method
+		focus : function(){ return false; },
+		select: function(event, ui){
+			$('#selected_item_id').val(ui.item.id);
+	  	$("#add_item_form").submit();
+		}
+	});
+
+	$("#btn-new-item").on('click', function () {
+		$('#my-modal').removeData('bs.modal');
+    $('#my-modal').modal({remote: '<?php echo site_url("items/view/-1"); ?>'});
+    $('#my-modal').modal('show');
+  });
+
+  $("#btn-new-supplier").on('click', function () {
+    $('#my-modal').removeData('bs.modal');
+    $('#my-modal').modal({remote: '<?php echo site_url("suppliers/view/-1"); ?>'});
+    $('#my-modal').modal('show');
+  });
+</script>
 <?php $this->load->view("partial/footer"); ?>

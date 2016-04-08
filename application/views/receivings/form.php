@@ -94,25 +94,25 @@ $(document).ready(function()
 		timeFormat: '<?php echo dateformat_jquery($this->config->item("timeformat"));?>'
 	});
 	
-	var format_item = function(row)
-	{
-    	var result = [row[0], "|", row[1]].join("");
-    	// if more than one occurence
-    	if (row[2] > 1 && row[3] && row[3].toString().trim()) {
-			// display zip code
-    		result += ' - ' + row[3];
-    	}
-		return result;
-	};
-	var autocompleter = $("#supplier_id").autocomplete('<?php echo site_url("receivings/supplier_search"); ?>', 
-	{
-		minChars: 0,
-		delay: 15, 
-		max: 100,
-		cacheLength: 1,
-		formatItem: format_item,
-		formatResult: format_item
-    });
+	// var format_item = function(row)
+	// {
+ //    	var result = [row[0], "|", row[1]].join("");
+ //    	// if more than one occurence
+ //    	if (row[2] > 1 && row[3] && row[3].toString().trim()) {
+	// 		// display zip code
+ //    		result += ' - ' + row[3];
+ //    	}
+	// 	return result;
+	// };
+	// var autocompleter = $("#supplier_id").autocomplete('<?php echo site_url("receivings/supplier_search"); ?>', 
+	// {
+	// 	minChars: 0,
+	// 	delay: 15, 
+	// 	max: 100,
+	// 	cacheLength: 1,
+	// 	formatItem: format_item,
+	// 	formatResult: format_item
+ //    });
 
 	// declare submitHandler as an object.. will be reused
 	var submit_form = function(selected_supplier) 
@@ -121,11 +121,11 @@ $(document).ready(function()
 			success:function(response)
 			{
 				tb_remove();
-				post_form_submit(response);
+				post_person_form_submit(response);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				selected_supplier && autocompleter.val(selected_supplier);
-				post_form_submit({message: errorThrown});
+				post_person_form_submit({message: errorThrown});
 			},
 			dataType:'json'
 		});

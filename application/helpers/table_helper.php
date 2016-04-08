@@ -3,7 +3,8 @@
 function get_sales_manage_table($sales, $controller)
 {
 	$CI =& get_instance();
-	$table='<table class="tablesorter" id="sortable_table">';
+	$table='';
+	// $table='<table class="tablesorter" id="sortable_table">';
 
 	$headers = array('&nbsp;',
 	$CI->lang->line('sales_receipt_number'),
@@ -14,7 +15,7 @@ function get_sales_manage_table($sales, $controller)
 	$CI->lang->line('sales_change_due'),
 	$CI->lang->line('sales_payment'),
 	$CI->lang->line('sales_invoice_number'),
-	'&nbsp');
+	'&nbsp','&nbsp','&nbsp');
 
 	$table.='<thead><tr>';
 	foreach($headers as $header)
@@ -23,7 +24,7 @@ function get_sales_manage_table($sales, $controller)
 	}
 	$table.='</tr></thead><tbody>';
 	$table.=get_sales_manage_table_data_rows($sales, $controller);
-	$table.='</tbody></table>';
+	$table.='</tbody>';
 
 	return $table;
 }
@@ -48,15 +49,6 @@ function get_sales_manage_table_data_rows($sales, $controller)
 		$sum_change_due += $sale['change_due'];
 	}
 
-	if($table_data_rows == '')
-	{
-		$table_data_rows .= "<tr><td colspan='10'><div class='warning_message' style='padding:7px;'>".$CI->lang->line('sales_no_sales_to_display')."</div></td></tr>";
-	}
-	else
-	{
-		$table_data_rows .= "<tr class='static-last'><td>&nbsp;</td><td>".$CI->lang->line('sales_total')."</td><td>&nbsp;</td><td>&nbsp;</td><td>".to_currency($sum_amount_tendered)."</td><td>".to_currency($sum_amount_due)."</td><td>".to_currency($sum_change_due)."</td><td colspan=\"3\"></td></tr>";
-	}
-
 	return $table_data_rows;
 }
 
@@ -67,22 +59,25 @@ function get_sales_manage_sale_data_row($sale, $controller)
 	$width = $controller->get_form_width();
 
 	$table_data_row='<tr>';
-	$table_data_row.='<td width="3%"><input type="checkbox" id="sale_' . $sale['sale_id'] . '" value="' . $sale['sale_id']. '" /></td>';
-	$table_data_row.='<td width="15%">'.'POS ' . $sale['sale_id'] . '</td>';
-	$table_data_row.='<td width="17%">'.date( $CI->config->item('dateformat') . ' ' . $CI->config->item('timeformat'), strtotime($sale['sale_time']) ).'</td>';
-	$table_data_row.='<td width="23%">'.character_limiter( $sale['customer_name'], 25).'</td>';
-	$table_data_row.='<td width="8%">'.to_currency( $sale['amount_tendered'] ).'</td>';
-	$table_data_row.='<td width="8%">'.to_currency( $sale['amount_due'] ).'</td>';
-	$table_data_row.='<td width="8%">'.to_currency( $sale['change_due'] ).'</td>';
-	$table_data_row.='<td width="12%">'.$sale['payment_type'].'</td>';
-	$table_data_row.='<td width="8%">'.$sale['invoice_number'].'</td>';
-	$table_data_row.='<td width="8%">';
-	$table_data_row.=anchor($controller_name."/edit/" . $sale['sale_id'] . "/width:$width", $CI->lang->line('common_edit'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_update')));
-	$table_data_row.='&nbsp;&nbsp;&nbsp;&nbsp;';
-	$table_data_row.='<a href="'.site_url($controller_name. "/receipt/" . $sale['sale_id']) . '">' . $CI->lang->line('sales_show_receipt') . '</a>';
-	$table_data_row.='&nbsp;&nbsp;&nbsp;&nbsp;';
-	$table_data_row.='<a href="'.site_url($controller_name. "/invoice/" . $sale['sale_id']) . '">' . $CI->lang->line('sales_show_invoice') . '</a>';
-	$table_data_row.='</td>';
+	$table_data_row.='<td><input type="checkbox" id="sale_' . $sale['sale_id'] . '" value="' . $sale['sale_id']. '" /></td>';
+	$table_data_row.='<td>'.'POS ' . $sale['sale_id'] . '</td>';
+	$table_data_row.='<td>'.date( $CI->config->item('dateformat') . ' ' . $CI->config->item('timeformat'), strtotime($sale['sale_time']) ).'</td>';
+	$table_data_row.='<td>'.character_limiter( $sale['customer_name'], 25).'</td>';
+	$table_data_row.='<td>'.to_currency( $sale['amount_tendered'] ).'</td>';
+	$table_data_row.='<td>'.to_currency( $sale['amount_due'] ).'</td>';
+	$table_data_row.='<td>'.to_currency( $sale['change_due'] ).'</td>';
+	$table_data_row.='<td>'.$sale['payment_type'].'</td>';
+	$table_data_row.='<td>'.$sale['invoice_number'].'</td>';
+	
+	$table_data_row.='<td><button class="btn btn-info btn-sm" onclick="modal_edit_sales('.$sale['sale_id'].')" title="'.$CI->lang->line($controller_name.'_update').'"><i class="fa fa-pencil-square"></i> '.$CI->lang->line('common_edit').'</button></td>';
+	// $table_data_row.=anchor($controller_name."/edit/" . $sale['sale_id'] . "/width:$width", $CI->lang->line('common_edit'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_update')));
+	// $table_data_row.='&nbsp;&nbsp;&nbsp;&nbsp;';
+	$table_data_row.='<td><a class="btn btn-success btn-sm" href="'.site_url($controller_name. '/receipt/' . $sale['sale_id']) . '">' . $CI->lang->line('sales_show_receipt') . '</a></td>';
+	// $table_data_row.='<a href="'.site_url($controller_name. "/receipt/" . $sale['sale_id']) . '">' . $CI->lang->line('sales_show_receipt') . '</a>';
+	// $table_data_row.='&nbsp;&nbsp;&nbsp;&nbsp;';
+	$table_data_row.='<td><a class="btn btn-info btn-sm" href="'.site_url($controller_name. "/invoice/" . $sale['sale_id']) . '">' . $CI->lang->line('sales_show_invoice') . '</a></td>';
+	// $table_data_row.='<a href="'.site_url($controller_name. "/invoice/" . $sale['sale_id']) . '">' . $CI->lang->line('sales_show_invoice') . '</a>';
+	
 	$table_data_row.='</tr>';
 
 	return $table_data_row;
@@ -109,7 +104,7 @@ function get_sales_manage_payments_summary($payments, $sales, $controller)
 				$amount -= $sale['change_due'];
 			}
 		}
-		$table.='<div class="summary_row">'.$payment['payment_type'].': '.to_currency( $amount ) . '</div>';
+		$table.='<div class="summary_row"><strong>'.$payment['payment_type'].'</strong>: '.to_currency( $amount ) . '</div>';
 	}
 	$table.='</div>';
 	return $table;
@@ -205,7 +200,7 @@ Gets the html table to manage suppliers.
 function get_supplier_manage_table($suppliers,$controller)
 {
 	$CI =& get_instance();
-	$table='<table class="tablesorter" id="sortable_table">';
+	$table='';
 	
 	$headers = array('<input type="checkbox" id="select_all" />',
 	$CI->lang->line('suppliers_company_name'),
@@ -224,7 +219,7 @@ function get_supplier_manage_table($suppliers,$controller)
 	}
 	$table.='</tr></thead><tbody>';
 	$table.=get_supplier_manage_table_data_rows($suppliers,$controller);
-	$table.='</tbody></table>';
+	$table.='</tbody>';
 
 	return $table;
 }
@@ -257,15 +252,16 @@ function get_supplier_data_row($supplier,$controller)
 	$width = $controller->get_form_width();
 
 	$table_data_row='<tr>';
-	$table_data_row.="<td width='5%'><input type='checkbox' id='person_$supplier->person_id' value='".$supplier->person_id."'/></td>";
-	$table_data_row.='<td width="17%">'.character_limiter($supplier->company_name,13).'</td>';
-	$table_data_row.='<td width="17%">'.character_limiter($supplier->agency_name,13).'</td>';
-	$table_data_row.='<td width="17%">'.character_limiter($supplier->last_name,13).'</td>';
-	$table_data_row.='<td width="17%">'.character_limiter($supplier->first_name,13).'</td>';
-	$table_data_row.='<td width="22%">'.mailto($supplier->email,character_limiter($supplier->email,22)).'</td>';
-	$table_data_row.='<td width="17%">'.character_limiter($supplier->phone_number,13).'</td>';
-	$table_data_row.='<td width="5%">'.character_limiter($supplier->person_id,5).'</td>';
-	$table_data_row.='<td width="5%">'.anchor($controller_name."/view/$supplier->person_id/width:$width", $CI->lang->line('common_edit'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_update'))).'</td>';
+	$table_data_row.="<td><input type='checkbox' id='person_$supplier->person_id' value='".$supplier->person_id."'/></td>";
+	$table_data_row.='<td>'.character_limiter($supplier->company_name,13).'</td>';
+	$table_data_row.='<td>'.character_limiter($supplier->agency_name,13).'</td>';
+	$table_data_row.='<td>'.character_limiter($supplier->last_name,13).'</td>';
+	$table_data_row.='<td>'.character_limiter($supplier->first_name,13).'</td>';
+	$table_data_row.='<td>'.mailto($supplier->email,character_limiter($supplier->email,22)).'</td>';
+	$table_data_row.='<td>'.character_limiter($supplier->phone_number,13).'</td>';
+	$table_data_row.='<td>'.character_limiter($supplier->person_id,5).'</td>';
+	$table_data_row.='<td><button class="btn btn-info btn-sm" onclick="modal_edit_item('.$supplier->person_id.')" title="'.$CI->lang->line($controller_name.'_update').'"><i class="fa fa-pencil-square"></i> '.$CI->lang->line('common_edit').'</button></td>';
+	// $table_data_row.='<td>'.anchor($controller_name."/view/$supplier->person_id/width:$width", $CI->lang->line('common_edit'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_update'))).'</td>';
 	$table_data_row.='</tr>';
 	
 	return $table_data_row;
@@ -383,7 +379,7 @@ Gets the html table to manage giftcards.
 function get_giftcards_manage_table( $giftcards, $controller )
 {
 	$CI =& get_instance();
-	$table='<table class="tablesorter" id="sortable_table">';
+	$table='';
 	
 	$headers = array('<input type="checkbox" id="select_all" />', 
 	$CI->lang->line('common_last_name'),
@@ -400,7 +396,7 @@ function get_giftcards_manage_table( $giftcards, $controller )
 	}
 	$table.='</tr></thead><tbody>';
 	$table.=get_giftcards_manage_table_data_rows( $giftcards, $controller );
-	$table.='</tbody></table>';
+	$table.='</tbody>';
 
 	return $table;
 }
@@ -418,11 +414,6 @@ function get_giftcards_manage_table_data_rows( $giftcards, $controller )
 		$table_data_rows.=get_giftcard_data_row( $giftcard, $controller );
 	}
 	
-	if($giftcards->num_rows()==0)
-	{
-		$table_data_rows.="<tr><td colspan='11'><div class='warning_message' style='padding:7px;'>".$CI->lang->line('giftcards_no_giftcards_to_display')."</div></td></tr>";
-	}
-	
 	return $table_data_rows;
 }
 
@@ -433,12 +424,13 @@ function get_giftcard_data_row($giftcard,$controller)
 	$width = $controller->get_form_width();
 
 	$table_data_row='<tr>';
-	$table_data_row.="<td width='3%'><input type='checkbox' id='giftcard_$giftcard->giftcard_id' value='".$giftcard->giftcard_id."'/></td>";
-	$table_data_row.='<td width="15%">'.$giftcard->last_name.'</td>';
-	$table_data_row.='<td width="15%">'.$giftcard->first_name.'</td>';
-	$table_data_row.='<td width="15%">'.$giftcard->giftcard_number.'</td>';
-	$table_data_row.='<td width="20%">'.to_currency($giftcard->value).'</td>';
-	$table_data_row.='<td width="5%">'.anchor($controller_name."/view/$giftcard->giftcard_id/width:$width", $CI->lang->line('common_edit'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_update'))).'</td>';
+	$table_data_row.="<td><input type='checkbox' id='giftcard_$giftcard->giftcard_id' value='".$giftcard->giftcard_id."'/></td>";
+	$table_data_row.='<td>'.$giftcard->last_name.'</td>';
+	$table_data_row.='<td>'.$giftcard->first_name.'</td>';
+	$table_data_row.='<td>'.$giftcard->giftcard_number.'</td>';
+	$table_data_row.='<td>'.to_currency($giftcard->value).'</td>';
+	$table_data_row.='<td><button class="btn btn-info btn-sm" onclick="modal_edit_giftcard('.$giftcard->giftcard_id.')" title="'.$CI->lang->line($controller_name.'_update').'"><i class="fa fa-pencil-square"></i> '.$CI->lang->line('common_edit').'</button></td>';
+	// $table_data_row.='<td>'.anchor($controller_name."/view/$giftcard->giftcard_id/width:$width", $CI->lang->line('common_edit'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_update'))).'</td>';
 	$table_data_row.='</tr>';
 
 	return $table_data_row;

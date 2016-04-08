@@ -98,10 +98,6 @@
               </div>
 							<!-- <div id="title_bar">
 								<div id="new_button">
-									<?php // echo anchor("$controller_name/view/-1/width:$form_width",
-										//"<div style='float: left;'><button class='btn btn-block btn-success btn-sm'>".$this->lang->line($controller_name.'_new')."</button></div>",
-									//array('class'=>'thickbox none','title'=>$this->lang->line($controller_name.'_new')));
-									?>
 									<?php //if ($controller_name =='customers') {?>
 										<?php //echo anchor("$controller_name/excel_import/width:$form_width",
 											//"<div style='float: left;'><button class='btn btn-block btn-warning btn-sm'>".$this->lang->line('common_import_excel')."</button></div>",
@@ -111,19 +107,6 @@
 								</div>
 							</div> -->
 							
-							<!-- <div id="table_action_header">
-								<ul>
-									<li class="float_left"><span><?php echo anchor("$controller_name/delete",$this->lang->line("common_delete"),array('id'=>'delete')); ?></span></li>
-									<li class="float_left"><span><a href="#" id="email"><?php echo $this->lang->line("common_email");?></a></span></li>
-									<li class="float_right">
-									<img src='<?php //echo base_url()?>images/spinner_small.gif' alt='spinner' id='spinner' />
-									<?php //echo form_open("$controller_name/search",array('id'=>'search_form')); ?>
-									<input type="text" name ='search' id='search'/>
-									<input type="hidden" name ='limit_from' id='limit_from'/>
-									</form>
-									</li>
-								</ul>
-							</div> -->
 							<table id="data-table" class="table table-bordered table-striped">
                 <?php echo $manage_table; ?>
               </table>
