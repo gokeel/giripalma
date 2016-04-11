@@ -54,6 +54,7 @@ $lang["sales_invoice_number_duplicate"] = "Nomor Nota Double";
 $lang["sales_invoice_sent"] = "Invoice sent to";
 $lang["sales_invoice_unsent"] = "Invoice failed to be sent to";
 $lang["sales_invoice_update"] = "Recount";
+$lang["sales_items"] = "Item-Item";
 $lang["sales_item_insufficient_of_stock"] = "Stok Item tidak mencukupi";
 $lang["sales_item_name"] = "Nama Item ";
 $lang["sales_item_number"] = "Item #";

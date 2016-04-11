@@ -32,10 +32,6 @@
     
     <!-- AdminLTE App -->
     <script src="<?php echo ADMIN_LTE_DIR;?>/dist/js/app.min.js" type="text/javascript"></script>
-    
-    <script>
-        $('#daterangepicker').daterangepicker({format: 'YYYY-MM-DD'});
-    </script>
 
 </body>
 </html>

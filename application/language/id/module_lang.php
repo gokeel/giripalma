@@ -27,3 +27,5 @@ $lang["module_raw_materials"] = "Raw Material";
 $lang["module_raw_materials_desc"] = "Tambah, Rubah, Hapus, dan Cari Raw Material";
 $lang["module_items_sell"] = "Item Jual";
 $lang["module_items_sell_desc"] = "Tambah, Rubah, Hapus, dan Cari Item Jual";
+$lang["module_shippings"] = "Pengiriman / Surat Jalan";
+$lang["module_shippings_desc"] = "Tambah, Rubah, Hapus, dan Cari Surat Jalan";

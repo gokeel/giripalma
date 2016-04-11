@@ -109,7 +109,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('Appconfig','Person','Customer','Employee','Module','Item', 'Item_taxes', 'Sale', 'Sale_suspended', 'Supplier','Inventory','Receiving','Giftcard', 'Item_kit', 'Item_kit_items','Stock_location','Item_quantity','Raw_material', 'Raw_material_quantities', 'Raw_material_taxes');
+$autoload['model'] = array('Appconfig','Person','Customer','Employee','Module','Item', 'Item_taxes', 'Sale', 'Sale_suspended', 'Supplier','Inventory','Receiving','Giftcard', 'Item_kit', 'Item_kit_items','Stock_location','Item_quantity','Raw_material', 'Raw_material_quantities', 'Raw_material_taxes', 'Shipping');
 
 
 /* End of file autoload.php */

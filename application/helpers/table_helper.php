@@ -595,5 +595,80 @@ function get_raw_materials_data_row($raw_material,$controller)
 
 	return $table_data_row;
 }
+/*Shipping table*/
+function get_shippings_manage_table($shippings,$controller)
+{
+	$CI =& get_instance();
+	$table='';
+	
+	$headers = array('<input type="checkbox" id="select_all" />', 
+	$CI->lang->line('sales_invoice_number'),
+	$CI->lang->line('shippings_recipient_detail'),
+	$CI->lang->line('shippings_ship_date'),
+	$CI->lang->line('shippings_ship_status'),
+	$CI->lang->line('sales_items'),
+	$CI->lang->line('shippings_user_data_entry'),
+	'&nbsp;'	
+	);
+	
+	$table.='<thead><tr>';
+	foreach($headers as $header)
+	{
+		$table.="<th>$header</th>";
+	}
+	$table.='</tr></thead><tbody>';
+	$table.=get_shippings_manage_table_data_rows($shippings,$controller);
+	$table.='</tbody>';
 
+	return $table;
+}
+
+/*
+Gets the html data rows for the items.
+*/
+function get_shippings_manage_table_data_rows($shippings,$controller)
+{
+	$CI =& get_instance();
+	$table_data_rows='';
+	
+	foreach($shippings->result() as $item)
+	{
+		$table_data_rows.=get_shippings_data_row($item,$controller);
+	}
+	
+	return $table_data_rows;
+}
+
+function get_shippings_data_row($shipping,$controller)
+{
+	$CI =& get_instance();
+	$item_info =$CI->Shipping->get_item_info_by_sale_id($shipping->sale_id);
+	$item_list = '';
+	foreach($item_info->result_array() as $info)
+	{
+		$item_list .= '<strong>'.$info['item_number']. '</strong> | '.$info['name'].($info['color']<>""?" | Warna: ".$info['color']:"").($info['dimension']<>""?" | Ukuran: ".$info['dimension']:"").'<br>';
+	}
+	$item_list=substr($item_list, 0, -2);
+
+	// get employee user entry
+	$employee_info = $CI->Employee->get_info($shipping->user_entry_id);
+	$controller_name=strtolower(get_class($CI));
+
+    $item_quantity='';
+    
+	$table_data_row='<tr>';
+	$table_data_row.="<td width='3%'><input type='checkbox' id='ship_$shipping->ship_id' value='".$shipping->ship_id."'/></td>";
+	$table_data_row.='<td><strong>'.$shipping->invoice_number.'</strong></td>';
+	$table_data_row.='<td>'.$shipping->recipient_name.'<br>Alamat: '.$shipping->recipient_address.'</td>';
+	$table_data_row.='<td>'.date_format(new DateTime($shipping->shipping_date), 'd M Y').'</td>';
+	$table_data_row.='<td>'.$shipping->status.'</td>';
+	$table_data_row.='<td>'.$item_list.'</td>';
+    $table_data_row.='<td>'.$employee_info->first_name.' '.$employee_info->last_name.'</td>';
+	
+	$table_data_row.='<td><button class="btn btn-info btn-sm" onclick="modal_edit_item('.$shipping->ship_id.')" title="'.$CI->lang->line($controller_name.'_update').'"><i class="fa fa-pencil-square"></i> '.$CI->lang->line('common_edit').'</button></td>';
+
+	$table_data_row.='</tr>';
+
+	return $table_data_row;
+}
 ?>

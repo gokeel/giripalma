@@ -11,17 +11,11 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for table giripalma.osposs_app_config
-DROP TABLE IF EXISTS `osposs_app_config`;
-CREATE TABLE IF NOT EXISTS `osposs_app_config` (
-  `key` varchar(255) NOT NULL,
-  `value` varchar(255) NOT NULL,
-  PRIMARY KEY (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.osposs_app_config: ~0 rows (approximately)
-/*!40000 ALTER TABLE `osposs_app_config` DISABLE KEYS */;
-/*!40000 ALTER TABLE `osposs_app_config` ENABLE KEYS */;
+-- Dumping database structure for giripalma
+DROP DATABASE IF EXISTS `giripalma`;
+CREATE DATABASE IF NOT EXISTS `giripalma` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `giripalma`;
 
 -- Dumping structure for table giripalma.ospos_app_config
 DROP TABLE IF EXISTS `ospos_app_config`;
@@ -204,7 +198,7 @@ CREATE TABLE IF NOT EXISTS `ospos_employees` (
   CONSTRAINT `ospos_employees_ibfk_1` FOREIGN KEY (`person_id`) REFERENCES `ospos_people` (`person_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_employees: ~1 rows (approximately)
+-- Dumping data for table giripalma.ospos_employees: ~0 rows (approximately)
 /*!40000 ALTER TABLE `ospos_employees` DISABLE KEYS */;
 INSERT INTO `ospos_employees` (`username`, `password`, `person_id`, `deleted`) VALUES
 	('admin', '21232f297a57a5a743894a0e4a801fc3', 1, 0);
@@ -252,7 +246,7 @@ CREATE TABLE IF NOT EXISTS `ospos_grants` (
   CONSTRAINT `ospos_grants_ibfk_2` FOREIGN KEY (`person_id`) REFERENCES `ospos_employees` (`person_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_grants: ~66 rows (approximately)
+-- Dumping data for table giripalma.ospos_grants: ~67 rows (approximately)
 /*!40000 ALTER TABLE `ospos_grants` DISABLE KEYS */;
 INSERT INTO `ospos_grants` (`permission_id`, `person_id`) VALUES
 	('config', 1);
@@ -286,6 +280,8 @@ INSERT INTO `ospos_grants` (`permission_id`, `person_id`) VALUES
 	('items_stock', 1);
 INSERT INTO `ospos_grants` (`permission_id`, `person_id`) VALUES
 	('item_kits', 1);
+INSERT INTO `ospos_grants` (`permission_id`, `person_id`) VALUES
+	('productions', 1);
 INSERT INTO `ospos_grants` (`permission_id`, `person_id`) VALUES
 	('raw_materials', 1);
 INSERT INTO `ospos_grants` (`permission_id`, `person_id`) VALUES
@@ -357,6 +353,8 @@ INSERT INTO `ospos_grants` (`permission_id`, `person_id`) VALUES
 INSERT INTO `ospos_grants` (`permission_id`, `person_id`) VALUES
 	('sales_stock', 1);
 INSERT INTO `ospos_grants` (`permission_id`, `person_id`) VALUES
+	('shippings', 1);
+INSERT INTO `ospos_grants` (`permission_id`, `person_id`) VALUES
 	('suppliers', 1);
 INSERT INTO `ospos_grants` (`permission_id`, `person_id`) VALUES
 	('customers', 16);
@@ -407,7 +405,7 @@ CREATE TABLE IF NOT EXISTS `ospos_inventory` (
   CONSTRAINT `ospos_inventory_ibfk_3` FOREIGN KEY (`trans_location`) REFERENCES `ospos_stock_locations` (`location_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=178 DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_inventory: ~176 rows (approximately)
+-- Dumping data for table giripalma.ospos_inventory: ~162 rows (approximately)
 /*!40000 ALTER TABLE `ospos_inventory` DISABLE KEYS */;
 INSERT INTO `ospos_inventory` (`trans_id`, `trans_items`, `trans_user`, `trans_date`, `trans_comment`, `trans_location`, `trans_inventory`) VALUES
 	(1, 1, 1, '2016-01-25 23:01:23', 'Manual Edit of Quantity', 1, 10);
@@ -799,7 +797,7 @@ CREATE TABLE IF NOT EXISTS `ospos_items` (
   CONSTRAINT `ospos_items_ibfk_1` FOREIGN KEY (`supplier_id`) REFERENCES `ospos_suppliers` (`person_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_items: ~13 rows (approximately)
+-- Dumping data for table giripalma.ospos_items: ~11 rows (approximately)
 /*!40000 ALTER TABLE `ospos_items` DISABLE KEYS */;
 INSERT INTO `ospos_items` (`name`, `category`, `supplier_id`, `type_item`, `item_number`, `description`, `color`, `dimension`, `cost_price`, `unit_price`, `reorder_level`, `receiving_quantity`, `item_id`, `pic_id`, `allow_alt_description`, `is_serialized`, `deleted`, `custom1`, `custom2`, `custom3`, `custom4`, `custom5`, `custom6`, `custom7`, `custom8`, `custom9`, `custom10`) VALUES
 	('meja', 'kredit', NULL, NULL, NULL, '', '', '', 40000.00, 50000.00, 5.00, 0, 1, NULL, 0, 0, 1, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
@@ -839,7 +837,7 @@ CREATE TABLE IF NOT EXISTS `ospos_items_taxes` (
   CONSTRAINT `ospos_items_taxes_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `ospos_items` (`item_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_items_taxes: ~5 rows (approximately)
+-- Dumping data for table giripalma.ospos_items_taxes: ~4 rows (approximately)
 /*!40000 ALTER TABLE `ospos_items_taxes` DISABLE KEYS */;
 INSERT INTO `ospos_items_taxes` (`item_id`, `name`, `percent`) VALUES
 	(5, 'Pajak Penjualan1', 10.00);
@@ -884,7 +882,7 @@ CREATE TABLE IF NOT EXISTS `ospos_item_kit_items` (
   CONSTRAINT `ospos_item_kit_items_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `ospos_items` (`item_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_item_kit_items: ~6 rows (approximately)
+-- Dumping data for table giripalma.ospos_item_kit_items: ~5 rows (approximately)
 /*!40000 ALTER TABLE `ospos_item_kit_items` DISABLE KEYS */;
 INSERT INTO `ospos_item_kit_items` (`item_kit_id`, `item_id`, `quantity`) VALUES
 	(1, 2, 1.00);
@@ -913,7 +911,7 @@ CREATE TABLE IF NOT EXISTS `ospos_item_quantities` (
   CONSTRAINT `ospos_item_quantities_ibfk_2` FOREIGN KEY (`location_id`) REFERENCES `ospos_stock_locations` (`location_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_item_quantities: ~130 rows (approximately)
+-- Dumping data for table giripalma.ospos_item_quantities: ~124 rows (approximately)
 /*!40000 ALTER TABLE `ospos_item_quantities` DISABLE KEYS */;
 INSERT INTO `ospos_item_quantities` (`item_id`, `location_id`, `quantity`) VALUES
 	(1, 1, 10);
@@ -1221,7 +1219,7 @@ INSERT INTO `ospos_menu` (`id`, `name`, `module_id`, `depth_level`, `parent_id`,
 INSERT INTO `ospos_menu` (`id`, `name`, `module_id`, `depth_level`, `parent_id`, `href`, `sort_number`, `menu_identifier`, `font_awesome_icon`) VALUES
 	(14, 'Surat Pesanan', 'sales', 1, 4, 'sales', 1, 'sales', NULL);
 INSERT INTO `ospos_menu` (`id`, `name`, `module_id`, `depth_level`, `parent_id`, `href`, `sort_number`, `menu_identifier`, `font_awesome_icon`) VALUES
-	(15, 'Surat Jalan', 'sales', 1, 4, 'sales/shipping', 2, 'shipping', NULL);
+	(15, 'Surat Jalan', 'sales', 1, 4, 'shippings', 2, 'shipping', NULL);
 INSERT INTO `ospos_menu` (`id`, `name`, `module_id`, `depth_level`, `parent_id`, `href`, `sort_number`, `menu_identifier`, `font_awesome_icon`) VALUES
 	(16, 'Input Proyek', 'productions', 1, 5, 'productions/project', 1, 'project', NULL);
 INSERT INTO `ospos_menu` (`id`, `name`, `module_id`, `depth_level`, `parent_id`, `href`, `sort_number`, `menu_identifier`, `font_awesome_icon`) VALUES
@@ -1386,7 +1384,7 @@ CREATE TABLE IF NOT EXISTS `ospos_modules` (
   UNIQUE KEY `name_lang_key` (`name_lang_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_modules: ~11 rows (approximately)
+-- Dumping data for table giripalma.ospos_modules: ~13 rows (approximately)
 /*!40000 ALTER TABLE `ospos_modules` DISABLE KEYS */;
 INSERT INTO `ospos_modules` (`name_lang_key`, `desc_lang_key`, `sort`, `module_id`, `font_awesome_icon`, `sort_number`, `href`) VALUES
 	('module_config', 'module_config_desc', 100, 'config', 'fa fa-cogs', 10, 'config');
@@ -1401,13 +1399,17 @@ INSERT INTO `ospos_modules` (`name_lang_key`, `desc_lang_key`, `sort`, `module_i
 INSERT INTO `ospos_modules` (`name_lang_key`, `desc_lang_key`, `sort`, `module_id`, `font_awesome_icon`, `sort_number`, `href`) VALUES
 	('module_item_kits', 'module_item_kits_desc', 30, 'item_kits', 'ion ion-cube', 2, 'item_kits');
 INSERT INTO `ospos_modules` (`name_lang_key`, `desc_lang_key`, `sort`, `module_id`, `font_awesome_icon`, `sort_number`, `href`) VALUES
+	('module_productions', 'module_productions_desc', 130, 'productions', 'fa fa-puzzle', 13, 'productions');
+INSERT INTO `ospos_modules` (`name_lang_key`, `desc_lang_key`, `sort`, `module_id`, `font_awesome_icon`, `sort_number`, `href`) VALUES
 	('module_raw_materials', 'module_raw_materials_desc', 110, 'raw_materials', 'fa fa-tint', 11, 'raw_materials');
 INSERT INTO `ospos_modules` (`name_lang_key`, `desc_lang_key`, `sort`, `module_id`, `font_awesome_icon`, `sort_number`, `href`) VALUES
 	('module_receivings', 'module_receivings_desc', 60, 'receivings', 'fa fa-truck', 6, 'receivings');
 INSERT INTO `ospos_modules` (`name_lang_key`, `desc_lang_key`, `sort`, `module_id`, `font_awesome_icon`, `sort_number`, `href`) VALUES
 	('module_reports', 'module_reports_desc', 50, 'reports', 'fa fa-file-text-o', 9, 'reports');
 INSERT INTO `ospos_modules` (`name_lang_key`, `desc_lang_key`, `sort`, `module_id`, `font_awesome_icon`, `sort_number`, `href`) VALUES
-	('module_sales', 'module_sales_desc', 70, 'sales', 'fa fa-shopping-cart', 4, '#');
+	('module_sales', 'module_sales_desc', 70, 'sales', 'fa fa-shopping-cart', 4, 'sales');
+INSERT INTO `ospos_modules` (`name_lang_key`, `desc_lang_key`, `sort`, `module_id`, `font_awesome_icon`, `sort_number`, `href`) VALUES
+	('module_shippings', 'module_shippings_desc', 120, 'shippings', 'fa fa-truck fa-flip-horizontal', 12, 'shippings');
 INSERT INTO `ospos_modules` (`name_lang_key`, `desc_lang_key`, `sort`, `module_id`, `font_awesome_icon`, `sort_number`, `href`) VALUES
 	('module_suppliers', 'module_suppliers_desc', 40, 'suppliers', 'fa fa-retweet', 5, 'suppliers');
 /*!40000 ALTER TABLE `ospos_modules` ENABLE KEYS */;
@@ -1432,7 +1434,7 @@ CREATE TABLE IF NOT EXISTS `ospos_people` (
   PRIMARY KEY (`person_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_people: ~16 rows (approximately)
+-- Dumping data for table giripalma.ospos_people: ~15 rows (approximately)
 /*!40000 ALTER TABLE `ospos_people` DISABLE KEYS */;
 INSERT INTO `ospos_people` (`first_name`, `last_name`, `id_number`, `gender`, `phone_number`, `email`, `address_1`, `address_2`, `city`, `state`, `zip`, `country`, `comments`, `person_id`) VALUES
 	('WM', 'Dev', '78347900', NULL, '555-555-5555', 'admin@pappastech.com', 'Address 1', '', '', '', '', '', '', 1);
@@ -1516,6 +1518,8 @@ INSERT INTO `ospos_permissions` (`permission_id`, `module_id`, `location_id`) VA
 INSERT INTO `ospos_permissions` (`permission_id`, `module_id`, `location_id`) VALUES
 	('item_kits', 'item_kits', NULL);
 INSERT INTO `ospos_permissions` (`permission_id`, `module_id`, `location_id`) VALUES
+	('productions', 'productions', NULL);
+INSERT INTO `ospos_permissions` (`permission_id`, `module_id`, `location_id`) VALUES
 	('raw_materials', 'raw_materials', NULL);
 INSERT INTO `ospos_permissions` (`permission_id`, `module_id`, `location_id`) VALUES
 	('receivings', 'receivings', NULL);
@@ -1585,6 +1589,8 @@ INSERT INTO `ospos_permissions` (`permission_id`, `module_id`, `location_id`) VA
 	('sales_MOGATR - Atrium MOG', 'sales', 10);
 INSERT INTO `ospos_permissions` (`permission_id`, `module_id`, `location_id`) VALUES
 	('sales_stock', 'sales', 1);
+INSERT INTO `ospos_permissions` (`permission_id`, `module_id`, `location_id`) VALUES
+	('shippings', 'shippings', NULL);
 INSERT INTO `ospos_permissions` (`permission_id`, `module_id`, `location_id`) VALUES
 	('suppliers', 'suppliers', NULL);
 /*!40000 ALTER TABLE `ospos_permissions` ENABLE KEYS */;
@@ -1810,9 +1816,9 @@ CREATE TABLE IF NOT EXISTS `ospos_sales` (
   CONSTRAINT `FK_ospos_sales_ospos_employees` FOREIGN KEY (`sales_person_id`) REFERENCES `ospos_employees` (`person_id`),
   CONSTRAINT `ospos_sales_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `ospos_employees` (`person_id`),
   CONSTRAINT `ospos_sales_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `ospos_customers` (`person_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_sales: ~38 rows (approximately)
+-- Dumping data for table giripalma.ospos_sales: ~39 rows (approximately)
 /*!40000 ALTER TABLE `ospos_sales` DISABLE KEYS */;
 INSERT INTO `ospos_sales` (`sale_time`, `customer_id`, `employee_id`, `sales_person_id`, `comment`, `invoice_number`, `sale_id`) VALUES
 	('2016-01-27 02:12:18', NULL, 1, 1, '', NULL, 1);
@@ -1841,7 +1847,7 @@ INSERT INTO `ospos_sales` (`sale_time`, `customer_id`, `employee_id`, `sales_per
 INSERT INTO `ospos_sales` (`sale_time`, `customer_id`, `employee_id`, `sales_person_id`, `comment`, `invoice_number`, `sale_id`) VALUES
 	('2016-02-14 05:40:30', NULL, 1, 1, '', '4', 13);
 INSERT INTO `ospos_sales` (`sale_time`, `customer_id`, `employee_id`, `sales_person_id`, `comment`, `invoice_number`, `sale_id`) VALUES
-	('2016-02-16 14:24:54', NULL, 1, 1, '', '5', 14);
+	('2016-02-16 14:24:54', NULL, 1, 1, '', 'SP-0006', 14);
 INSERT INTO `ospos_sales` (`sale_time`, `customer_id`, `employee_id`, `sales_person_id`, `comment`, `invoice_number`, `sale_id`) VALUES
 	('2016-02-22 14:45:36', 5, 1, 1, '', NULL, 15);
 INSERT INTO `ospos_sales` (`sale_time`, `customer_id`, `employee_id`, `sales_person_id`, `comment`, `invoice_number`, `sale_id`) VALUES
@@ -1889,7 +1895,7 @@ INSERT INTO `ospos_sales` (`sale_time`, `customer_id`, `employee_id`, `sales_per
 INSERT INTO `ospos_sales` (`sale_time`, `customer_id`, `employee_id`, `sales_person_id`, `comment`, `invoice_number`, `sale_id`) VALUES
 	('2016-03-30 15:29:24', 2, 1, 1, '', 'SP-0004', 37);
 INSERT INTO `ospos_sales` (`sale_time`, `customer_id`, `employee_id`, `sales_person_id`, `comment`, `invoice_number`, `sale_id`) VALUES
-	('2016-04-05 22:33:02', NULL, 1, 1, '', NULL, 38);
+	('2016-04-05 22:33:02', NULL, 1, 1, '', 'SP-0005', 38);
 /*!40000 ALTER TABLE `ospos_sales` ENABLE KEYS */;
 
 -- Dumping structure for table giripalma.ospos_sales_items
@@ -2013,7 +2019,7 @@ CREATE TABLE IF NOT EXISTS `ospos_sales_items_taxes` (
   CONSTRAINT `ospos_sales_items_taxes_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `ospos_items` (`item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_sales_items_taxes: ~6 rows (approximately)
+-- Dumping data for table giripalma.ospos_sales_items_taxes: ~5 rows (approximately)
 /*!40000 ALTER TABLE `ospos_sales_items_taxes` DISABLE KEYS */;
 INSERT INTO `ospos_sales_items_taxes` (`sale_id`, `item_id`, `line`, `name`, `percent`) VALUES
 	(12, 5, 1, 'Pajak Penjualan1', 10.00);
@@ -2217,7 +2223,7 @@ CREATE TABLE IF NOT EXISTS `ospos_sessions` (
   PRIMARY KEY (`session_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_sessions: ~71 rows (approximately)
+-- Dumping data for table giripalma.ospos_sessions: ~75 rows (approximately)
 /*!40000 ALTER TABLE `ospos_sessions` DISABLE KEYS */;
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 	('0148a39435b34ebc75678e1cf9007048', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455095550, 'a:8:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"3";}');
@@ -2262,7 +2268,11 @@ INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_ac
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 	('515270df63a524dd29693fca40f51890', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455180365, '');
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
+	('520b0461065eecabf219f27bea2c4d63', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0', 1460272316, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}');
+INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 	('54ece90649a4011c10e70c362893f2c6', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454402425, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}');
+INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
+	('561f9a48a20ddb32f87eb584e2e2a9e2', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0', 1460212760, '');
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 	('570d2cd2522e5e7d8d3e841a72dc7dec', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455528976, 'a:15:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"item_location";s:1:"1";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"5";s:8:"cartRecv";a:0:{}s:9:"recv_mode";s:6:"return";s:17:"recv_stock_source";s:1:"1";s:22:"recv_stock_destination";s:1:"1";s:8:"supplier";i:-1;s:19:"recv_invoice_number";s:1:"0";}');
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
@@ -2288,8 +2298,6 @@ INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_ac
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 	('7d7a92b278cd8d92e66a79784c8a664e', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1458029826, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}');
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
-	('8046e5eea8098d5fbc4efa6cb47daad8', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0', 1460126896, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}');
-INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 	('85c1a706a61566aedc5c4681200b7eb6', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0', 1459761498, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}');
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 	('8a44c43d58092fd06d31573a15c157b9', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455615952, 'a:15:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:8:"cartRecv";a:0:{}s:9:"recv_mode";s:7:"receive";s:17:"recv_stock_source";s:1:"1";s:22:"recv_stock_destination";s:1:"1";s:8:"supplier";i:-1;s:19:"recv_invoice_number";s:1:"1";s:13:"item_location";s:1:"1";s:4:"cart";a:2:{i:1;a:16:{s:7:"item_id";s:1:"2";s:13:"item_location";s:1:"1";s:10:"stock_name";s:5:"stock";s:4:"line";i:1;s:4:"name";s:8:"TWVqYQ==";s:11:"item_number";s:4:"M001";s:11:"description";s:0:"";s:12:"serialnumber";s:0:"";s:21:"allow_alt_description";s:1:"0";s:13:"is_serialized";s:1:"0";s:8:"quantity";s:4:"1.00";s:8:"discount";i:0;s:8:"in_stock";s:2:"20";s:5:"price";s:8:"30000.00";s:5:"total";s:10:"30000.0000";s:16:"discounted_total";s:11:"30000.00000";}i:3;a:16:{s:7:"item_id";s:1:"5";s:13:"item_location";s:1:"1";s:10:"stock_name";s:5:"stock";s:4:"line";i:3;s:4:"name";s:16:"S3Vyc2kgVHVuZ2d1";s:11:"item_number";s:14:"56746774276356";s:11:"description";s:0:"";s:12:"serialnumber";s:0:"";s:21:"allow_alt_description";s:1:"0";s:13:"is_serialized";s:1:"0";s:8:"quantity";i:1;s:8:"discount";s:1:"0";s:8:"in_stock";s:2:"60";s:5:"price";s:9:"900000.00";s:5:"total";s:9:"900000.00";s:16:"discounted_total";s:12:"900000.00000";}}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";s:1:"2";s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"6";}');
@@ -2297,6 +2305,8 @@ INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_ac
 	('9711dda4c869e57a303f97c1d37042cf', '127.0.0.1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0', 1454385518, 'a:11:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"sale_location";s:1:"6";s:13:"item_location";s:1:"1";s:22:"sales_print_after_sale";s:4:"true";s:28:"sales_invoice_number_enabled";s:4:"true";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"2";}');
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 	('99575385aa82b43afb6ded614f31dba6', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455671545, '');
+INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
+	('9974400677421ad25bbe3e4c10aae81d', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0', 1460370552, 'a:7:{s:9:"person_id";s:1:"1";s:8:"cartRecv";a:0:{}s:9:"recv_mode";s:7:"receive";s:17:"recv_stock_source";s:1:"1";s:22:"recv_stock_destination";s:1:"1";s:8:"supplier";i:-1;s:19:"recv_invoice_number";s:1:"1";}');
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 	('a12adc74c253f5fe8fb105e1571f98dd', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1457347557, '');
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
@@ -2320,11 +2330,15 @@ INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_ac
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 	('c75a7ebad36009e09e56bcf2c42ec1a3', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1458189868, '');
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
+	('c8220abf697d12e9304d5aaf5733ee62', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0', 1460240776, 'a:8:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:2:"15";}');
+INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 	('c83e61ebdf2e64ade0736a81d5241fb0', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0', 1460102218, 'a:9:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:8:"cartRecv";a:1:{i:1;a:15:{s:7:"item_id";s:1:"4";s:13:"item_location";s:1:"1";s:10:"stock_name";s:5:"stock";s:4:"line";i:1;s:4:"name";s:20:"S3Vyc2kgU3lhaHJpbmk=";s:11:"description";s:0:"";s:12:"serialnumber";s:0:"";s:21:"allow_alt_description";s:1:"0";s:13:"is_serialized";s:1:"0";s:8:"quantity";i:1;s:8:"discount";i:0;s:8:"in_stock";s:2:"15";s:5:"price";s:9:"100000.00";s:18:"receiving_quantity";s:1:"0";s:5:"total";s:12:"100000.00000";}}s:9:"recv_mode";s:7:"receive";s:17:"recv_stock_source";s:1:"1";s:22:"recv_stock_destination";s:1:"1";s:9:"sale_mode";s:4:"sale";s:8:"supplier";s:2:"15";s:19:"recv_invoice_number";s:1:"1";}');
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 	('cccf53a43b898114d98208b3f4e57ca9', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455096608, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}');
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 	('d4234be6342c14a83b8d80a82f166adb', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1457929314, '');
+INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
+	('d603ea861f6e3e6627b6edd497b5abae', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0', 1460128747, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}');
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 	('d6395bbf13038609132982763ba8dd88', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455882489, '');
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
@@ -2362,6 +2376,32 @@ INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_ac
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 	('ff7c6a2585e3ac26e4bd697f5a6952e5', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454403203, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}');
 /*!40000 ALTER TABLE `ospos_sessions` ENABLE KEYS */;
+
+-- Dumping structure for table giripalma.ospos_shippings
+DROP TABLE IF EXISTS `ospos_shippings`;
+CREATE TABLE IF NOT EXISTS `ospos_shippings` (
+  `ship_id` int(11) NOT NULL AUTO_INCREMENT,
+  `sale_id` int(11) DEFAULT NULL,
+  `recipient_name` varchar(255) DEFAULT NULL,
+  `recipient_address` text,
+  `person_in_charge` varchar(255) DEFAULT NULL,
+  `shipping_date` date DEFAULT NULL,
+  `status` varchar(50) DEFAULT NULL,
+  `user_entry_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ship_id`),
+  KEY `FK_ospos_shippings_ospos_sales` (`sale_id`),
+  KEY `FK_ospos_shippings_ospos_people` (`user_entry_id`),
+  CONSTRAINT `FK_ospos_shippings_ospos_people` FOREIGN KEY (`user_entry_id`) REFERENCES `ospos_people` (`person_id`),
+  CONSTRAINT `FK_ospos_shippings_ospos_sales` FOREIGN KEY (`sale_id`) REFERENCES `ospos_sales` (`sale_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+-- Dumping data for table giripalma.ospos_shippings: ~1 rows (approximately)
+/*!40000 ALTER TABLE `ospos_shippings` DISABLE KEYS */;
+INSERT INTO `ospos_shippings` (`ship_id`, `sale_id`, `recipient_name`, `recipient_address`, `person_in_charge`, `shipping_date`, `status`, `user_entry_id`) VALUES
+	(1, 14, 'Dwi Listika', 'Jalan Jalan Sana', 'Hendro', '2016-04-13', 'SJ Dibuat', 1);
+INSERT INTO `ospos_shippings` (`ship_id`, `sale_id`, `recipient_name`, `recipient_address`, `person_in_charge`, `shipping_date`, `status`, `user_entry_id`) VALUES
+	(2, 38, 'Endro Yono', 'Merbabu Lima', 'Joko', '2016-04-14', 'Tunggu kirim', 1);
+/*!40000 ALTER TABLE `ospos_shippings` ENABLE KEYS */;
 
 -- Dumping structure for table giripalma.ospos_stock_locations
 DROP TABLE IF EXISTS `ospos_stock_locations`;

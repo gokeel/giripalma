@@ -25,6 +25,8 @@
     <link href="themes/adminlte/plugins/colorpicker/bootstrap-colorpicker.min.css" rel="stylesheet"/>
     <!-- Bootstrap time Picker -->
     <link href="themes/adminlte/plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet"/>
+    <!-- Datetimepicker -->
+    <link rel="stylesheet" href="themes/adminlte/plugins/datetimepicker-eonasdan/bootstrap-datetimepicker.css" />
     <!-- DATA TABLES -->
     <link href="themes/adminlte/plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
     <!-- Typeahead autocomplete -->
@@ -50,8 +52,8 @@
 	<script type="text/javascript" src="js/jquery.form-3.51.js" language="javascript"></script>
 	<script type="text/javascript" src="js/jquery.jkey-1.1.js" language="javascript"></script>
 	<script type="text/javascript" src="js/jquery.metadata.js" language="javascript"></script>
-	<script type="text/javascript" src="js/jquery.tablesorter-2.20.1.js" language="javascript"></script>
-	<script type="text/javascript" src="js/jquery.tablesorter.staticrow.js" language="javascript"></script>
+	<!-- <script type="text/javascript" src="js/jquery.tablesorter-2.20.1.js" language="javascript"></script>
+	<script type="text/javascript" src="js/jquery.tablesorter.staticrow.js" language="javascript"></script> -->
 	<script type="text/javascript" src="js/jquery.validate-1.13.1-min.js" language="javascript"></script>
 	<script type="text/javascript" src="js/common.js" language="javascript"></script>
 	<script type="text/javascript" src="js/date.js" language="javascript"></script>
@@ -61,6 +63,9 @@
 	<!-- <script type="text/javascript" src="js/swfobject.js" language="javascript"></script> -->
 	<script type="text/javascript" src="js/tabcontent.js" language="javascript"></script>
 	<script type="text/javascript" src="js/thickbox.js" language="javascript"></script>
+  <!-- Bootstrap Datetimepicker -->
+  <script type="text/javascript" src="themes/adminlte/plugins/datetimepicker-eonasdan/moment.js"></script>
+  <script type="text/javascript" src="themes/adminlte/plugins/datetimepicker-eonasdan/bootstrap-datetimepicker.js"></script>
 
   <!-- typeahead autocomplete -->
   <!-- <script src="<?php echo ADMIN_LTE_DIR; ?>/plugins/typeahead-autocomplete/typeahead.js" type="text/javascript"></script> -->
