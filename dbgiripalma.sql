@@ -11,12 +11,6 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-
--- Dumping database structure for giripalma
-DROP DATABASE IF EXISTS `giripalma`;
-CREATE DATABASE IF NOT EXISTS `giripalma` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `giripalma`;
-
 -- Dumping structure for table giripalma.ospos_app_config
 DROP TABLE IF EXISTS `ospos_app_config`;
 CREATE TABLE IF NOT EXISTS `ospos_app_config` (
@@ -2223,7 +2217,7 @@ CREATE TABLE IF NOT EXISTS `ospos_sessions` (
   PRIMARY KEY (`session_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_sessions: ~75 rows (approximately)
+-- Dumping data for table giripalma.ospos_sessions: ~76 rows (approximately)
 /*!40000 ALTER TABLE `ospos_sessions` DISABLE KEYS */;
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 	('0148a39435b34ebc75678e1cf9007048', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1455095550, 'a:8:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"3";}');
@@ -2241,6 +2235,8 @@ INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_ac
 	('1a0f512b7f383c6dd52f66b70942f79e', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454402754, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}');
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 	('1e1fa74028a9ee9a9ef48a3acdf7b30e', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1458029188, '');
+INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
+	('200d0d6193a89ab368b0fedf35683189', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0', 1460387376, '');
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
 	('20374eff3972a47e6ab12613972bfa3b', '::1', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0', 1454418265, 'a:8:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"2";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"2";}');
 INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_activity`, `user_data`) VALUES
@@ -2393,9 +2389,9 @@ CREATE TABLE IF NOT EXISTS `ospos_shippings` (
   KEY `FK_ospos_shippings_ospos_people` (`user_entry_id`),
   CONSTRAINT `FK_ospos_shippings_ospos_people` FOREIGN KEY (`user_entry_id`) REFERENCES `ospos_people` (`person_id`),
   CONSTRAINT `FK_ospos_shippings_ospos_sales` FOREIGN KEY (`sale_id`) REFERENCES `ospos_sales` (`sale_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
--- Dumping data for table giripalma.ospos_shippings: ~1 rows (approximately)
+-- Dumping data for table giripalma.ospos_shippings: ~2 rows (approximately)
 /*!40000 ALTER TABLE `ospos_shippings` DISABLE KEYS */;
 INSERT INTO `ospos_shippings` (`ship_id`, `sale_id`, `recipient_name`, `recipient_address`, `person_in_charge`, `shipping_date`, `status`, `user_entry_id`) VALUES
 	(1, 14, 'Dwi Listika', 'Jalan Jalan Sana', 'Hendro', '2016-04-13', 'SJ Dibuat', 1);
